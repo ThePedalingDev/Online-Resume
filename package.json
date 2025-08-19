@@ -1,0 +1,32 @@
+{
+  "name": "starwars-cycling-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A sci‑fi themed portfolio combining Star Wars and cycling, built with React and TailwindCSS.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
+    "@heroicons/react": "^2.0.18",
+    "@react-three/fiber": "^8.18.0",
+    "classnames": "^2.3.2",
+    "framer-motion": "^10.18.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "react-star-wars-crawl": "^2.0.0",
+    "three": "^0.179.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.30",
+    "tailwindcss": "^3.4.4",
+    "vite": "^6.3.5"
+  }
+}

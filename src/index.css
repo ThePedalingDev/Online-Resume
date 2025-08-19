@@ -1,0 +1,81 @@
+/*
+ * Global stylesheet for the portfolio
+ *
+ * This file imports Tailwind’s base, components and utilities layers. At
+ * the bottom you can find a few custom styles that are not easily
+ * expressed via Tailwind classes. These include animations for the
+ * hyperspace effect and the Star Wars text crawl. Feel free to modify
+ * these to adjust the speed or density of the effects.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- No starfield or grid overlays: All effects are via canvas/components --- */
+body::after,
+body::before {
+  display: none;
+  content: '';
+}
+
+/* --- Solid black background, no color overlay, no theme bleed --- */
+
+/* Hide scrollbars on body */
+body::-webkit-scrollbar {
+  display: none; /* Chrome */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+
+
+/* StarJedi font face */
+@font-face {
+  font-family: 'StarJedi';
+  src: url('/fonts/Starjedi.ttf') format('truetype');
+}
+
+/* --- Custom utility classes for slow pulse/spin --- */
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .animate-spin-slow {
+    animation: spin-slow 120s linear infinite;
+  }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* --- Cockpit window clip (still used for cockpit HUD) --- */
+.cockpit-window {
+  clip-path: polygon(
+    15% 0%,
+    85% 0%,
+    95% 20%,
+    95% 80%,
+    85% 100%,
+    15% 100%,
+    5% 80%,
+    5% 20%
+  );
+}
+
+/* Thin custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #50b8ff; /* Jedi accent */
+  border-radius: 3px;
+}
