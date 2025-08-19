@@ -129,9 +129,8 @@ export default function SkillTree() {
 
   const category = skillTree[currentPage];
 
-  // Calculate positions only for unlocked skills (hide locked ones)
-  const unlockedSkills = category.skills.filter((skill) => skill.status === 'unlocked');
-  const skillsWithPos = unlockedSkills.map((skill) => ({
+  // Calculate positions for all skills (show locked and unlocked, like original)
+  const skillsWithPos = category.skills.map((skill) => ({
     ...skill,
     x: skill.branch * (NODE_WIDTH + H_SPACING),
     y: skill.level * (NODE_HEIGHT + V_SPACING) + 50,
@@ -229,7 +228,7 @@ export default function SkillTree() {
 
           {skillsWithPos.map((skill) => {
             const isSelected = selected?.id === skill.id;
-            const isUnlocked = true; // already filtered
+            const isUnlocked = skill.status === 'unlocked';
 
             return (
               <div
