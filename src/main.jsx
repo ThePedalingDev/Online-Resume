@@ -10,7 +10,7 @@ import './index.css';
 // clean when users run `npm run dev`.
 const rootEl = document.getElementById('root');
 ReactDOM.createRoot(rootEl).render(
-  <BrowserRouter>
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
     <App />
   </BrowserRouter>
 );
