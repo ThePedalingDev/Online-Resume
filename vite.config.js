@@ -6,6 +6,7 @@ const react = require('@vitejs/plugin-react');
 // enables JSX and other React transformations. You can adjust the
 // server settings as needed.
 module.exports = defineConfig({
+  base: '/Online-Resume/',
   plugins: [react()],
   server: {
     port: 3000,
