@@ -37,7 +37,7 @@ const SplitText = ({
   tag = 'p',
   onLetterAnimationComplete
 }: SplitTextProps) => {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLHeadingElement>(null);
   const animationCompletedRef = useRef(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -155,12 +155,12 @@ const SplitText = ({
   );
 
   const renderTag = () => {
-    const style = {
+    const style: React.CSSProperties = {
       textAlign,
       overflow: 'hidden',
       display: 'inline-block',
       whiteSpace: 'normal',
-      wordWrap: 'break-word',
+      wordWrap: 'break-word' as any,
       willChange: 'transform, opacity'
     };
     const classes = `split-parent ${className}`;
