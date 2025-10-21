@@ -22,13 +22,11 @@ const MagicBento: React.FC<MagicBentoProps> = ({
   particleSpeed = 0.5,
   particleSize = 2,
   particleColor = '#3b82f6',
-  hoverIntensity = 1.5,
-  animationDuration = 0.6,
-  staggerDelay = 0.1
+  hoverIntensity = 1.5
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [particles, setParticles] = useState<Array<{
     x: number;

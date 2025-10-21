@@ -23,13 +23,13 @@ export default function LiquidEther({
   autoResumeDelay = 1000,
   autoRampDuration = 0.6
 }) {
-  const mountRef = useRef(null);
-  const webglRef = useRef(null);
-  const resizeObserverRef = useRef(null);
-  const rafRef = useRef(null);
-  const intersectionObserverRef = useRef(null);
+  const mountRef = useRef<HTMLDivElement>(null);
+  const webglRef = useRef<WebGLManager | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
   const isVisibleRef = useRef(true);
-  const resizeRafRef = useRef(null);
+  const resizeRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -982,6 +982,8 @@ export default function LiquidEther({
     }
 
     const container = mountRef.current;
+    if (!container) return;
+    
     container.style.position = 'relative';
     container.style.overflow = 'hidden';
     container.style.width = '100%';
