@@ -82,50 +82,50 @@ export function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="w-full px-[var(--container-padding)] py-20 pt-32 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="relative">
+        <div className="w-full px-[var(--container-padding)] py-20 pt-32 relative z-10 pointer-events-none">
+          <div className="max-w-7xl mx-auto pointer-events-none">
+            <div className="relative pointer-events-none">
               {/* Bitmoji Avatar - Desktop version */}
-              <div className="absolute top-0 right-0 lg:right-4 xl:right-8 z-20 hidden md:block">
+              <div className="absolute top-0 right-0 lg:right-4 xl:right-8 z-20 hidden md:block pointer-events-none">
                 <ScaleIn delay={0.4} className="relative group">
-                  <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem]">
+                  <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] pointer-events-none">
                     <img
                       src={bitmojiImage}
                       alt="Markus Fourie - Full-Stack Developer"
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                     />
                     {/* Floating elements around the avatar */}
-                    <div className="absolute -top-4 -right-4 w-6 h-6 bg-primary/20 rounded-full animate-pulse"></div>
-                    <div className="absolute -bottom-6 -left-6 w-4 h-4 bg-accent/20 rounded-full animate-pulse delay-1000"></div>
-                    <div className="absolute top-1/2 -left-6 w-3 h-3 bg-primary/30 rounded-full animate-pulse delay-500"></div>
+                    <div className="absolute -top-4 -right-4 w-6 h-6 bg-primary/20 rounded-full animate-pulse pointer-events-none"></div>
+                    <div className="absolute -bottom-6 -left-6 w-4 h-4 bg-accent/20 rounded-full animate-pulse delay-1000 pointer-events-none"></div>
+                    <div className="absolute top-1/2 -left-6 w-3 h-3 bg-primary/30 rounded-full animate-pulse delay-500 pointer-events-none"></div>
                   </div>
                 </ScaleIn>
               </div>
 
               {/* Main Content */}
-              <div className="space-y-8 text-center lg:text-left max-w-4xl">
+              <div className="space-y-8 text-center lg:text-left max-w-4xl pointer-events-none">
                 {/* Mobile Bitmoji - Above text */}
-                <div className="flex justify-center mb-6 md:hidden">
+                <div className="flex justify-center mb-6 md:hidden pointer-events-none">
                   <ScaleIn delay={0.1} className="relative group">
-                    <div className="relative w-32 h-32">
+                    <div className="relative w-32 h-32 pointer-events-none">
                       <img
                         src={bitmojiImage}
                         alt="Markus Fourie - Full-Stack Developer"
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                       />
                       {/* Floating elements around the avatar */}
-                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary/20 rounded-full animate-pulse"></div>
-                      <div className="absolute -bottom-3 -left-3 w-3 h-3 bg-accent/20 rounded-full animate-pulse delay-1000"></div>
-                      <div className="absolute top-1/2 -left-3 w-2 h-2 bg-primary/30 rounded-full animate-pulse delay-500"></div>
+                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary/20 rounded-full animate-pulse pointer-events-none"></div>
+                      <div className="absolute -bottom-3 -left-3 w-3 h-3 bg-accent/20 rounded-full animate-pulse delay-1000 pointer-events-none"></div>
+                      <div className="absolute top-1/2 -left-3 w-2 h-2 bg-primary/30 rounded-full animate-pulse delay-500 pointer-events-none"></div>
                     </div>
                   </ScaleIn>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="space-y-4">
+                <div className="space-y-6 pointer-events-none">
+                  <div className="space-y-4 pointer-events-none">
                     <SplitText
                       text="Hi, I'm Markus" 
-                      className="text-5xl md:text-7xl lg:text-8xl font-bold"
+                      className="text-5xl md:text-7xl lg:text-8xl font-bold pointer-events-none"
                       splitType="words"
                       delay={60}
                       duration={0.8}
@@ -137,12 +137,12 @@ export function Home() {
                       rootMargin="-50px"
                     />
                     <FadeIn delay={0.3} direction="up">
-                      <div className="flex items-center gap-3 justify-center lg:justify-start flex-wrap">
-                        <div className="px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 text-primary text-sm md:text-base font-medium flex items-center gap-2">
+                      <div className="flex items-center gap-3 justify-center lg:justify-start flex-wrap pointer-events-none">
+                        <div className="px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 text-primary text-sm md:text-base font-medium flex items-center gap-2 pointer-events-none">
                           <Sparkles className="w-5 h-5" />
                           <span>Full-Stack Developer</span>
                         </div>
-                        <div className="px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-accent/30 text-accent-foreground text-sm md:text-base font-medium">
+                        <div className="px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-accent/30 text-accent-foreground text-sm md:text-base font-medium pointer-events-none">
                           BSc IT Student
                         </div>
                       </div>
@@ -150,20 +150,20 @@ export function Home() {
                   </div>
 
                   <FadeIn delay={0.5} direction="up">
-                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed pointer-events-none">
                       I build scalable web solutions that make a real impact. Specializing in full-stack development with React, Node.js, and ASP.NET.
                     </p>
                   </FadeIn>
 
                   <FadeIn delay={0.7} direction="up">
-                    <div className="flex gap-4 pt-4 justify-center lg:justify-start flex-wrap">
-                      <Link to="/projects">
+                    <div className="flex gap-4 pt-4 justify-center lg:justify-start flex-wrap pointer-events-none">
+                      <Link to="/projects" className="pointer-events-auto">
                         <Button size="lg" className="flex items-center gap-2 hover:scale-105 transition-transform text-base px-8 py-6">
                           View My Projects
                           <ArrowRight className="w-5 h-5" />
                         </Button>
                       </Link>
-                      <Link to="/contact">
+                      <Link to="/contact" className="pointer-events-auto">
                         <Button size="lg" variant="outline" className="hover:scale-105 transition-transform text-base px-8 py-6">
                           Get in Touch
                         </Button>
@@ -174,17 +174,17 @@ export function Home() {
 
                 {/* Stats Grid */}
                 <FadeIn delay={0.9} direction="up">
-                  <div className="pt-8 border-t border-border/50">
-                    <StaggerReveal className="grid grid-cols-3 gap-6 lg:gap-8" stagger={0.1}>
+                  <div className="pt-8 border-t border-border/50 pointer-events-none">
+                    <StaggerReveal className="grid grid-cols-3 gap-6 lg:gap-8 pointer-events-none" stagger={0.1}>
                       {stats.map((stat, index) => {
                         const Icon = stat.icon;
                         return (
-                          <div key={index} className="text-center">
-                            <div className="inline-flex items-center justify-center p-3 rounded-xl bg-background/80 backdrop-blur-sm border border-primary/20 mb-3 hover:scale-110 hover:rotate-6 transition-all">
+                          <div key={index} className="text-center pointer-events-none">
+                            <div className="inline-flex items-center justify-center p-3 rounded-xl bg-background/80 backdrop-blur-sm border border-primary/20 mb-3 hover:scale-110 hover:rotate-6 transition-all pointer-events-none">
                               <Icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                             </div>
-                            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">{stat.value}</p>
-                            <p className="text-xs md:text-sm text-muted-foreground mt-1">{stat.label}</p>
+                            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground pointer-events-none">{stat.value}</p>
+                            <p className="text-xs md:text-sm text-muted-foreground mt-1 pointer-events-none">{stat.label}</p>
                           </div>
                         );
                       })}

@@ -6,22 +6,6 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
-interface SplitTextProps {
-  text: string;
-  className?: string;
-  delay?: number;
-  duration?: number;
-  ease?: string;
-  splitType?: 'chars' | 'words' | 'lines';
-  from?: gsap.TweenVars;
-  to?: gsap.TweenVars;
-  threshold?: number;
-  rootMargin?: string;
-  textAlign?: 'left' | 'center' | 'right';
-  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
-  onLetterAnimationComplete?: () => void;
-}
-
 const SplitText = ({
   text,
   className = '',
@@ -36,8 +20,8 @@ const SplitText = ({
   textAlign = 'center',
   tag = 'p',
   onLetterAnimationComplete
-}: SplitTextProps) => {
-  const ref = useRef<HTMLHeadingElement>(null);
+}) => {
+  const ref = useRef(null);
   const animationCompletedRef = useRef(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -56,13 +40,13 @@ const SplitText = ({
       if (!ref.current || !text || !fontsLoaded) return;
       const el = ref.current;
 
-      if ((el as any)._rbsplitInstance) {
+      if (el._rbsplitInstance) {
         try {
-          (el as any)._rbsplitInstance.revert();
+          el._rbsplitInstance.revert();
         } catch (_) {
           /* noop */
         }
-        (el as any)._rbsplitInstance = null;
+        el._rbsplitInstance = null;
       }
 
       const startPct = (1 - threshold) * 100;
@@ -77,8 +61,8 @@ const SplitText = ({
             : `+=${marginValue}${marginUnit}`;
       const start = `top ${startPct}%${sign}`;
 
-      let targets: any;
-      const assignTargets = (self: any) => {
+      let targets;
+      const assignTargets = self => {
         if (splitType.includes('chars') && self.chars.length) targets = self.chars;
         if (!targets && splitType.includes('words') && self.words.length) targets = self.words;
         if (!targets && splitType.includes('lines') && self.lines.length) targets = self.lines;
@@ -93,7 +77,7 @@ const SplitText = ({
         wordsClass: 'split-word',
         charsClass: 'split-char',
         reduceWhiteSpace: false,
-        onSplit: (self: any) => {
+        onSplit: self => {
           assignTargets(self);
           const tween = gsap.fromTo(
             targets,
@@ -122,7 +106,7 @@ const SplitText = ({
         }
       });
 
-      (el as any)._rbsplitInstance = splitInstance;
+      el._rbsplitInstance = splitInstance;
 
       return () => {
         ScrollTrigger.getAll().forEach(st => {
@@ -133,7 +117,7 @@ const SplitText = ({
         } catch (_) {
           /* noop */
         }
-        (el as any)._rbsplitInstance = null;
+        el._rbsplitInstance = null;
       };
     },
     {
@@ -155,12 +139,12 @@ const SplitText = ({
   );
 
   const renderTag = () => {
-    const style: React.CSSProperties = {
+    const style = {
       textAlign,
       overflow: 'hidden',
       display: 'inline-block',
       whiteSpace: 'normal',
-      wordWrap: 'break-word' as any,
+      wordWrap: 'break-word',
       willChange: 'transform, opacity'
     };
     const classes = `split-parent ${className}`;
