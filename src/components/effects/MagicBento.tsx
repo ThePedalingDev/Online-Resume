@@ -28,15 +28,6 @@ const MagicBento: React.FC<MagicBentoProps> = ({
   const particlesRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [particles, setParticles] = useState<Array<{
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    size: number;
-    opacity: number;
-    life: number;
-  }>>([]);
 
   useEffect(() => {
     const canvas = particlesRef.current;

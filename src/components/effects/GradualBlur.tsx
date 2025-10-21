@@ -73,10 +73,10 @@ const getGradientDirection = (position: string) =>
   })[position] || 'to bottom';
 
 const debounce = (fn: Function, wait: number) => {
-  let t: NodeJS.Timeout;
+  let t: number;
   return (...args: any[]) => {
     clearTimeout(t);
-    t = setTimeout(() => fn(...args), wait);
+    t = setTimeout(() => fn(...args), wait) as unknown as number;
   };
 };
 
@@ -103,7 +103,7 @@ const useResponsiveDimension = (responsive: boolean, config: any, key: string) =
   return responsive ? value : config[key];
 };
 
-const useIntersectionObserver = (ref: React.RefObject<HTMLElement>, shouldObserve = false) => {
+const useIntersectionObserver = (ref: React.RefObject<HTMLDivElement>, shouldObserve = false) => {
   const [isVisible, setIsVisible] = useState(!shouldObserve);
 
   useEffect(() => {
@@ -199,15 +199,15 @@ function GradualBlur(props: GradualBlurProps) {
     if (isVertical) {
       baseStyle.height = responsiveHeight;
       baseStyle.width = responsiveWidth || '100%';
-      baseStyle[config.position as keyof React.CSSProperties] = 0;
-      baseStyle.left = 0;
-      baseStyle.right = 0;
+      baseStyle[config.position as keyof React.CSSProperties] = '0px';
+      baseStyle.left = '0px';
+      baseStyle.right = '0px';
     } else if (isHorizontal) {
       baseStyle.width = responsiveWidth || responsiveHeight;
       baseStyle.height = '100%';
-      baseStyle[config.position as keyof React.CSSProperties] = 0;
-      baseStyle.top = 0;
-      baseStyle.bottom = 0;
+      baseStyle[config.position as keyof React.CSSProperties] = '0px';
+      baseStyle.top = '0px';
+      baseStyle.bottom = '0px';
     }
 
     return baseStyle;

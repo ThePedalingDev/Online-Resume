@@ -16,7 +16,7 @@ const LaserFlow = ({
   style = {}
 }: LaserFlowProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const timeRef = useRef(0);
 
   useEffect(() => {
