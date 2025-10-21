@@ -78,10 +78,24 @@ export function About() {
       <section className="w-full px-[var(--container-padding)] py-12 md:py-16 bg-card/50">
         <div className="max-w-7xl mx-auto">
           <FadeIn direction="up">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Professional Journey</h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-3xl leading-relaxed">
-              Currently developing enterprise-grade systems for Rimitso Mining Services, automating workflows across DRC mining operations. Experienced in designing scalable architectures, implementing RESTful APIs, and translating complex business requirements into elegant technical solutions.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Professional Summary</h2>
+            <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-4xl leading-relaxed">
+              <p>
+                Full-stack software- and applications developer, specialising in systems design, development, multi-disciplinary programming and systems maintenance, who will complete final year of BSc. Computer and Information Science Degree, expected to be received Cum Laude in December 2025.
+              </p>
+              <p>
+                Already experienced in developing scalable, web-based, enterprise solutions, including the "Resource Management System" of Rimitso Mining Services (Pty) Ltd (being developed under Technical Services and Management Consulting Agreement for African Mining Solutions Ltd and its major subsidiary, Katanga Contracting Services SAS established in DRC) and the Afrisist Fleet Management Alarm Dashboard - both of which systems being developed whilst completing Final year of BSc. Degree.
+              </p>
+              <p>
+                Always ready to take responsibility and initiative, to create high-quality and performance-driven systems and solutions, applying appropriate attention to critical details and pro-active problem-solving skills.
+              </p>
+              <p>
+                Content to work unsupervised, if needed, but always focussed on working with, supporting and developing teams and mentoring-, developing and assisting others. Served as Varsity College student tutor, to both junior students and fellow students.
+              </p>
+              <p>
+                Loyal, hard working and eager to make a difference, to grow and serve people, business and systems.
+              </p>
+            </div>
           </FadeIn>
         </div>
       </section>

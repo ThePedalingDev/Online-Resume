@@ -1,6 +1,9 @@
 import { ReactNode, CSSProperties } from 'react';
 
 export interface MagicBentoProps {
+  children?: ReactNode;
+  className?: string;
+  style?: CSSProperties;
   textAutoHide?: boolean;
   enableStars?: boolean;
   enableSpotlight?: boolean;
@@ -12,9 +15,6 @@ export interface MagicBentoProps {
   glowColor?: string;
   clickEffect?: boolean;
   enableMagnetism?: boolean;
-  children?: ReactNode;
-  className?: string;
-  style?: CSSProperties;
   particleSpeed?: number;
   particleSize?: number;
   particleColor?: string;

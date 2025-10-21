@@ -24,3 +24,4 @@ export interface GradualBlurProps {
 declare const GradualBlur: React.FC<GradualBlurProps>;
 export default GradualBlur;
 
+

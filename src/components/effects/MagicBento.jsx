@@ -471,22 +471,48 @@ const useMobileDetection = () => {
 };
 
 const MagicBento = ({
+  children,
+  className = '',
+  style = {},
   textAutoHide = true,
   enableStars = true,
-  enableSpotlight = true,
-  enableBorderGlow = true,
+  enableSpotlight = false,
+  enableBorderGlow = false,
   disableAnimations = false,
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
   particleCount = DEFAULT_PARTICLE_COUNT,
   enableTilt = false,
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
-  enableMagnetism = true
+  enableMagnetism = false,
+  particleSpeed = 0.3,
+  particleSize = 1.5,
+  particleColor = '#3b82f6',
+  hoverIntensity = 1.5
 }) => {
   const gridRef = useRef(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
 
+  // If children are provided, use as a simple wrapper with particle effects
+  if (children) {
+    return (
+      <ParticleCard
+        className={className}
+        style={style}
+        disableAnimations={shouldDisableAnimations}
+        particleCount={particleCount}
+        glowColor={glowColor}
+        enableTilt={enableTilt}
+        clickEffect={clickEffect}
+        enableMagnetism={enableMagnetism}
+      >
+        {children}
+      </ParticleCard>
+    );
+  }
+
+  // Original behavior - render the bento grid with cardData
   return (
     <>
       {enableSpotlight && (

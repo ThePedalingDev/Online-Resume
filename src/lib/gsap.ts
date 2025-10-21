@@ -20,3 +20,4 @@ ScrollTrigger.defaults({
 
 export { gsap, ScrollTrigger, ScrollToPlugin };
 
+

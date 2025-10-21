@@ -8,38 +8,42 @@ import MagicBento from '@/components/effects/MagicBento';
 export function Projects() {
   const projects = [
     {
-      title: 'Rimitso RMS System',
-      description: 'Full-stack ASP.NET MVC application for mining asset and transaction management with site-based user roles and audit logging.',
-      technologies: ['ASP.NET', 'C#', 'MVC', 'Entity Framework', 'Azure'],
+      title: 'Katanga Contracting Services - Resource Management System',
+      period: '2025 to Present',
+      description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
+      highlights: [
+        'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
+        'Improved asset tracking efficiency and data accuracy',
+        'Integrated modular controllers and seeding logic for roles, sites and transactions'
+      ],
+      technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Tailwind CSS'],
       link: '#',
       github: '#',
     },
     {
-      title: 'Afrisist Alarm Dashboard',
-      description: 'Real-time MERN-based dashboard for vehicle alarm management with WebSocket updates and role-based actions.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'WebSocket', 'Real-time'],
+      title: 'Afrisist - Alarm Monitoring System',
+      period: '2025 Limited Duration Project',
+      description: 'Built a self-hosted, real-time web application using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
+      highlights: [
+        'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
+        'Supporting animated tabs, filtering and real-time event streams',
+        'Enhanced reliability and speed with webhook-driven automation and optimised API routes'
+      ],
+      technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Tailwind CSS', 'DaisyUI'],
       link: '#',
       github: '#',
     },
     {
-      title: 'RDA Charity Website',
-      description: 'Full-featured charity site with React, Node.js, Supabase, Stripe integration, admin CMS, and volunteer signups.',
-      technologies: ['React', 'Node.js', 'Supabase', 'Stripe', 'TypeScript'],
-      link: 'https://rda-foundation.co.uk',
-      github: '#',
-    },
-    {
-      title: 'BudgetPiggy App',
-      description: 'Personal finance tracker built with React Native for managing expenses, savings goals, and notifications.',
-      technologies: ['React Native', 'Firebase', 'TypeScript', 'Mobile'],
-      link: '#',
-      github: '#',
-    },
-    {
-      title: 'Star Wars x Cycling Portfolio',
-      description: 'Creative personal portfolio built with React, Three.js, and TailwindCSS, featuring an interactive light/dark theme.',
-      technologies: ['React', 'Three.js', 'TailwindCSS', 'Creative'],
-      link: '#',
+      title: 'Eridge Branch of RDA Non-Profit Charity',
+      period: '2024',
+      description: 'Developed a full-stack web solution for a UK-based charity using React (Vite), Node.js (Express), and PostgreSQL (Supabase). Delivered CMS functionality for managing volunteers, gallery content, and programmes.',
+      highlights: [
+        'Designed accessible, responsive UI components matching the organization\'s branding',
+        'Implemented custom admin dashboard and contact form management',
+        'Dynamic program/event listings for better content control'
+      ],
+      technologies: ['React', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'DaisyUI'],
+      link: 'https://www.eridgerda.org.uk/',
       github: '#',
     },
   ];
@@ -63,46 +67,72 @@ export function Projects() {
       {/* Projects Grid */}
       <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
         <div className="max-w-7xl mx-auto">
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" stagger={0.15}>
+          <StaggerReveal className="grid grid-cols-1 lg:grid-cols-2 gap-8" stagger={0.15}>
             {projects.map((project, index) => (
               <MagicBento
                 key={index}
-                particleCount={15}
-                particleSpeed={0.3}
-                particleSize={1.5}
+                particleCount={20}
+                particleSpeed={0.4}
+                particleSize={2}
                 particleColor="#3b82f6"
-                hoverIntensity={2}
+                hoverIntensity={1.8}
                 className="h-full"
               >
-                <Card className="h-full flex flex-col hover:shadow-lg transition hover:-translate-y-2 group cursor-pointer bg-transparent border-none shadow-none">
-                  <CardHeader>
-                    <CardTitle className="group-hover:text-primary transition-colors">{project.title}</CardTitle>
-                    <CardDescription>{project.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-1 flex flex-col justify-between">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:scale-105 transition-transform"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                <Card className="h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1 group cursor-default bg-card/50 backdrop-blur-sm">
+                  <CardHeader className="space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <CardTitle className="group-hover:text-primary transition-colors text-xl leading-tight">
+                        {project.title}
+                      </CardTitle>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap bg-primary/10 px-2 py-1 rounded-full">
+                        {project.period}
+                      </span>
                     </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1 hover:scale-105 transition-transform" asChild>
-                        <a href={project.link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          View
-                        </a>
-                      </Button>
-                      <Button size="sm" variant="outline" className="flex-1 hover:scale-105 transition-transform" asChild>
-                        <a href={project.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-4 h-4 mr-2" />
-                          Code
-                        </a>
-                      </Button>
+                    <CardDescription className="text-sm leading-relaxed">
+                      {project.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground">Key Highlights:</h4>
+                      <ul className="space-y-2">
+                        {project.highlights.map((highlight, idx) => (
+                          <li key={idx} className="text-xs text-muted-foreground leading-relaxed flex gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:scale-105 transition-transform"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        {project.link !== '#' && (
+                          <Button size="sm" variant="outline" className="flex-1 hover:scale-105 transition-transform" asChild>
+                            <a href={project.link} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              View Live
+                            </a>
+                          </Button>
+                        )}
+                        {project.github !== '#' && (
+                          <Button size="sm" variant="outline" className="flex-1 hover:scale-105 transition-transform" asChild>
+                            <a href={project.github} target="_blank" rel="noopener noreferrer">
+                              <Github className="w-4 h-4 mr-2" />
+                              Code
+                            </a>
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

@@ -15,3 +15,4 @@ export function StravaIcon({ className = "w-6 h-6" }: StravaIconProps) {
   );
 }
 
+

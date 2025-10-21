@@ -7,7 +7,7 @@ import { Projects } from '@/pages/Projects';
 import { Contact } from '@/pages/Contact';
 import { Skills } from '@/pages/Skills';
 import { Social } from '@/pages/Social';
-import { Blog } from '@/pages/Blog';
+import { Docs } from '@/pages/Docs';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/skills" element={<Skills />} />
             <Route path="/social" element={<Social />} />
-            <Route path="/blog" element={<Blog />} />
+            <Route path="/docs" element={<Docs />} />
           </Route>
         </Routes>
       </Router>

@@ -2,13 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, Phone, MapPin, Github, Linkedin, Instagram } from 'lucide-react';
-import { StravaIcon } from '@/components/icons/StravaIcon';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import SplitText from '@/components/animations/SplitText';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
-import { ScaleIn } from '@/components/animations/ScaleIn';
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -18,14 +16,6 @@ export function Contact() {
     { icon: Phone, label: 'Phone', value: '+27 66 220 3312', href: 'tel:+27662203312' },
     { icon: MapPin, label: 'Location', value: 'Midstream Estate, Gauteng, South Africa', href: '#' },
   ];
-
-  const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/ThePedalingDev', username: '@ThePedalingDev' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/markus-fourie/', username: 'markus-fourie' },
-    { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/markusfourie', username: '@markusfourie' },
-    { icon: StravaIcon, label: 'Strava', href: 'https://www.strava.com/athletes/7756913', username: 'Markus Fourie', isCustom: true },
-  ];
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,52 +135,6 @@ export function Contact() {
         </div>
       </section>
 
-      {/* Social Links */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16 bg-card/50">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn direction="up" className="text-center space-y-8">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Connect on Social</h2>
-              <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
-                Follow me on social media to stay updated with my latest projects and insights
-              </p>
-            </div>
-            <StaggerReveal className="flex justify-center gap-6 flex-wrap" stagger={0.1}>
-              {socialLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-4 rounded-lg border bg-background hover:bg-primary/10 transition hover:scale-110 hover:rotate-6"
-                    title={link.label}
-                  >
-                    {link.isCustom ? <Icon className="w-8 h-8 text-primary" /> : <Icon className="w-8 h-8 text-primary" />}
-                  </a>
-                );
-              })}
-            </StaggerReveal>
-          </FadeIn>
-        </div>
-      </section>
-
-
-      {/* CTA */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16 bg-card/50">
-        <div className="max-w-7xl mx-auto">
-          <ScaleIn delay={0.2} className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-8 md:p-12 text-center hover:scale-[1.01] transition-transform">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Let's Collaborate</h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-              Whether you have a project in mind, want to discuss opportunities, or just want to connect, I'm here for it. Let's create something amazing together.
-            </p>
-            <Button size="lg" onClick={() => document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' })}>
-              Get in Touch
-            </Button>
-          </ScaleIn>
-        </div>
-      </section>
     </div>
   );
 }

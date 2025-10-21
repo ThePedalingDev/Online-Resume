@@ -17,7 +17,7 @@ export function Navbar() {
     { label: 'About', path: '/about', icon: User },
     { label: 'Projects', path: '/projects', icon: Briefcase },
     { label: 'Skills', path: '/skills', icon: Code2 },
-    { label: 'Blog', path: '/blog', icon: BookOpen },
+    { label: 'Docs', path: '/docs', icon: BookOpen },
     { label: 'Social', path: '/social', icon: Share2 },
     { label: 'Contact', path: '/contact', icon: Mail },
   ];
