@@ -1,0 +1,47 @@
+<svg viewBox="0 0 100 100" fill="none" stroke="#5227FF" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer rim -->
+  <circle cx="50" cy="50" r="45" stroke-width="3" />
+  
+  <!-- Inner rim -->
+  <circle cx="50" cy="50" r="40" stroke-width="1.5" opacity="0.6" />
+  
+  <!-- Hub (center) -->
+  <circle cx="50" cy="50" r="5" fill="#5227FF" />
+  
+  <!-- Spokes - 12 spokes evenly distributed -->
+  <!-- Top spoke -->
+  <line x1="50" y1="50" x2="50" y2="5" stroke-width="1" />
+  
+  <!-- 30° -->
+  <line x1="50" y1="50" x2="72" y2="13" stroke-width="1" />
+  
+  <!-- 60° -->
+  <line x1="50" y1="50" x2="89" y2="27" stroke-width="1" />
+  
+  <!-- Right spoke -->
+  <line x1="50" y1="50" x2="95" y2="50" stroke-width="1" />
+  
+  <!-- 120° -->
+  <line x1="50" y1="50" x2="89" y2="73" stroke-width="1" />
+  
+  <!-- 150° -->
+  <line x1="50" y1="50" x2="72" y2="87" stroke-width="1" />
+  
+  <!-- Bottom spoke -->
+  <line x1="50" y1="50" x2="50" y2="95" stroke-width="1" />
+  
+  <!-- 210° -->
+  <line x1="50" y1="50" x2="28" y2="87" stroke-width="1" />
+  
+  <!-- 240° -->
+  <line x1="50" y1="50" x2="11" y2="73" stroke-width="1" />
+  
+  <!-- Left spoke -->
+  <line x1="50" y1="50" x2="5" y2="50" stroke-width="1" />
+  
+  <!-- 300° -->
+  <line x1="50" y1="50" x2="11" y2="27" stroke-width="1" />
+  
+  <!-- 330° -->
+  <line x1="50" y1="50" x2="28" y2="13" stroke-width="1" />
+</svg>
