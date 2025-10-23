@@ -4,7 +4,7 @@ import { Download, FileText, Award, GraduationCap, ExternalLink, CheckCircle2, A
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
-import { ScrollIndicator } from '@/components/animations/ScrollIndicator';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 export function Docs() {
   const certifications = [
@@ -31,7 +31,7 @@ export function Docs() {
       icon: Award,
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-600/10',
-      downloadUrl: '#',
+      downloadUrl: '/cert-docs/VC_GoldenKey.pdf',
       verifyUrl: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455',
     },
     {
@@ -68,24 +68,24 @@ export function Docs() {
       description: 'Complete academic record including all courses, grades, and GPA.',
       type: 'Transcript',
       icon: FileText,
-      downloadUrl: '#',
+      downloadUrl: '/cert-docs/VarsityCollege_Results.zip',
       isZip: true,
     },
     {
-      title: 'Final Year Project',
-      description: 'Comprehensive documentation of final year capstone project and research.',
-      type: 'Report',
+      title: 'CV - Markus Fourie',
+      description: 'Professional curriculum vitae with complete work experience and qualifications.',
+      type: 'CV',
       icon: FileText,
-      downloadUrl: '#',
-      isZip: true,
+      downloadUrl: '/cert-docs/251023 Markus Fourie CV.pdf',
+      isZip: false,
     },
     {
-      title: 'Course Completion Certificates',
-      description: 'Collection of all course completion certificates and honors.',
-      type: 'Documents',
+      title: 'Resume - Markus Fourie',
+      description: 'Concise resume highlighting key skills, experience, and achievements.',
+      type: 'Resume',
       icon: FileText,
-      downloadUrl: '#',
-      isZip: true,
+      downloadUrl: '/cert-docs/251023 Markus Fourie Resume.pdf',
+      isZip: false,
     },
   ];
 
@@ -103,7 +103,7 @@ export function Docs() {
   return (
     <div className="min-h-screen">
       {/* Scroll Indicator */}
-      <ScrollIndicator showDelay={3000} />
+      <ScrollIndicator variant="glossy" />
       
       {/* Header */}
       <section className="w-full px-[var(--container-padding)] py-16 md:py-20">

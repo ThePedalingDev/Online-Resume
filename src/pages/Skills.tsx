@@ -2,10 +2,10 @@ import { Zap, Award, TrendingUp, Code2, Database, Server, Wrench, Sparkles, Targ
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
-import MagicBento from '@/components/effects/MagicBento';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 type SkillLevel = 'core' | 'proficient' | 'learning';
 type SortOption = 'level' | 'name' | 'category';
@@ -169,6 +169,8 @@ export function Skills() {
 
   return (
     <div className="min-h-screen">
+      {/* Global Scroll Indicator */}
+      <ScrollIndicator variant="glossy" />
       {/* Skills Header */}
       <section className="w-full px-[var(--container-padding)] py-16 md:py-20">
         <div className="max-w-7xl mx-auto">
@@ -290,15 +292,7 @@ export function Skills() {
             {skillCategories.map((skillGroup, index) => {
               const Icon = skillGroup.icon;
               return (
-                <MagicBento
-                  key={index}
-                  particleCount={15}
-                  particleSpeed={0.3}
-                  particleSize={1.5}
-                  particleColor="#8400ff"
-                  hoverIntensity={1.5}
-                  className="h-full"
-                >
+                <div key={index} className="h-full">
                   <Card className="h-full bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all hover:-translate-y-1">
                     <CardHeader>
                       <div className="flex items-center gap-3 mb-2">
@@ -345,7 +339,7 @@ export function Skills() {
                       </div>
                     </CardContent>
                   </Card>
-                </MagicBento>
+                </div>
               );
             })}
           </StaggerReveal>

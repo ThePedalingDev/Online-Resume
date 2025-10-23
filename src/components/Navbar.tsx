@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Home, User, Briefcase, Code2, Mail, Share2, BookOpen, Moon, Sun } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -11,6 +11,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isTransparent, setIsTransparent] = useState(true);
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
 
   const navItems = [
     { label: 'Home', path: '/', icon: Home },
@@ -52,16 +53,24 @@ export function Navbar() {
   // Handle scroll to toggle navbar transparency
   useEffect(() => {
     const handleScroll = () => {
+      const isHomePage = location.pathname === '/';
       const heroHeight = window.innerHeight * 0.8; // 80% of viewport height
       const scrollPosition = window.scrollY;
-      setIsTransparent(scrollPosition < heroHeight);
+      
+      if (isHomePage) {
+        // On home page, be transparent until scrolled past hero section
+        setIsTransparent(scrollPosition < heroHeight);
+      } else {
+        // On other pages, always have glossy effect (not transparent)
+        setIsTransparent(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial state
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${

@@ -3,64 +3,79 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink, Github } from 'lucide-react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
-import MagicBento from '@/components/effects/MagicBento';
+import SplitText from '@/components/animations/SplitText';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+
+const PROJECTS = [
+  {
+    title: 'Katanga Contracting Services - Resource Management System',
+    period: '2025 to Present',
+    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
+    highlights: [
+      'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
+      'Improved asset tracking efficiency and data accuracy',
+      'Integrated modular controllers and seeding logic for roles, sites and transactions'
+    ],
+    technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Tailwind CSS'],
+    link: '#',
+    github: '#',
+  },
+  {
+    title: 'Afrisist - Alarm Monitoring System',
+    period: '2025 Limited Duration Project',
+    description: 'Built a self-hosted, real-time web application using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
+    highlights: [
+      'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
+      'Supporting animated tabs, filtering and real-time event streams',
+      'Enhanced reliability and speed with webhook-driven automation and optimised API routes'
+    ],
+    technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Tailwind CSS', 'DaisyUI'],
+    link: '#',
+    github: '#',
+  },
+  {
+    title: 'Eridge Branch of RDA Non-Profit Charity',
+    period: '2024',
+    description: 'Developed a full-stack web solution for a UK-based charity using React (Vite), Node.js (Express), and PostgreSQL (Supabase). Delivered CMS functionality for managing volunteers, gallery content, and programmes.',
+    highlights: [
+      'Designed accessible, responsive UI components matching the organization\'s branding',
+      'Implemented custom admin dashboard and contact form management',
+      'Dynamic program/event listings for better content control'
+    ],
+    technologies: ['React', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'DaisyUI'],
+    link: 'https://www.eridgerda.org.uk/',
+    github: '#',
+  },
+] as const;
 
 export function Projects() {
-  const projects = [
-    {
-      title: 'Katanga Contracting Services - Resource Management System',
-      period: '2025 to Present',
-      description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
-      highlights: [
-        'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
-        'Improved asset tracking efficiency and data accuracy',
-        'Integrated modular controllers and seeding logic for roles, sites and transactions'
-      ],
-      technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Tailwind CSS'],
-      link: '#',
-      github: '#',
-    },
-    {
-      title: 'Afrisist - Alarm Monitoring System',
-      period: '2025 Limited Duration Project',
-      description: 'Built a self-hosted, real-time web application using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
-      highlights: [
-        'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
-        'Supporting animated tabs, filtering and real-time event streams',
-        'Enhanced reliability and speed with webhook-driven automation and optimised API routes'
-      ],
-      technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Tailwind CSS', 'DaisyUI'],
-      link: '#',
-      github: '#',
-    },
-    {
-      title: 'Eridge Branch of RDA Non-Profit Charity',
-      period: '2024',
-      description: 'Developed a full-stack web solution for a UK-based charity using React (Vite), Node.js (Express), and PostgreSQL (Supabase). Delivered CMS functionality for managing volunteers, gallery content, and programmes.',
-      highlights: [
-        'Designed accessible, responsive UI components matching the organization\'s branding',
-        'Implemented custom admin dashboard and contact form management',
-        'Dynamic program/event listings for better content control'
-      ],
-      technologies: ['React', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'DaisyUI'],
-      link: 'https://www.eridgerda.org.uk/',
-      github: '#',
-    },
-  ];
 
   return (
     <div className="min-h-screen">
+      {/* Global Scroll Indicator */}
+      <ScrollIndicator variant="glossy" />
       {/* Projects Header */}
       <section className="w-full px-[var(--container-padding)] py-16 md:py-20">
         <div className="max-w-7xl mx-auto">
-          <FadeIn direction="up">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-bold">My Projects</h1>
+          <div className="space-y-4">
+            <SplitText
+              text="My Projects"
+              className="text-4xl md:text-5xl font-bold"
+              splitType="words"
+              delay={100}
+              duration={0.8}
+              ease="power3.out"
+              from={{ opacity: 0, y: 50, scale: 0.9 }}
+              to={{ opacity: 1, y: 0, scale: 1 }}
+              tag="h1"
+              threshold={0.2}
+            />
+            <FadeIn direction="up" delay={0.3}>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl">
                 A collection of real-world applications I've built, showcasing my full-stack development capabilities and problem-solving skills.
               </p>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          </div>
         </div>
       </section>
 
@@ -68,16 +83,8 @@ export function Projects() {
       <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
         <div className="max-w-7xl mx-auto">
           <StaggerReveal className="grid grid-cols-1 lg:grid-cols-2 gap-8" stagger={0.15}>
-            {projects.map((project, index) => (
-              <MagicBento
-                key={index}
-                particleCount={20}
-                particleSpeed={0.4}
-                particleSize={2}
-                particleColor="#3b82f6"
-                hoverIntensity={1.8}
-                className="h-full"
-              >
+            {PROJECTS.map((project, index) => (
+              <div key={index} className="h-full">
                 <Card className="h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1 group cursor-default bg-card/50 backdrop-blur-sm">
                   <CardHeader className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
@@ -135,8 +142,8 @@ export function Projects() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              </MagicBento>
+                  </Card>
+                </div>
             ))}
           </StaggerReveal>
         </div>

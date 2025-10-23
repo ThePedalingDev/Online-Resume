@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, Linkedin } from 'lucide-react';
 import { useState } from 'react';
 import SplitText from '@/components/animations/SplitText';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -14,7 +15,7 @@ export function Contact() {
   const contactDetails = [
     { icon: Mail, label: 'Email', value: 'markusfourie@icloud.com', href: 'mailto:markusfourie@icloud.com' },
     { icon: Phone, label: 'Phone', value: '+27 66 220 3312', href: 'tel:+27662203312' },
-    { icon: MapPin, label: 'Location', value: 'Midstream Estate, Gauteng, South Africa', href: '#' },
+    { icon: Linkedin, label: 'LinkedIn', value: 'Markus Fourie', href: 'https://linkedin.com/in/markus-fourie' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -26,8 +27,10 @@ export function Contact() {
 
   return (
     <div className="min-h-screen">
+      {/* Global Scroll Indicator */}
+      <ScrollIndicator variant="glossy" />
       {/* Header */}
-      <section className="w-full px-[var(--container-padding)] py-16 md:py-20">
+      <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
         <div className="max-w-7xl mx-auto">
           <div className="space-y-4">
             <SplitText
@@ -52,7 +55,7 @@ export function Contact() {
       </section>
 
       {/* Contact Methods */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16 bg-card/50">
+      <section className="w-full px-[var(--container-padding)] py-8 md:py-12 bg-card/50">
         <div className="max-w-7xl mx-auto">
           <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-6" stagger={0.15}>
             {contactDetails.map((contact, idx) => {
@@ -84,7 +87,7 @@ export function Contact() {
       </section>
 
       {/* Contact Form */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
+      <section className="w-full px-[var(--container-padding)] py-8 md:py-12">
         <div className="max-w-3xl mx-auto">
           <FadeIn direction="up" delay={0.2}>
             <Card>

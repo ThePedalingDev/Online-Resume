@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Sparkles, Code2, Zap, Users, Github, Linkedin, Mail, ExternalLink, FileText, Award, Download } from 'lucide-react';
-import { useRef } from 'react';
+import { ArrowRight, Sparkles, Code2, Zap, Users, Github, Linkedin, Mail, ExternalLink, FileText, Award, Download, ChevronDown } from 'lucide-react';
+import { useRef, useState, useEffect } from 'react';
 import SplitText from '@/components/animations/SplitText';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
@@ -12,9 +12,40 @@ import { StravaIcon } from '@/components/icons/StravaIcon';
 import bitmojiImage from '@/assets/images/bitmoji.png';
 import GradualBlur from '@/components/effects/GradualBlur';
 import LiquidEther from '@/components/effects/LiquidEther';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 export function Home() {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device with debounced resize handler
+  useEffect(() => {
+    let resizeTimeout: number;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    const debouncedCheckMobile = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(checkMobile, 150);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', debouncedCheckMobile);
+    
+    return () => {
+      window.removeEventListener('resize', debouncedCheckMobile);
+      clearTimeout(resizeTimeout);
+    };
+  }, []);
+
+  // Scroll to about section function
+  const scrollToAbout = () => {
+    const aboutSection = document.querySelector('#about-section');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const featuredProjects = [
     {
@@ -59,6 +90,8 @@ export function Home() {
 
   return (
     <div className="min-h-screen" ref={containerRef}>
+      {/* Global Scroll Indicator */}
+      <ScrollIndicator variant="glossy" />
       {/* Hero Section with LiquidEther Background */}
       <section className="w-full relative overflow-hidden min-h-screen flex items-center -mt-16 pt-16">
         {/* LiquidEther Background - Extended to cover navbar */}
@@ -93,6 +126,7 @@ export function Home() {
                   <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] pointer-events-none">
                     <img
                       src={bitmojiImage}
+                      loading="lazy"
                       alt="Markus Fourie - Full-Stack Developer"
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                     />
@@ -112,6 +146,7 @@ export function Home() {
                     <div className="relative w-32 h-32 pointer-events-none">
                       <img
                         src={bitmojiImage}
+                      loading="lazy"
                         alt="Markus Fourie - Full-Stack Developer"
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                       />
@@ -156,7 +191,7 @@ export function Home() {
 
                   <FadeIn delay={0.5} direction="up">
                     <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed pointer-events-none">
-                      I build scalable web solutions that make a real impact. Specializing in full-stack development with React, Node.js, and ASP.NET.
+                      I build and develop computer-based solutions that make a real impact with a strong foundation in React, Node.js and ASP.NET.
                     </p>
                   </FadeIn>
 
@@ -200,10 +235,23 @@ export function Home() {
             </div>
           </div>
         </div>
+
+        {/* Mobile Scroll Button */}
+        {isMobile && (
+          <FadeIn delay={1} direction="up" className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <Button
+              onClick={scrollToAbout}
+              size="lg"
+              className="bg-background/80 backdrop-blur-sm border border-primary/20 hover:bg-background/90 hover:scale-105 transition-all duration-300 shadow-lg"
+            >
+              <ChevronDown className="w-5 h-5 animate-bounce text-primary" />
+            </Button>
+          </FadeIn>
+        )}
       </section>
 
       {/* About Section */}
-      <section className="w-full px-[var(--container-padding)] py-16 md:py-20 bg-gradient-to-br from-card/30 via-card/50 to-card/30 relative overflow-hidden">
+      <section id="about-section" className="w-full px-[var(--container-padding)] py-16 md:py-20 bg-gradient-to-br from-card/30 via-card/50 to-card/30 relative overflow-hidden">
         <GradualBlur preset="top" strength={1.5} height="4rem" opacity={0.6} />
         
         {/* Background Pattern */}
@@ -229,7 +277,7 @@ export function Home() {
               <FadeIn direction="up" delay={0.2}>
                 <div className="space-y-6">
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    I'm a passionate <span className="text-primary font-semibold">full-stack web developer</span> and <span className="text-accent font-semibold">BSc IT student</span> specializing in Application Development. I've worked on several real-world projects ranging from mining management systems to charity websites and alarm monitoring dashboards.
+                    I'm a passionate <span className="text-primary font-semibold">full-stack web developer</span> and <span className="text-blue-600 dark:text-blue-400 font-semibold">BSc IT student</span> specializing in Application Development. I've worked on several real-world projects ranging from mining management systems to charity websites and alarm monitoring dashboards.
                   </p>
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                     I love building solutions that make a difference, combining clean design with solid backend logic. My goal is to grow into a <span className="text-primary font-semibold">Solutions Architect</span> and design systems that scale globally.
@@ -240,7 +288,7 @@ export function Home() {
               <FadeIn direction="up" delay={0.4}>
                 <div className="space-y-4">
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Beyond code, I'm an <span className="text-accent font-semibold">XC and road cycling enthusiast</span>, strength training advocate, and home lab tinkerer. I believe in continuous learning and staying ahead of tech trends.
+                    Beyond code, I'm an <span className="text-green-600 dark:text-green-400 font-semibold">XC and road cycling enthusiast</span>, strength training advocate, and home lab tinkerer. I believe in continuous learning and staying ahead of tech trends.
                   </p>
                   
                   {/* Skills Tags */}
@@ -301,10 +349,10 @@ export function Home() {
             </div>
           </FadeIn>
 
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" stagger={0.15}>
+          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch" stagger={0.15}>
             {featuredProjects.map((project, index) => (
               <ScaleIn key={index} delay={index * 0.1}>
-                <div className="group relative">
+                <div className="group relative h-full">
                   <Card className="h-full flex flex-col bg-background/50 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl overflow-hidden">
                     {/* Glare Effect */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -338,8 +386,8 @@ export function Home() {
                         </div>
                       </div>
                       
-                      {project.link && (
-                        <div className="mt-6 pt-4 border-t border-border/50">
+                      {project.link && project.link !== '#' ? (
+                        <div className="mt-auto pt-4 border-t border-border/50">
                           <a 
                             href={project.link} 
                             target="_blank" 
@@ -349,6 +397,10 @@ export function Home() {
                             <span className="text-sm font-medium">View Project</span>
                             <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                           </a>
+                        </div>
+                      ) : (
+                        <div className="mt-auto pt-4">
+                          {/* Empty space to maintain consistent card heights */}
                         </div>
                       )}
                     </CardContent>

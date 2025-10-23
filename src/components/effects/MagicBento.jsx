@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import './MagicBento.css';
 
@@ -6,6 +6,7 @@ const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = '132, 0, 255';
 const MOBILE_BREAKPOINT = 768;
+const MOBILE_PARTICLE_COUNT = 6; // Reduced for mobile performance
 
 const cardData = [
   {
@@ -99,15 +100,20 @@ const ParticleCard = ({
   const particlesInitialized = useRef(false);
   const magnetismAnimationRef = useRef(null);
 
+  // Memoize particle count based on device type
+  const effectiveParticleCount = useMemo(() => {
+    return window.innerWidth <= MOBILE_BREAKPOINT ? MOBILE_PARTICLE_COUNT : particleCount;
+  }, [particleCount]);
+
   const initializeParticles = useCallback(() => {
     if (particlesInitialized.current || !cardRef.current) return;
 
     const { width, height } = cardRef.current.getBoundingClientRect();
-    memoizedParticles.current = Array.from({ length: particleCount }, () =>
+    memoizedParticles.current = Array.from({ length: effectiveParticleCount }, () =>
       createParticleElement(Math.random() * width, Math.random() * height, glowColor)
     );
     particlesInitialized.current = true;
-  }, [particleCount, glowColor]);
+  }, [effectiveParticleCount, glowColor]);
 
   const clearAllParticles = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
@@ -211,8 +217,16 @@ const ParticleCard = ({
       }
     };
 
+    // Throttled mouse move handler for better performance
+    let mouseMoveTimeout;
     const handleMouseMove = e => {
       if (!enableTilt && !enableMagnetism) return;
+      
+      // Throttle mousemove events to 60fps (16ms)
+      if (mouseMoveTimeout) return;
+      mouseMoveTimeout = setTimeout(() => {
+        mouseMoveTimeout = null;
+      }, 16);
 
       const rect = element.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -310,7 +324,13 @@ const ParticleCard = ({
     <div
       ref={cardRef}
       className={`${className} particle-container`}
-      style={{ ...style, position: 'relative', overflow: 'hidden' }}
+      style={{ 
+        ...style, 
+        position: 'relative', 
+        overflow: 'hidden',
+        borderRadius: 'inherit',
+        border: 'none'
+      }}
     >
       {children}
     </div>
@@ -459,12 +479,21 @@ const useMobileDetection = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    let resizeTimeout;
     const checkMobile = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    
+    const debouncedCheckMobile = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(checkMobile, 150);
+    };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', debouncedCheckMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', debouncedCheckMobile);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   return isMobile;

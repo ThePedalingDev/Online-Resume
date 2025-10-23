@@ -1,0 +1,34 @@
+/* Performance optimization CSS hints */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.will-animate-complete {
+  will-change: auto;
+}
+
+/* Optimize frequently animated elements */
+.animate-bounce,
+.animate-spin,
+.animate-pulse {
+  will-change: transform;
+}
+
+/* Optimize hover animations - using proper Tailwind classes */
+.hover\:scale-105:hover,
+.hover\:scale-110:hover,
+.hover\:-translate-y-1:hover,
+.hover\:-translate-y-2:hover,
+.hover\:-translate-y-3:hover {
+  will-change: transform;
+}
+
+/* Optimize GSAP animations */
+.gsap-animate {
+  will-change: transform, opacity;
+}
+
+/* Reset will-change after animations complete */
+.gsap-animate-complete {
+  will-change: auto;
+}

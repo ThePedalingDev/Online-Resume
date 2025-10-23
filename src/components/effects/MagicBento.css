@@ -182,6 +182,11 @@
 .particle-container {
   position: relative;
   overflow: hidden;
+  border-radius: inherit !important;
+}
+
+.particle-container:hover {
+  border-radius: inherit !important;
 }
 
 .particle::before {
@@ -214,4 +219,5 @@
   position: relative;
   user-select: none;
 }
+
 
