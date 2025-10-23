@@ -2,15 +2,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, Phone, Linkedin } from 'lucide-react';
+import { Mail, Phone, Linkedin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import SplitText from '@/components/animations/SplitText';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG, EMAIL_TEMPLATE_PARAMS } from '@/config/emailjs';
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const contactDetails = [
     { icon: Mail, label: 'Email', value: 'markusfourie@icloud.com', href: 'mailto:markusfourie@icloud.com' },
@@ -18,11 +22,52 @@ export function Contact() {
     { icon: Linkedin, label: 'LinkedIn', value: 'Markus Fourie', href: 'https://linkedin.com/in/markus-fourie' },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! I\'ll get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // Check if EmailJS is configured
+      if (EMAILJS_CONFIG.serviceId === 'service_your_service_id') {
+        // EmailJS not configured, simulate sending
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log('EmailJS not configured. Simulating email send:', formData);
+      } else {
+        // Send email using EmailJS
+        const templateParams = {
+          ...EMAIL_TEMPLATE_PARAMS,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          time: new Date().toLocaleString(),
+        };
+
+        const result = await emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          templateParams,
+          EMAILJS_CONFIG.publicKey
+        );
+
+        console.log('Email sent successfully:', result);
+      }
+      
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+      
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+      
+      // Reset error message after 5 seconds
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,10 +137,32 @@ export function Contact() {
           <FadeIn direction="up" delay={0.2}>
             <Card>
               <CardHeader>
-                <CardTitle>Send Me a Message</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Send className="w-5 h-5" />
+                  Send Me a Message
+                </CardTitle>
                 <CardDescription>I'll get back to you as soon as possible</CardDescription>
               </CardHeader>
               <CardContent>
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="mb-6 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <p className="text-green-800 dark:text-green-200 font-medium">
+                      Message sent successfully! I'll get back to you soon.
+                    </p>
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    <p className="text-red-800 dark:text-red-200 font-medium">
+                      Sorry, there was an error sending your message. Please try again or contact me directly.
+                    </p>
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -105,6 +172,7 @@ export function Contact() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-2">
@@ -115,6 +183,7 @@ export function Contact() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -126,12 +195,51 @@ export function Contact() {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       required
                       rows={6}
+                      disabled={isSubmitting}
                     />
                   </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    Send Message
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
+
+                {/* Alternative Contact Methods */}
+                <div className="mt-8 pt-6 border-t border-border/50">
+                  <p className="text-sm text-muted-foreground text-center mb-4">
+                    Prefer to contact me directly?
+                  </p>
+                  <div className="flex justify-center gap-4">
+                    <a 
+                      href="mailto:markusfourie@icloud.com"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm font-medium"
+                    >
+                      <Mail className="w-4 h-4" />
+                      Email Me
+                    </a>
+                    <a 
+                      href="tel:+27662203312"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm font-medium"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Call Me
+                    </a>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </FadeIn>
