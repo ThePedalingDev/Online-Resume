@@ -164,9 +164,7 @@ export function NotFound() {
               <ShinyText
                 text="Lost in the Code?"
                 className="text-2xl md:text-3xl font-bold mb-4"
-                shimmerColor="hsl(var(--primary))"
-                shimmerWidth={200}
-                animationDuration={3}
+                duration={3}
               />
               <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
                 Even the best developers encounter 404 errors. It's part of the journey! 
