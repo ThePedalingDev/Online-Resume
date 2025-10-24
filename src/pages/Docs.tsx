@@ -5,8 +5,11 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import { useState } from 'react';
 
 export function Docs() {
+  const [showComingSoon, setShowComingSoon] = useState(false);
+
   const certifications = [
     {
       title: 'BSc Computer and Information Science (Cum Laude*)',
@@ -20,6 +23,7 @@ export function Docs() {
       bgColor: 'bg-blue-600/10',
       downloadUrl: '#',
       verifyUrl: null,
+      isComingSoon: true,
     },
     {
       title: 'Golden Key International Honour Society',
@@ -33,32 +37,7 @@ export function Docs() {
       bgColor: 'bg-yellow-600/10',
       downloadUrl: '/cert-docs/VC_GoldenKey.pdf',
       verifyUrl: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455',
-    },
-    {
-      title: 'Full-Stack Web Development',
-      issuer: 'Certification Authority',
-      date: '2023',
-      type: 'Certificate',
-      description: 'Comprehensive certification covering React, Node.js, databases, and deployment strategies.',
-      status: 'Verified',
-      icon: Award,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-600/10',
-      downloadUrl: '#',
-      verifyUrl: null,
-    },
-    {
-      title: 'ASP.NET Core Developer',
-      issuer: 'Microsoft',
-      date: '2023',
-      type: 'Certificate',
-      description: 'Professional certification in ASP.NET Core MVC, Entity Framework, and C# development.',
-      status: 'Verified',
-      icon: Award,
-      color: 'text-green-600',
-      bgColor: 'bg-green-600/10',
-      downloadUrl: '#',
-      verifyUrl: null,
+      isComingSoon: false,
     },
   ];
 
@@ -72,16 +51,16 @@ export function Docs() {
       isZip: true,
     },
     {
-      title: 'CV - Markus Fourie',
-      description: 'Professional curriculum vitae with complete work experience and qualifications.',
+      title: 'CV - Markus Fourie (Full Version)',
+      description: 'Complete curriculum vitae with detailed work experience, education, and qualifications.',
       type: 'CV',
       icon: FileText,
-      downloadUrl: '/cert-docs/251023 Markus Fourie CV.pdf',
+      downloadUrl: '/cert-docs/251024 Markus Fourie CV.pdf',
       isZip: false,
     },
     {
-      title: 'Resume - Markus Fourie',
-      description: 'Concise resume highlighting key skills, experience, and achievements.',
+      title: 'Resume - Markus Fourie (Short Version)',
+      description: 'Concise one-page resume highlighting key skills, experience, and achievements.',
       type: 'Resume',
       icon: FileText,
       downloadUrl: '/cert-docs/251023 Markus Fourie Resume.pdf',
@@ -180,46 +159,65 @@ export function Docs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="flex gap-2">
-                      {cert.verifyUrl ? (
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="flex-1 hover:scale-105 transition-transform"
-                          asChild
-                        >
-                          <a href={cert.verifyUrl} target="_blank" rel="noopener noreferrer">
-                            <CheckCircle2 className="w-4 h-4 mr-2" />
-                            Verify Online
-                          </a>
-                        </Button>
-                      ) : (
-                        <>
+                    {cert.isComingSoon && showComingSoon ? (
+                      <div className="text-center py-4">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium">
+                          <GraduationCap className="w-4 h-4" />
+                          Coming Soon (End of 2025)
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        {cert.verifyUrl ? (
                           <Button 
-                            variant="outline" 
+                            variant="default" 
                             size="sm" 
                             className="flex-1 hover:scale-105 transition-transform"
                             asChild
                           >
-                            <a href={cert.downloadUrl} download>
-                              <Download className="w-4 h-4 mr-2" />
-                              Download
+                            <a href={cert.verifyUrl} target="_blank" rel="noopener noreferrer">
+                              <CheckCircle2 className="w-4 h-4 mr-2" />
+                              Verify Online
                             </a>
                           </Button>
+                        ) : cert.isComingSoon ? (
                           <Button 
                             variant="outline" 
                             size="sm" 
                             className="flex-1 hover:scale-105 transition-transform"
-                            asChild
+                            onClick={() => setShowComingSoon(true)}
                           >
-                            <a href={cert.downloadUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              View
-                            </a>
+                            <Download className="w-4 h-4 mr-2" />
+                            Download
                           </Button>
-                        </>
-                      )}
-                    </div>
+                        ) : (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-1 hover:scale-105 transition-transform"
+                              asChild
+                            >
+                              <a href={cert.downloadUrl} download>
+                                <Download className="w-4 h-4 mr-2" />
+                                Download
+                              </a>
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-1 hover:scale-105 transition-transform"
+                              asChild
+                            >
+                              <a href={cert.downloadUrl} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                View
+                              </a>
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );
@@ -244,9 +242,9 @@ export function Docs() {
               return (
                 <Card 
                   key={index}
-                  className="hover:shadow-lg transition-all hover:-translate-y-1 group cursor-pointer"
+                  className="hover:shadow-lg transition-all hover:-translate-y-1 group cursor-pointer flex flex-col h-full"
                 >
-                  <CardHeader>
+                  <CardHeader className="flex-1">
                     <div className="flex items-start gap-3 mb-2">
                       <div className="p-2 rounded-lg bg-primary/10 transition-all group-hover:scale-110">
                         <Icon className="w-5 h-5 text-primary" />
@@ -272,7 +270,7 @@ export function Docs() {
                       {record.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="mt-auto">
                     <Button 
                       variant="outline" 
                       size="sm" 

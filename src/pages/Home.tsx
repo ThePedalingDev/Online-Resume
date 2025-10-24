@@ -288,12 +288,12 @@ export function Home() {
               <FadeIn direction="up" delay={0.4}>
                 <div className="space-y-4">
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Beyond code, I'm an <span className="text-green-600 dark:text-green-400 font-semibold">XC and road cycling enthusiast</span>, strength training advocate, and home lab tinkerer. I believe in continuous learning and staying ahead of tech trends.
+                    Beyond code, I'm a <span className="text-green-600 dark:text-green-400 font-semibold">cross-country and road cycling enthusiast</span>, strength training advocate, and passionate self-learner who enjoys experimenting with new technologies in my home lab. I believe in continuous learning and staying ahead of tech trends through hands-on exploration and independent study.
                   </p>
                   
                   {/* Skills Tags */}
                   <div className="flex flex-wrap gap-3 pt-4">
-                    {['Docker', 'Nginx', 'React', 'Node.js', 'ASP.NET'].map((skill) => (
+                    {['JavaScript', 'TypeScript', 'C#', 'React', 'Node.js'].map((skill) => (
                       <div key={skill} className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
                         {skill}
                       </div>

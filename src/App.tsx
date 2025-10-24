@@ -11,6 +11,7 @@ const Contact = lazy(() => import('@/pages/Contact').then(module => ({ default: 
 const Skills = lazy(() => import('@/pages/Skills').then(module => ({ default: module.Skills })));
 const Social = lazy(() => import('@/pages/Social').then(module => ({ default: module.Social })));
 const Docs = lazy(() => import('@/pages/Docs').then(module => ({ default: module.Docs })));
+const NotFound = lazy(() => import('@/pages/NotFound').then(module => ({ default: module.NotFound })));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -58,6 +59,11 @@ function App() {
             <Route path="/docs" element={
               <Suspense fallback={<PageLoader />}>
                 <Docs />
+              </Suspense>
+            } />
+            <Route path="*" element={
+              <Suspense fallback={<PageLoader />}>
+                <NotFound />
               </Suspense>
             } />
           </Route>
