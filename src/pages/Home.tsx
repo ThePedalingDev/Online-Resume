@@ -349,7 +349,7 @@ export function Home() {
             </div>
           </FadeIn>
 
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch" stagger={0.15}>
+          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" stagger={0.15}>
             {featuredProjects.map((project, index) => (
               <ScaleIn key={index} delay={index * 0.1}>
                 <div className="group relative h-full">
@@ -361,19 +361,19 @@ export function Home() {
                       />
                     </div>
                     
-                    <CardHeader className="pb-4 relative z-10">
+                    <CardHeader className="pb-4 relative z-10 flex-shrink-0">
                       <div className="space-y-3">
                         <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors leading-tight">
                           {project.title}
                         </CardTitle>
-                        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+                        <CardDescription className="text-sm leading-relaxed text-muted-foreground min-h-[3.5rem]">
                           {project.description}
                         </CardDescription>
                       </div>
                     </CardHeader>
                     
                     <CardContent className="flex-1 flex flex-col justify-between relative z-10">
-                      <div className="space-y-4">
+                      <div className="flex-1 flex flex-col justify-end">
                         <div className="flex flex-wrap gap-2">
                           {project.tags.map((tag) => (
                             <span
@@ -387,7 +387,7 @@ export function Home() {
                       </div>
                       
                       {project.link && project.link !== '#' ? (
-                        <div className="mt-auto pt-4 border-t border-border/50">
+                        <div className="mt-4 pt-4 border-t border-border/50">
                           <a 
                             href={project.link} 
                             target="_blank" 
@@ -399,7 +399,7 @@ export function Home() {
                           </a>
                         </div>
                       ) : (
-                        <div className="mt-auto pt-4">
+                        <div className="mt-4 pt-4">
                           {/* Empty space to maintain consistent card heights */}
                         </div>
                       )}

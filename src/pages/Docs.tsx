@@ -59,11 +59,11 @@ export function Docs() {
       isZip: false,
     },
     {
-      title: 'Resume - Markus Fourie (Short Version)',
-      description: 'Concise one-page resume highlighting key skills, experience, and achievements.',
-      type: 'Resume',
+      title: 'Abridged CV - Markus Fourie',
+      description: 'Concise one-page CV highlighting key skills, experience, and achievements.',
+      type: 'CV',
       icon: FileText,
-      downloadUrl: '/cert-docs/251023 Markus Fourie Resume.pdf',
+      downloadUrl: '/cert-docs/251024 Markus Fourie Abridged Resume.pdf',
       isZip: false,
     },
   ];

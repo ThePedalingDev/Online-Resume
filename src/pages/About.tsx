@@ -361,7 +361,7 @@ export function About() {
                     </p>
                   </div>
                   <Button size="lg" className="flex items-center gap-2 hover:scale-105 transition-transform bg-primary hover:bg-primary/90 text-white border-0 px-8 py-6 text-lg font-semibold" asChild>
-                    <a href="/cert-docs/251023 Markus Fourie Resume.pdf" download>
+                    <a href="/cert-docs/251024 Markus Fourie Abridged Resume.pdf" download>
                       <Download className="w-5 h-5" />
                       Download Resume
                     </a>
