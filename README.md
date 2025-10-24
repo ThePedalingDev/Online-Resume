@@ -1,73 +1,131 @@
-# React + TypeScript + Vite
+# Markus Fourie - Personal CV Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive personal portfolio website showcasing my full-stack development skills, projects, and professional journey.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Deployment](#deployment)
+- [Contact](#contact)
 
-## React Compiler
+## Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This is my personal CV website built to showcase my professional portfolio, technical skills, and academic achievements. The site features modern animations, responsive design, and interactive elements to demonstrate my frontend development capabilities.
 
-## Expanding the ESLint configuration
+**Live Demo:** [markusfourie.dev](https://markusfourie.dev/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Category | Technology | Purpose |
+|----------|------------|---------|
+| **Frontend** | React 18 | Component-based UI development |
+| **Language** | TypeScript | Type safety and better development experience |
+| **Build Tool** | Vite | Fast development server and optimized builds |
+| **Styling** | Tailwind CSS | Utility-first CSS framework for rapid styling |
+| **UI Components** | DaisyUI | Pre-built component library for Tailwind |
+| **Animations** | GSAP | Professional animations and transitions |
+| **Routing** | React Router | Client-side routing |
+| **Icons** | Lucide React | Modern icon library |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Why These Technologies?
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **React + TypeScript**: Industry standard for modern web development with excellent type safety
+- **Vite**: Significantly faster than Create React App, better developer experience
+- **Tailwind CSS**: Rapid prototyping and consistent design system
+- **GSAP**: Professional-grade animations that enhance user experience
+- **DaisyUI**: Accelerates development with pre-built, accessible components
+
+## Features
+
+-  **Modern Design**: Clean, professional interface with smooth animations
+-  **Responsive**: Optimized for all device sizes
+-  **Fast Performance**: Optimized loading and smooth interactions
+-  **Portfolio Showcase**: Interactive project displays with live demos
+-  **Documentation**: Downloadable CV, resume, and academic records
+-  **Skills Visualization**: Interactive tech stack presentation
+-  **Contact Integration**: Multiple ways to get in touch
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ThePedalingDev/CV_Website.git
+   cd CV_Website/frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:5173`
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+frontend/
+├── public/
+│   ├── cert-docs/           # PDF documents and certificates
+│   └── favicon.svg
+├── src/
+│   ├── components/
+│   │   ├── animations/      # Custom animation components
+│   │   ├── effects/        # Visual effect components
+│   │   ├── icons/          # Custom icon components
+│   │   └── ui/             # Reusable UI components
+│   ├── pages/              # Main page components
+│   │   ├── About.tsx
+│   │   ├── Contact.tsx
+│   │   ├── Docs.tsx
+│   │   ├── Home.tsx
+│   │   ├── Projects.tsx
+│   │   └── Skills.tsx
+│   ├── contexts/           # React contexts
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utility functions
+│   └── layouts/            # Layout components
+├── package.json
+├── tailwind.config.js
+├── tsconfig.json
+└── vite.config.ts
+```
+
+## Deployment
+
+The website is deployed on **Vercel** with automatic deployments from the main branch.
+
+## Contact
+
+- **Website**: [markusfourie.dev](https://markusfourie.dev/)
+- **Email**: markusfourie@icloud.com
+- **LinkedIn**: [linkedin.com/in/markus-fourie](https://www.linkedin.com/in/markus-fourie/)
+- **GitHub**: [github.com/ThePedalingDev](https://github.com/ThePedalingDev)
+
+---
+

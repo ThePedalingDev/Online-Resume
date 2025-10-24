@@ -132,19 +132,22 @@ export function About() {
               <CardContent className="p-8">
                 <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
                   <p>
-                Full-stack software- and applications developer, specialising in systems design, development, multi-disciplinary programming and systems maintenance, who will complete final year of BSc. Computer and Information Science Degree, expected to be received Cum Laude in December 2025.
+                Full-stack software- and applications developer, specialising in systems design, development, multi-language programming and systems maintenance, who will complete final year of BSc. Computer and Information Science Degree, expected to be received Cum Laude in December 2025.
               </p>
               <p>
-                Already experienced in developing scalable, web-based, enterprise solutions, including the "Resource Management System" of Rimitso Mining Services (Pty) Ltd (being developed under Technical Services and Management Consulting Agreement for African Mining Solutions Ltd and its major subsidiary, Katanga Contracting Services SAS established in DRC) and the Afrisist Fleet Management Alarm Dashboard - both of which systems being developed whilst completing Final year of BSc. Degree.
+                A proficient Software Developer, experienced in developing scalable, web-based, enterprise solutions, including the "Resource Management System" of Rimitso Mining Services (Pty) Ltd (being developed under Technical Services and Management Consulting Agreement for African Mining Solutions Ltd and its major subsidiary, Katanga Contracting Services in DRC) and the Afrisist Fleet Management Alarm Dashboard - both of which systems being developed whilst completing Final year of BSc. Degree.
               </p>
               <p>
                 Always ready to take responsibility and initiative, to create high-quality and performance-driven systems and solutions, applying appropriate attention to critical details and pro-active problem-solving skills.
               </p>
               <p>
-                Content to work unsupervised, if needed, but always focussed on working with, supporting and developing teams and mentoring-, developing and assisting others. Served as Varsity College student tutor, to both junior students and fellow students.
+                Content to work unsupervised, but always focussed on supporting teams and mentoring, developing and assisting others. Served as Varsity College student tutor, to both junior students and fellow students.
               </p>
               <p>
                 Loyal, hard working and eager to make a difference, to grow and serve people, business and systems.
+              </p>
+              <p>
+                Committed to continuous learning and improvement, striving to become a leading Solutions Architect.
               </p>
                 </div>
               </CardContent>
