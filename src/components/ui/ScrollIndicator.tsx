@@ -73,14 +73,13 @@ export function ScrollIndicator({
     <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 ${className}`}>
       <button
         onClick={scrollToNext}
-        className={`group flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 animate-bounce ${getVariantStyles()}`}
+        className={`group flex items-center justify-center w-12 h-12 rounded-full will-change-transform transition-[transform,background-color,border-color,box-shadow] duration-200 ease-out hover:scale-110 hover:-translate-y-1 active:scale-[0.97] ${getVariantStyles()}`}
         aria-label="Scroll to next section"
       >
         <ChevronDown className="w-5 h-5 text-primary group-hover:text-primary/80 transition-colors" />
       </button>
       
-      {/* Subtle pulse effect */}
-      <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-20 pointer-events-none"></div>
+      <div className="absolute inset-0 rounded-full bg-primary/10 opacity-30 pointer-events-none"></div>
     </div>
   );
 }
@@ -124,12 +123,12 @@ export function SectionScrollIndicator({
     <div className={`flex justify-center py-8 ${className}`}>
       <button
         onClick={scrollToNext}
-        className="group flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+        className="group flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors active:scale-[0.98] will-change-transform"
         aria-label="Continue to next section"
       >
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium">More below</span>
-          <ChevronDown className="w-4 h-4 animate-bounce group-hover:scale-110 transition-transform" />
+          <ChevronDown className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 ease-out" />
         </div>
       </button>
     </div>

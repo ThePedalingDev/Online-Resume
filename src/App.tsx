@@ -1,7 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { RootLayout } from '@/layouts/RootLayout';
 import { Suspense, lazy } from 'react';
+import { AdminLogin } from '@/pages/AdminLogin';
+import { Admin } from '@/pages/Admin';
 
 // Lazy load page components for code splitting
 const Home = lazy(() => import('@/pages/Home').then(module => ({ default: module.Home })));
@@ -10,7 +12,6 @@ const Projects = lazy(() => import('@/pages/Projects').then(module => ({ default
 const Contact = lazy(() => import('@/pages/Contact').then(module => ({ default: module.Contact })));
 const Skills = lazy(() => import('@/pages/Skills').then(module => ({ default: module.Skills })));
 const Social = lazy(() => import('@/pages/Social').then(module => ({ default: module.Social })));
-const Docs = lazy(() => import('@/pages/Docs').then(module => ({ default: module.Docs })));
 const NotFound = lazy(() => import('@/pages/NotFound').then(module => ({ default: module.NotFound })));
 
 // Loading fallback component
@@ -25,6 +26,8 @@ function App() {
     <ThemeProvider>
       <Router>
         <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<Admin />} />
           <Route element={<RootLayout />}>
             <Route path="/" element={
               <Suspense fallback={<PageLoader />}>
@@ -56,11 +59,7 @@ function App() {
                 <Social />
               </Suspense>
             } />
-            <Route path="/docs" element={
-              <Suspense fallback={<PageLoader />}>
-                <Docs />
-              </Suspense>
-            } />
+            <Route path="/docs" element={<Navigate to="/#docs" replace />} />
             <Route path="*" element={
               <Suspense fallback={<PageLoader />}>
                 <NotFound />

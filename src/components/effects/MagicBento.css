@@ -33,7 +33,10 @@
   background: var(--background-dark);
   font-weight: 300;
   overflow: hidden;
-  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
 
   --glow-x: 50%;
   --glow-y: 50%;
@@ -44,6 +47,10 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .card__header,

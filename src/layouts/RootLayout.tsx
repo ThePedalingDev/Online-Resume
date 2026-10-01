@@ -1,17 +1,21 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ScrollToTop } from '@/components/ScrollToTop';
 
 export function RootLayout() {
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
+  const isAdmin = pathname.startsWith('/admin');
+
   return (
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
-      <Navbar />
+      {!isHome && !isAdmin && <Navbar />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <Footer />
+      {!isHome && !isAdmin && <Footer />}
     </div>
   );
 }

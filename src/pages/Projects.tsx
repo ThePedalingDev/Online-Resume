@@ -10,26 +10,26 @@ const PROJECTS = [
   {
     title: 'Katanga Contracting Services - Resource Management System',
     period: '2025 to Present',
-    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
+    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
     highlights: [
       'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
       'Improved asset tracking efficiency and data accuracy',
       'Integrated modular controllers and seeding logic for roles, sites and transactions'
     ],
-    technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Tailwind CSS'],
+    technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Azure', 'Tailwind CSS'],
     link: '#',
     github: '#',
   },
   {
     title: 'Afrisist - Alarm Monitoring System',
     period: '2025 Limited Duration Project',
-    description: 'Built a self-hosted, real-time web application using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
+    description: 'Built a real-time web application, hosted on Azure, using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
     highlights: [
       'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
       'Supporting animated tabs, filtering and real-time event streams',
       'Enhanced reliability and speed with webhook-driven automation and optimised API routes'
     ],
-    technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Tailwind CSS', 'DaisyUI'],
+    technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Azure', 'Tailwind CSS', 'DaisyUI'],
     link: '#',
     github: '#',
   },

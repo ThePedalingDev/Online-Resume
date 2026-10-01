@@ -13,7 +13,7 @@ export function Docs() {
   const certifications = [
     {
       title: 'BSc Computer and Information Science (Cum Laude*)',
-      issuer: 'Varsity College – Pretoria Campus, RSA',
+      issuer: 'Varsity College, Pretoria Campus, RSA',
       date: '2023 to December 2025',
       type: 'Degree',
       description: 'Bachelor of Science degree in Computer and Information Sciences. Expected to be received Cum Laude, passing 19 of 20 completed modules with distinctions.',
@@ -70,7 +70,7 @@ export function Docs() {
 
   const academicInfo = {
     degree: 'BSc Computer and Information Science Degree (Cum Laude*)',
-    institution: 'Varsity College – Pretoria Campus, RSA',
+    institution: 'Varsity College, Pretoria Campus, RSA',
     period: '2023 to December 2025',
     highlights: [
       '*Expected to be received Cum Laude, passing 19 of 20 completed modules with distinctions.',

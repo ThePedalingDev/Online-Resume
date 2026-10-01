@@ -1,579 +1,1170 @@
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Sparkles, Code2, Zap, Users, Github, Linkedin, Mail, ExternalLink, FileText, Award, Download, ChevronDown } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
-import SplitText from '@/components/animations/SplitText';
-import { FadeIn } from '@/components/animations/FadeIn';
-import { StaggerReveal } from '@/components/animations/StaggerReveal';
-import { ScaleIn } from '@/components/animations/ScaleIn';
-import { ShinyText } from '@/components/animations/ShinyText';
-import { StravaIcon } from '@/components/icons/StravaIcon';
-import bitmojiImage from '@/assets/images/bitmoji.png';
-import GradualBlur from '@/components/effects/GradualBlur';
-import LiquidEther from '@/components/effects/LiquidEther';
-import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import pfpImage from '@/assets/images/PFP.jpg';
+import gearEpic from '@/assets/gear/epic-sworks.jpg';
+import gearGarmin from '@/assets/gear/garmin-edge-840.jpg';
+import gearHeadset from '@/assets/gear/arctis-nova-pro.webp';
+import gearKeyboard from '@/assets/gear/corsair-vanguard-96.jpg';
+import gearLaptop from '@/assets/gear/rog-zephyrus-g16.jpg';
+import gearMouse from '@/assets/gear/logitech-g-pro.jpg';
+import gearScicon from '@/assets/gear/scicon-aeroshade.jpg';
+import gearWilier from '@/assets/gear/wilier-rave.png';
+import trailseekerWellington from '@/assets/images/trailseeker-wellington.jpg';
+import deskSetup from '@/assets/images/desk-setup.jpg';
+import raceReady from '@/assets/images/race-ready.jpg';
+import longRide from '@/assets/images/long-ride.jpg';
+import sworksUpgrades from '@/assets/images/sworks-upgrades.jpg';
+import graduationPhoto from '@/assets/images/graduation-kyle.jpg';
+import topAchieverPhoto from '@/assets/images/top-achiever.jpg';
+import goldenKeyBadge from '@/assets/images/golden-key.png';
+import skillanceMark from '@/assets/images/skillance-mark.png';
+import kcsMark from '@/assets/projects/kcs.webp';
+import afrisistMark from '@/assets/projects/afrisist.png';
+import afrisistFleet from '@/assets/projects/afrisist-fleet.jpg';
+import rmsHome from '@/assets/projects/rms-home.jpg';
+import skillanceHome from '@/assets/projects/skillance-home.jpg';
+import rdaMark from '@/assets/projects/rda-logo.svg';
+import eridgeRda from '@/assets/projects/eridge-rda.jpg';
+import capePeninsula from '@/assets/video/cape-peninsula.mp4';
+import capePeninsulaPoster from '@/assets/video/cape-peninsula.jpg';
+import capeFriends from '@/assets/images/cape-friends.jpg';
+import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
+import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
+import { fetchContent } from '@/lib/content';
 
-export function Home() {
-  const containerRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detect mobile device with debounced resize handler
+function useInView<T extends HTMLElement>(threshold = 0.2) {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    let resizeTimeout: number;
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) setInView(true); }),
+      { threshold, rootMargin: '-40px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, inView };
+}
+
+function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${inView ? 'is-in' : ''} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+const NAV_LINKS = [
+  ['#about', 'About'],
+  ['#journey', 'Journey'],
+  ['#projects', 'Work'],
+  ['#stack', 'Stack'],
+  ['#docs', 'Docs'],
+  ['#contact', 'Contact'],
+] as const;
+
+function EdNav() {
+  return (
+    <nav className="ed-nav">
+      <div className="ed-nav-inner">
+        <a href="#top" className="ed-nav-brand">Markus Fourie</a>
+        <div className="ed-nav-links">
+          {NAV_LINKS.map(([href, label]) => (
+            <a key={href} href={href}>{label}</a>
+          ))}
+        </div>
+        <div className="ed-nav-meta">
+          <span className="status-dot" />
+          Available
+        </div>
+        <a className="ed-nav-cta" href="#contact">Get in touch</a>
+        <details className="ed-nav-drawer">
+          <summary>Menu</summary>
+          <div className="ed-nav-drawer-links">
+            {NAV_LINKS.map(([href, label]) => (
+              <a key={href} href={href}>{label}</a>
+            ))}
+          </div>
+        </details>
+      </div>
+    </nav>
+  );
+}
+
+type HeroContent = {
+  imageUrl?: string;
+  imageAlt?: string;
+  photoMeta?: string;
+  captionLeft?: string;
+  captionRight?: string;
+};
+
+function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; content?: HeroContent | null }) {
+  const year = new Date().getFullYear();
+  const heroImg = content?.imageUrl || pfpImage;
+  const heroAlt = content?.imageAlt || 'Markus Fourie';
+  return (
+    <section id="top" className="hero">
+      <figure className="hero-plate">
+        <img
+          src={trailseekerWellington}
+          alt="Markus Fourie at the start of Ford Trailseeker #6 Wellington"
+        />
+        <figcaption>Ford Trailseeker · Wellington</figcaption>
+      </figure>
+      <div className="ed-shell">
+        <div className="hero-copy">
+          <div className="hero-main">
+            <h1 className="hero-name">Markus Fourie</h1>
+            <p className="hero-kicker">Full-stack developer · Pretoria, ZA</p>
+            <p className="hero-lead">
+              I build structured systems for the real world: resource platforms,
+              operational tooling, and charity sites.
+            </p>
+            <p className="hero-sub">
+              React, Node.js, and ASP.NET. BSc Computer &amp; Information Sciences.
+            </p>
+            <div className="hero-actions">
+              <a className="btn-solid" href="#projects">View work</a>
+              <a className="btn-text" href="#contact">Get in touch</a>
+            </div>
+          </div>
+          <div className="hero-media">
+            <img src={heroImg} alt={heroAlt} />
+          </div>
+        </div>
+        <div className="hero-stats">
+          <div className="hero-stat"><span>Work</span><span className="v">Rimitso · KCS</span></div>
+          <div className="hero-stat"><span>Employment</span><span className="v">Full time</span></div>
+          <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type AboutContent = {
+  ledeHtml?: string;
+  sideHtml?: string[];
+  images?: Array<{ slot: 'one' | 'two' | 'three'; url: string; label: string; meta: string }>;
+};
+
+type JourneyItem = {
+  year: string;
+  chip: string;
+  title: string;
+  desc: string;
+  tags: string[];
+};
+
+type StackCat = { name: string; items: Array<{ n: string; y: string }> };
+type GearItemT = { name: string; spec: string; cat: string; href: string };
+
+function About({ content }: { content?: AboutContent | null }) {
+  const side = content?.sideHtml?.length ? content.sideHtml : null;
+  const sideNamesKyle = side?.some((html) => /kyle nel/i.test(html)) ?? false;
+  const img = (slot: 'one' | 'two' | 'three') => content?.images?.find((i) => i.slot === slot) || null;
+  const gradLabel = img('one')?.label;
+  const gradCaption = !gradLabel || gradLabel === 'Graduation';
+  return (
+    <section id="about">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">01 · About</span>
+          <span className="num">Biographical · v1.1</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="about-lede">
+            {content?.ledeHtml ? (
+              <p dangerouslySetInnerHTML={{ __html: content.ledeHtml }} />
+            ) : (
+              <p>
+                I build operational software, and I race.
+                Small steps, a long view.
+              </p>
+            )}
+          </Reveal>
+          <Reveal className="about-side" delay={120}>
+            {side ? (
+              <>
+                {side.map((html, i) => <p key={i} dangerouslySetInnerHTML={{ __html: html }} />)}
+                {!sideNamesKyle && (
+                  <p>
+                    <a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>
+                    , a side hustle with{' '}
+                    <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>
+                    , a good friend and colleague. Launch still to come.
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p>
+                  Operational platforms for Rimitso Management Services and Katanga Contracting Services.
+                  BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025.
+                  {' '}<a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a>
+                  {' '}Top Performer, 23 April 2025.
+                </p>
+                <p>
+                  <a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>
+                  , a side hustle with{' '}
+                  <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>
+                  , a good friend and colleague. Launch still to come.
+                </p>
+              </>
+            )}
+          </Reveal>
+          <div className="about-visual">
+            <Reveal className="about-img one ph">
+              <img src={img('one')?.url || graduationPhoto} alt={gradCaption ? 'Markus Fourie at graduation with Kyle Nel' : gradLabel} />
+              <span>{img('one')?.meta || 'BSc · 2025'}</span>
+              <span className="ph-label">
+                {gradCaption ? (
+                  <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">With Kyle Nel</a>
+                ) : gradLabel}
+              </span>
+            </Reveal>
+            <Reveal className="about-img two ph" delay={140}>
+              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} />
+              <span>{img('two')?.meta || 'Varsity College'}</span>
+              <span className="ph-label">{img('two')?.label || 'Top Achiever · 2025'}</span>
+            </Reveal>
+            <Reveal className="about-img three ph" delay={260}>
+              <a className="cred-link" href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">
+                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} />
+              </a>
+              <span>{img('three')?.meta || '23 Apr 2025'}</span>
+              <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const JOURNEY: JourneyItem[] = [
+  { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
+    desc: 'Started in 2020 on the Potchefstroom campus. Passed 8 semester subjects, then left the degree. The first plan was mechanical engineering. Software was the wider brief.',
+    tags: ['NWU', 'Physics', 'Mathematics'] },
+  { year: '2023', chip: 'Varsity College', title: 'Started the BSc in Computer and Information Sciences',
+    desc: 'Pretoria campus, now Emeris. C#, Java, and the web stack. Tutored first-year students in the IT department through 2024.',
+    tags: ['Emeris', 'C#', 'Java'] },
+  { year: '2024', chip: 'First production work', title: 'Eridge RDA, then Afrisist',
+    desc: 'Shipped the Eridge RDA site for a UK charity: React, Node, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
+    tags: ['React', 'Afrisist', 'Trans Baviaans'] },
+  { year: '2025', chip: 'Final year', title: 'The degree, between the UK and South Africa',
+    desc: 'Final year of the BSc at Varsity College, now Emeris. Full time software developer at Rimitso Management Services for Katanga Contracting Services. Moved between the UK and South Africa for networking and experience.',
+    tags: ['Rimitso', 'KCS', 'Emeris'] },
+  { year: '2026', chip: 'Full time', title: 'Rimitso and KCS',
+    desc: 'No longer studying. Full time with Rimitso Management Services and Katanga Contracting Services. Rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
+    tags: ['Rimitso', 'KCS', 'Trailseeker'] },
+];
+
+const JOURNEY_STILLS: Record<string, { src: string; pos?: string }> = {
+  '2024': { src: eridgeRda },
+  '2025': { src: graduationPhoto, pos: 'center 40%' },
+  '2026': { src: rmsHome },
+};
+
+function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
+  const { ref, inView } = useInView<HTMLDivElement>(0.4);
+  const still = JOURNEY_STILLS[year];
+  return (
+    <div ref={ref} className={`milestone ${inView ? 'is-in' : ''}`}>
+      <div className="m-year">
+        {year}
+        <span className="m-chip">{chip}</span>
+        {still ? <img className="m-photo" src={still.src} alt="" style={still.pos ? { objectPosition: still.pos } : undefined} /> : null}
+      </div>
+      <div className="m-anchor"><span className="m-node" /></div>
+      <div className="m-card">
+        <h3 className="m-title">{title}</h3>
+        <p className="m-desc">{desc}</p>
+        <div className="m-tags">
+          {tags.map((t) => <span key={t}>{t}</span>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Journey({ items }: { items: JourneyItem[] }) {
+  return (
+    <section id="journey">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">02 · Journey</span>
+          <span className="num">Timeline · 2021-2026</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="journey-title">
+            <h2 className="section-title">
+              A <em>disciplined</em> progression, one milestone at a time.
+            </h2>
+          </Reveal>
+          <Reveal className="journey-intro" delay={120}>
+            <p className="section-intro">
+              Each node below marks a decision that compounded: a project, a lesson,
+              a discipline adopted. No shortcuts, no resets.
+            </p>
+          </Reveal>
+          <div className="timeline">
+            <div className="timeline-rail" />
+            {items.map((m) => <Milestone key={`${m.year}-${m.chip}`} {...m} />)}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Cycling() {
+  const filmRef = useRef<HTMLVideoElement>(null);
+  const [sound, setSound] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [stats, setStats] = useState<StravaStatBlock[] | null>(null);
+  const [meta, setMeta] = useState<{ updatedAt: string } | null>(null);
+  const [error, setError] = useState<{ message: string; authUrl?: string } | null>(null);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    setError(null);
+    fetchStravaSummary(ac.signal)
+      .then((data) => {
+        setStats(data.blocks);
+        setMeta({ updatedAt: data.updatedAt });
+      })
+      .catch((e: unknown) => {
+        // React dev (and quick route changes) can abort in-flight requests.
+        // Treat AbortError as a non-error so we don't flash warnings.
+        if (e instanceof DOMException && e.name === 'AbortError') return;
+        const err = e as (Error & { detail?: StravaUnavailable });
+        const detail = err.detail;
+        setError({
+          message: err?.message || 'Strava data unavailable',
+          authUrl: detail?.setup?.authUrl,
+        });
+        setStats(null);
+        setMeta(null);
+      });
+    return () => ac.abort();
+  }, []);
+
+  useEffect(() => {
+    const el = filmRef.current;
+    if (!el) return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => {
+      if (mq.matches) {
+        el.pause();
+        return;
+      }
+      el.play().catch(() => {});
     };
-    
-    const debouncedCheckMobile = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(checkMobile, 150);
+    const onVisible = () => {
+      if (document.hidden) return;
+      sync();
     };
-    
-    checkMobile();
-    window.addEventListener('resize', debouncedCheckMobile);
-    
+    el.addEventListener('canplay', sync);
+    document.addEventListener('visibilitychange', onVisible);
+    sync();
+    mq.addEventListener('change', sync);
     return () => {
-      window.removeEventListener('resize', debouncedCheckMobile);
-      clearTimeout(resizeTimeout);
+      el.removeEventListener('canplay', sync);
+      document.removeEventListener('visibilitychange', onVisible);
+      mq.removeEventListener('change', sync);
     };
   }, []);
 
-  // Scroll to about section function
-  const scrollToAbout = () => {
-    const aboutSection = document.querySelector('#about-section');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+  const onFilmControl = () => {
+    const el = filmRef.current;
+    if (!el) return;
+    if (el.paused) {
+      el.play().catch(() => {});
+      return;
     }
+    const next = !sound;
+    el.muted = !next;
+    setSound(next);
   };
 
-  const featuredProjects = [
-    {
-      title: 'Katanga Contracting Services - RMS',
-      description: 'Enterprise-level asset management and operations platform with multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
-      tags: ['ASP.NET MVC', 'SQL Server', 'EF Core', 'Tailwind CSS'],
-      link: '#',
-    },
-    {
-      title: 'Afrisist Alarm Monitoring',
-      description: 'Self-hosted, real-time web application for managing vehicle alarms for large fleets with WebSocket-based live updates and automated notification logic.',
-      tags: ['React', 'Node.js', 'Supabase', 'WebSocket', 'DaisyUI'],
-      link: '#',
-    },
-    {
-      title: 'Eridge RDA Non-Profit Charity',
-      description: 'Full-stack web solution for UK-based charity with CMS functionality for managing volunteers, gallery content, programmes, and dynamic event listings.',
-      tags: ['React', 'Vite', 'Node.js', 'PostgreSQL', 'Supabase'],
-      link: 'https://www.eridgerda.org.uk/',
-    },
+  const fallbackStats: StravaStatBlock[] = [
+    { label: `Kilometres · ${new Date().getFullYear()}`, val: '-', unit: 'km', sub: 'Connecting to Strava' },
+    { label: 'Elevation', val: '-', unit: 'm', sub: ' ' },
+    { label: 'Time in saddle', val: '-', unit: 'h', sub: ' ' },
+    { label: 'Last ride', val: '-', unit: 'km', sub: ' ' },
   ];
+  const blocks = stats ?? fallbackStats;
+  return (
+    <section id="cycling">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">03 · Cycling</span>
+          <span className="num">Season · Live from Strava</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="cycling-head">
+            <h2 className="section-title">
+              Trained <em>by the hills</em>, tracked by data.
+            </h2>
+          </Reveal>
+          <Reveal className="cycling-intro" delay={120}>
+            <p>
+              Cross-country marathon and endurance.
+              In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>.
+              In 2026 I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington on 12 September at Bosman Family Vineyards.
+              The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.
+            </p>
+          </Reveal>
+          <Reveal className="cycling-visual">
+            <figure className="cycling-film">
+              <video
+                ref={filmRef}
+                src={capePeninsula}
+                poster={capePeninsulaPoster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Markus Fourie cycling the Cape Peninsula"
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
+              />
+              <figcaption>
+                <span>Cape Peninsula</span>
+                <button type="button" onClick={onFilmControl} aria-pressed={sound}>
+                  {playing ? (sound ? 'Sound on' : 'Sound off') : 'Play'}
+                </button>
+              </figcaption>
+            </figure>
+          </Reveal>
+          <Reveal className="cycling-still" delay={80}>
+            <figure className="cycling-shot">
+              <img src={capeFriends} alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula" />
+              <figcaption>With Matthew Waldeck</figcaption>
+            </figure>
+          </Reveal>
+          <div className="cycling-data">
+            {blocks.map((s, i) => (
+              <Reveal key={s.label} delay={i * 80}>
+                <div className="stat-block">
+                  <span className="s-label">{s.label}</span>
+                  <span className="s-val">{s.val}<span className="unit">{s.unit}</span></span>
+                  <span className="s-sub">{s.sub}</span>
+                </div>
+              </Reveal>
+            ))}
+            <Reveal delay={blocks.length * 80}>
+              <div className="stat-block" style={{ borderBottom: '0', paddingBottom: 0 }}>
+                {error ? (
+                  <span className="s-sub">
+                    {error.message}
+                    {error.authUrl ? (
+                      <>
+                        {' '}·{' '}
+                        <a href={error.authUrl} target="_blank" rel="noopener noreferrer">Connect Strava</a>
+                      </>
+                    ) : null}
+                  </span>
+                ) : (
+                  <span className="s-sub">
+                    {meta?.updatedAt ? `Updated · ${new Date(meta.updatedAt).toLocaleString('en-ZA', { hour: '2-digit', minute: '2-digit' })}` : ' '}
+                  </span>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-  const technologies = [
-    { category: 'Frontend', items: ['React', 'TypeScript', 'TailwindCSS', 'Next.js', 'Three.js'] },
-    { category: 'Backend', items: ['Node.js', 'Express', 'ASP.NET Core', 'C#', 'Entity Framework'] },
-    { category: 'Databases', items: ['PostgreSQL', 'MongoDB', 'Supabase', 'SQL Server'] },
-    { category: 'DevOps', items: ['Docker', 'Azure', 'Nginx', 'GitHub Actions', 'CI/CD'] },
-  ];
+type GalleryItem = { cls: string; n: string; l: string; url?: string };
 
-  const stats = [
-    { icon: Code2, label: 'Projects Completed', value: '5+' },
-    { icon: Zap, label: 'Technologies', value: '15+' },
-    { icon: Users, label: 'Real-World Clients', value: '3+' },
+function Gallery() {
+  const defaultItems: GalleryItem[] = [
+    { cls: 'g-1', n: '12 Sep 2026', l: 'Trailseeker · Wellington', url: trailseekerWellington },
+    { cls: 'g-2', n: 'Studio', l: 'Work from home desk setup', url: deskSetup },
+    { cls: 'g-3', n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades },
+    { cls: 'g-4', n: 'Race', l: 'Always race ready', url: raceReady },
+    { cls: 'g-5', n: 'Ride', l: 'Long gravel ride', url: longRide },
+    { cls: 'g-6', n: 'IMG / 15', l: 'Jotting · Field book' },
+    { cls: 'g-7', n: 'IMG / 16', l: 'Sunset · Descent' },
   ];
+  const [items, setItems] = useState<GalleryItem[]>(defaultItems);
 
-  const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/ThePedalingDev', color: 'hover:text-gray-800 dark:hover:text-white' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/markus-fourie/', color: 'hover:text-blue-600' },
-    { icon: Mail, label: 'Email', href: 'mailto:markusfourie@icloud.com', color: 'hover:text-red-600' },
-    { icon: StravaIcon, label: 'Strava', href: 'https://www.strava.com/athletes/7756913', color: 'hover:text-orange-600', isCustom: true },
-  ];
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContent<GalleryItem[]>('gallery', ac.signal)
+      .then((r) => {
+        if (!Array.isArray(r.value) || !r.value.length) return;
+        setItems(r.value.map((item) => {
+          if (item.url) return item;
+          if (item.cls === 'g-2') {
+            const placeholder = !item.l || item.n === 'IMG / 11' || /6:42/i.test(item.l);
+            return placeholder
+              ? { ...item, n: 'Studio', l: 'Work from home desk setup', url: deskSetup }
+              : { ...item, url: deskSetup };
+          }
+          if (item.cls === 'g-3') {
+            const placeholder = !item.l || item.n === 'IMG / 12' || /chain, worn/i.test(item.l);
+            return placeholder
+              ? { ...item, n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades }
+              : { ...item, url: sworksUpgrades };
+          }
+          if (item.cls === 'g-4') {
+            const placeholder = !item.l || item.n === 'IMG / 13' || /nº 97/i.test(item.l);
+            return placeholder
+              ? { ...item, n: 'Race', l: 'Always race ready', url: raceReady }
+              : { ...item, url: raceReady };
+          }
+          if (item.cls === 'g-5') {
+            const placeholder = !item.l || item.n === 'IMG / 14' || /rock garden/i.test(item.l);
+            return placeholder
+              ? { ...item, n: 'Ride', l: 'Long gravel ride', url: longRide }
+              : { ...item, url: longRide };
+          }
+          return item;
+        }));
+      })
+      .catch(() => {});
+    return () => ac.abort();
+  }, []);
+  return (
+    <section id="gallery">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">04 · Gallery</span>
+          <span className="num">Field · Studio · Trail</span>
+        </div>
+        <div className="ed-grid12">
+          <div className="gallery-head">
+            <Reveal>
+              <h2 className="section-title">Visual <em>field notes</em>.</h2>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="section-intro">
+                Moments from the studio and the trail. Captured on a phone,
+                colour-corrected lightly, honest about the light.
+              </p>
+            </Reveal>
+          </div>
+          <div className="gallery-grid">
+            {items.map((g, i) => (
+              <Reveal key={g.cls} className={`g-item ${g.cls} ph`} delay={i * 60}>
+                {g.url ? <img src={g.url} alt={g.l} /> : null}
+                <span>{g.n}</span>
+                <span className="ph-label">{g.l}</span>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TerminalLine({ children }: { children: ReactNode }) {
+  return <span className="t-line">{children}</span>;
+}
+
+function Engineering() {
+  return (
+    <section id="engineering">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">05 · Engineering</span>
+          <span className="num">Craft · Day-to-day</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="eng-head">
+            <h2 className="section-title">
+              Structured tools for <em>real</em> operations.
+            </h2>
+          </Reveal>
+          <Reveal className="eng-intro" delay={120}>
+            <p>
+              Resource management, audit trails, billing reconciliation.
+              The glue code between field operations and back-office systems.
+              Built to survive rough conditions, network dropouts, and the
+              long tail of edge cases real businesses live with.
+            </p>
+          </Reveal>
+          <div className="eng-grid">
+            <Reveal>
+              <div className="eng-terminal">
+                <div className="t-bar">
+                  <span className="dot r" /><span className="dot y" /><span className="dot g" />
+                  <span className="t-label">markus@skillance ~ </span>
+                </div>
+                <TerminalLine><span className="pr">$</span> ./deploy rms --env prod</TerminalLine>
+                <TerminalLine><span className="dim">→ building 3 artefacts…</span></TerminalLine>
+                <TerminalLine><span className="dim">→ running migrations (017_audit_trail)</span></TerminalLine>
+                <TerminalLine><span className="dim">→ health check: api, worker, gateway</span></TerminalLine>
+                <TerminalLine><span className="ok">✓ deploy complete · 14.2s · 0 errors</span></TerminalLine>
+                <TerminalLine>&nbsp;</TerminalLine>
+                <TerminalLine><span className="pr">$</span> tail -f /var/log/rms/audit.log</TerminalLine>
+                <TerminalLine><span className="dim">[08:42:01]</span> OP_CHECKOUT · user:214 · asset:crane-07 · ok</TerminalLine>
+                <TerminalLine><span className="dim">[08:42:09]</span> OP_CHECKOUT · user:198 · asset:wheel-12 · ok</TerminalLine>
+                <TerminalLine><span className="dim">[08:42:17]</span> OP_RETURN   · user:214 · asset:crane-07 · 4.2h</TerminalLine>
+                <TerminalLine><span className="dim">[08:42:44]</span> <span className="egg">OP_CHECKOUT · user:markus · asset:legs · zone:4 · hill:accepted</span></TerminalLine>
+                <TerminalLine>&nbsp;</TerminalLine>
+                <TerminalLine><span className="pr">$</span> which weekend</TerminalLine>
+                <TerminalLine><span className="egg">/usr/local/bin/long-ride</span></TerminalLine>
+                <TerminalLine><span className="pr">$</span> <span className="t-cursor" /></TerminalLine>
+              </div>
+            </Reveal>
+            <Reveal delay={120}>
+              <div className="eng-copy">
+                <h3>The <em>quiet</em> infrastructure that keeps real businesses running.</h3>
+                <p>
+                  I build the systems that don't get shown in demos: the audit layer,
+                  the reconciliation jobs, the offline-first client that keeps a site
+                  foreman working through a dead signal. Fewer features, more surface reliability.
+                </p>
+                <ul>
+                  <li><span className="idx">01</span><strong>Resource mgmt</strong><span className="d">Checkouts, returns, compliance.</span></li>
+                  <li><span className="idx">02</span><strong>Audit trails</strong><span className="d">Append-only, field-safe, queryable.</span></li>
+                  <li><span className="idx">03</span><strong>Billing recon</strong><span className="d">Matching field ops against invoices.</span></li>
+                  <li><span className="idx">04</span><strong>Ops dashboards</strong><span className="d">React + TS, built for bad screens.</span></li>
+                  <li><span className="idx">05</span><strong>Offline-first</strong><span className="d">Sync queues, conflict resolution.</span></li>
+                </ul>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const GEAR_CODING: GearItemT[] = [
+  { name: 'ROG Zephyrus G16', spec: '16-inch daily driver', cat: 'Compute', href: 'https://rog.asus.com/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/' },
+  { name: 'Corsair Vanguard 96', spec: '96% mechanical · 8,000 Hz', cat: 'Input', href: 'https://www.corsair.com/us/en/p/keyboards/ch-91e911e-na/vanguard-96-mechanical-gaming-keyboard-corsair-mlx-quantum-ch-91e911e-na' },
+  { name: 'Logitech G Pro', spec: 'LIGHTSPEED wireless', cat: 'Input', href: 'https://www.logitechg.com/en-us/shop/p/pro-wireless-mouse' },
+  { name: 'Arctis Nova Pro Wireless', spec: 'SteelSeries · ANC · hot-swap battery', cat: 'Audio', href: 'https://steelseries.com/gaming-headsets/arctis-nova-pro' },
+];
+
+const GEAR_CYCLING: GearItemT[] = [
+  { name: 'Epic S-Works 7', spec: 'Specialized · full-suspension XC', cat: 'MTB', href: 'https://www.specialized.com/us/en/s-works-epic-sram-xx1-axs-rockshox-ultimate-brain/p/205828' },
+  { name: 'Rave SLR ID2', spec: 'Wilier · gravel race bike', cat: 'Gravel', href: 'https://www.wilier.com/en/bikes/gravel/rave-slr-id2' },
+  { name: 'Aeroshade 2.0 Titanium', spec: 'Scicon · cycling eyewear', cat: 'Eyewear', href: 'https://sciconsports.com/en/products/aeroshade-2-0-titanium-ey440801' },
+  { name: 'Garmin Edge 840', spec: 'GPS bike computer', cat: 'Compute', href: 'https://www.garmin.com/en-US/p/798777/' },
+];
+
+const GEAR_MARKS: Record<string, BrandMarkName> = {
+  'Corsair Vanguard 96': 'corsair',
+  'Logitech G Pro': 'logitech',
+  'Arctis Nova Pro Wireless': 'steelseries',
+  'Garmin Edge 840': 'garmin',
+};
+
+const GEAR_IMAGES: Record<string, string> = {
+  'ROG Zephyrus G16': gearLaptop,
+  'Corsair Vanguard 96': gearKeyboard,
+  'Logitech G Pro': gearMouse,
+  'Arctis Nova Pro Wireless': gearHeadset,
+  'Epic S-Works 7': gearEpic,
+  'Rave SLR ID2': gearWilier,
+  'Aeroshade 2.0 Titanium': gearScicon,
+  'Garmin Edge 840': gearGarmin,
+};
+
+function GearItem({ item, idx }: { item: GearItemT; idx: number }) {
+  const image = GEAR_IMAGES[item.name];
+  const mark = GEAR_MARKS[item.name];
+  return (
+    <Reveal delay={idx * 60}>
+      <article className="gear-item">
+        <div className="gear-render">
+          {image ? <img src={image} alt={item.name} /> : null}
+        </div>
+        <div className="gear-body">
+          <div>
+            <h4>{mark ? <BrandMark name={mark} /> : null}{item.name}</h4>
+            <p className="gear-spec">{item.spec}</p>
+          </div>
+          <div className="gear-meta">
+            <span className="gm-cat">{item.cat}</span>
+            {item.href !== '#' ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer">View →</a>
+            ) : (
+              <span className="gm-cat">Internal</span>
+            )}
+          </div>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+function Gear({ coding, cycling }: { coding: GearItemT[]; cycling: GearItemT[] }) {
+  return (
+    <section id="gear">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">06 · My gear</span>
+          <span className="num">Tools in hand · 2026</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="gear-head">
+            <h2 className="section-title">
+              The <em>tools</em> I reach for: desk and dirt.
+            </h2>
+          </Reveal>
+          <Reveal className="gear-intro" delay={120}>
+            <p>
+              Two tracks, same philosophy: buy once, use daily, maintain it well.
+            </p>
+          </Reveal>
+
+          <div className="gear-tracks">
+            <div className="gear-track">
+              <Reveal>
+                <div className="gear-track-head">
+                  <h3>Coding <em>kit</em></h3>
+                  <span className="cnt">{coding.length} items</span>
+                </div>
+              </Reveal>
+              {coding.map((item, i) => (
+                <GearItem key={`${item.name}-${i}`} item={item} idx={i} />
+              ))}
+            </div>
+
+            <div className="gear-track">
+              <Reveal>
+                <div className="gear-track-head">
+                  <h3>Cycling <em>kit</em></h3>
+                  <span className="cnt">{cycling.length} items</span>
+                </div>
+              </Reveal>
+              {cycling.map((item, i) => (
+                <GearItem key={`${item.name}-${i}`} item={item} idx={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const PROJECTS = [
+  { n: '01', name: 'Katanga RMS', href: 'https://rms.rimitso.com/', mark: kcsMark, shot: rmsHome, desc: 'Operations system for Katanga Contracting Services, hosted on Azure. Sites, assets, teams, and shift transactions such as hours and meter readings, reviewed through approval before they reach reports.', tags: 'React · ASP.NET Core · EF Core · Postgres · Azure' },
+  { n: '02', name: 'Afrisist', mark: afrisistMark, markFit: 'word', shot: afrisistFleet, desc: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure. Operators watch incoming alarms, assign them, and get notified as the events arrive.', tags: 'React · Node · Supabase · WebSocket · Azure' },
+  { n: '03', name: 'Eridge RDA', href: 'https://www.eridgerda.org.uk/', mark: rdaMark, shot: eridgeRda, desc: 'Site and CMS for the Eridge group of Riding for the Disabled. Programmes, a photo gallery, volunteer applications, and a protected admin for the people who keep it current.', tags: 'React · Vite · Supabase' },
+  { n: '04', name: 'Skillance', href: 'https://skillance.co.za/', mark: skillanceMark, shot: skillanceHome, desc: 'Verified freelance marketplace for South Africa. Discover a professional, review the profile, and book with payment held until the work is approved. Coming soon on iOS and Android. Built with Kyle Nel.', tags: 'React · Fastify · Postgres' },
+  { n: '05', name: 'Home lab + tooling', desc: 'An old laptop, turned into a home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
+];
+
+function Projects() {
+  const [hover, setHover] = useState<number | null>(null);
+  return (
+    <section id="projects">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">07 · Projects</span>
+          <span className="num">Selected work · {PROJECTS.length}</span>
+        </div>
+        <div className="ed-grid12">
+          <div className="proj-head">
+            <Reveal>
+              <h2 className="section-title">Selected work</h2>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="section-intro">
+                Platforms and tools shipped for operations, fleets, charities, and marketplaces.
+              </p>
+            </Reveal>
+          </div>
+          <div className="proj-list" onMouseLeave={() => setHover(null)}>
+            {PROJECTS.map((p, i) => {
+              const shot = 'shot' in p ? p.shot : undefined;
+              const mark = 'mark' in p ? p.mark : undefined;
+              const href = 'href' in p ? p.href : undefined;
+              const word = 'markFit' in p && p.markFit === 'word';
+              return (
+                <div
+                  key={p.name}
+                  className={`proj-row${shot ? ' has-shot' : ''}${hover !== null && hover !== i ? ' is-dim' : ''}`}
+                  onMouseEnter={() => setHover(i)}
+                  onFocus={() => setHover(i)}
+                  onBlur={() => setHover(null)}
+                  tabIndex={0}
+                >
+                  {shot ? <img className="proj-shot" src={shot} alt="" /> : null}
+                  <div className="proj-body">
+                    <span className="proj-name">
+                      {mark ? <img className={`proj-mark${word ? ' is-word' : ''}`} src={mark} alt="" /> : null}
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer">{p.name}</a>
+                      ) : p.name}
+                    </span>
+                    <span className="proj-desc">{p.desc}</span>
+                  </div>
+                  <span className="proj-tags">{p.tags}</span>
+                  <span className="proj-arrow" aria-hidden="true">→</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const STACK: StackCat[] = [
+  { name: 'Languages', items: [
+    { n: 'TypeScript', y: '4 yrs' }, { n: 'C#', y: '4 yrs' }, { n: 'JavaScript', y: '5 yrs' },
+    { n: 'SQL', y: '4 yrs' }, { n: 'Python', y: '2 yrs' }, { n: 'Go', y: 'learning' },
+  ]},
+  { name: 'Frontend', items: [
+    { n: 'React', y: '4 yrs' }, { n: 'Next.js', y: '2 yrs' }, { n: 'Tailwind', y: '3 yrs' },
+    { n: 'Three.js', y: '1 yr' }, { n: 'GSAP', y: '2 yrs' }, { n: 'CSS variables', y: '-' },
+  ]},
+  { name: 'Backend', items: [
+    { n: 'Node.js / Express', y: '4 yrs' }, { n: 'ASP.NET Core', y: '3 yrs' },
+    { n: 'Entity Framework', y: '3 yrs' }, { n: 'PostgreSQL', y: '3 yrs' },
+    { n: 'Supabase', y: '2 yrs' }, { n: 'REST / OpenAPI', y: '-' },
+  ]},
+  { name: 'Ops & tooling', items: [
+    { n: 'Docker', y: '2 yrs' }, { n: 'Nginx', y: '2 yrs' },
+    { n: 'GitHub Actions', y: '2 yrs' }, { n: 'Cloudflare tunnels', y: '1 yr' },
+    { n: 'Linux', y: '-' }, { n: 'Azure', y: '1 yr' },
+  ]},
+];
+
+const STACK_MARKS: Partial<Record<string, BrandMarkName>> = {
+  TypeScript: 'typescript',
+  'C#': 'csharp',
+  JavaScript: 'javascript',
+  Python: 'python',
+  Go: 'go',
+  React: 'react',
+  'Next.js': 'nextdotjs',
+  Tailwind: 'tailwindcss',
+  'Three.js': 'threedotjs',
+  GSAP: 'greensock',
+  'Node.js / Express': 'nodedotjs',
+  'ASP.NET Core': 'dotnet',
+  PostgreSQL: 'postgresql',
+  Supabase: 'supabase',
+  'REST / OpenAPI': 'openapiinitiative',
+  Docker: 'docker',
+  Nginx: 'nginx',
+  'GitHub Actions': 'github',
+  'Cloudflare tunnels': 'cloudflare',
+  Linux: 'linux',
+  Azure: 'microsoftazure',
+};
+
+function Stack({ cats }: { cats: StackCat[] }) {
+  return (
+    <section id="stack">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">08 · Stack</span>
+          <span className="num">Tools · what I reach for</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="stack-head">
+            <h2 className="section-title">
+              A small, <em>opinionated</em> toolbox.
+            </h2>
+          </Reveal>
+          <Reveal className="stack-intro" delay={120}>
+            <p>
+              The boring choices, mostly. I favour well-trodden, long-lived tools
+              over the new and shiny, and I expect every tool to earn its place
+              against the next three years of maintenance.
+            </p>
+          </Reveal>
+          <div className="stack-grid">
+            {cats.map((cat, i) => (
+              <Reveal key={cat.name} className="stack-cat" delay={i * 80}>
+                <h4>{cat.name} <span className="cnt">[{cat.items.length}]</span></h4>
+                <ul>
+                  {cat.items.map((it) => (
+                    <li key={it.n}>
+                      <span className="stack-name">
+                        {STACK_MARKS[it.n] ? <BrandMark name={STACK_MARKS[it.n]!} /> : null}
+                        {it.n}
+                      </span>
+                      <span className="yr">{it.y}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Philosophy() {
+  return (
+    <section id="philosophy">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">09 · Philosophy</span>
+          <span className="num">How I work · Why</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="philo-inner">
+            <p className="philo-quote">
+              Discipline is a chain of <em>small, repeated decisions</em>.
+              The 5 am ride, the log line written for the version of you debugging at 2.
+              The shape is built the same way.
+            </p>
+            <div className="philo-attr">Operating principles</div>
+          </Reveal>
+          <div className="philo-pillars">
+            <Reveal className="pillar">
+              <h5>01 · Long view</h5>
+              <p>Optimise for the version of the system that exists in three years, under a team that isn't me.</p>
+            </Reveal>
+            <Reveal className="pillar" delay={100}>
+              <h5>02 · Shape over feature</h5>
+              <p>Get the primitives right and features come cheaply. Get them wrong and every feature costs twice.</p>
+            </Reveal>
+            <Reveal className="pillar" delay={200}>
+              <h5>03 · Honest tools</h5>
+              <p>The system should tell you what it's actually doing. Audit logs, health checks, dashboards that earn their glance.</p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Docs() {
+  return (
+    <section id="docs">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">10 · Docs</span>
+          <span className="num">Paper · Download</span>
+        </div>
+        <div className="ed-grid12">
+          <Reveal className="docs-head">
+            <h2 className="section-title">The record, on paper.</h2>
+          </Reveal>
+          <Reveal className="docs-intro" delay={120}>
+            <p>
+              CV from October 2025, the Golden Key record, and the Varsity College results.
+              The college is now Emeris. The degree's final year was 2025.
+            </p>
+          </Reveal>
+          <div className="docs-list">
+            <div className="doc-row">
+              <a href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>CV</a>
+              <span>October 2025 · Full</span>
+            </div>
+            <div className="doc-row">
+              <a href="/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf" download>Abridged CV</a>
+              <span>October 2025 · One page</span>
+            </div>
+            <div className="doc-row">
+              <a href="/cert-docs/VC_GoldenKey.pdf" download>Golden Key</a>
+              <span>Top Performer · 23 April 2025</span>
+            </div>
+            <div className="doc-row">
+              <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key verify</a>
+              <span>External record</span>
+            </div>
+            <div className="doc-row">
+              <a href="/cert-docs/VarsityCollege_Results.zip" download>Academic results</a>
+              <span>Varsity College · ZIP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  const email = 'markusfourie@icloud.com';
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    const done = () => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(email).then(done).catch(() => {
+        const area = document.createElement('textarea');
+        area.value = email;
+        document.body.appendChild(area);
+        area.select();
+        const ok = document.execCommand('copy');
+        area.remove();
+        if (ok) done();
+      });
+      return;
+    }
+    const area = document.createElement('textarea');
+    area.value = email;
+    document.body.appendChild(area);
+    area.select();
+    const ok = document.execCommand('copy');
+    area.remove();
+    if (ok) done();
+  };
 
   return (
-    <div className="min-h-screen" ref={containerRef}>
-      {/* Global Scroll Indicator */}
-      <ScrollIndicator variant="glossy" />
-      {/* Hero Section with LiquidEther Background */}
-      <section className="w-full relative overflow-hidden min-h-screen flex items-center -mt-16 pt-16">
-        {/* LiquidEther Background - Extended to cover navbar */}
-        <div className="absolute inset-0 z-0" style={{ top: '-80px', height: 'calc(100% + 80px)' }}>
-          <LiquidEther
-            colors={['#5227FF', '#FF9FFC', '#B19EEF']}
-            mouseForce={50}
-            cursorSize={120}
-            isViscous={false}
-            viscous={30}
-            iterationsViscous={32}
-            iterationsPoisson={32}
-            resolution={0.5}
-            isBounce={false}
-            autoDemo={true}
-            autoSpeed={0.5}
-            autoIntensity={2.5}
-            takeoverDuration={0.25}
-            autoResumeDelay={3000}
-            autoRampDuration={0.6}
-            style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
-          />
+    <section id="contact">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">11 · Contact</span>
+          <span className="num">Available · Q2 2026</span>
         </div>
-
-        {/* Hero Content */}
-        <div className="w-full px-[var(--container-padding)] py-20 pt-32 relative z-10 pointer-events-none">
-          <div className="max-w-7xl mx-auto pointer-events-none">
-            <div className="relative pointer-events-none">
-              {/* Bitmoji Avatar - Desktop version */}
-              <div className="absolute top-0 right-0 lg:right-4 xl:right-8 z-20 hidden md:block pointer-events-none">
-                <ScaleIn delay={0.4} className="relative group">
-                  <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] pointer-events-none">
-                    <img
-                      src={bitmojiImage}
-                      loading="lazy"
-                      alt="Markus Fourie - Full-Stack Developer"
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                    />
-                    {/* Floating elements around the avatar */}
-                    <div className="absolute -top-4 -right-4 w-6 h-6 bg-primary/20 rounded-full animate-pulse pointer-events-none"></div>
-                    <div className="absolute -bottom-6 -left-6 w-4 h-4 bg-accent/20 rounded-full animate-pulse delay-1000 pointer-events-none"></div>
-                    <div className="absolute top-1/2 -left-6 w-3 h-3 bg-primary/30 rounded-full animate-pulse delay-500 pointer-events-none"></div>
-                  </div>
-                </ScaleIn>
-              </div>
-
-              {/* Main Content */}
-              <div className="space-y-8 text-center lg:text-left max-w-4xl pointer-events-none">
-                {/* Mobile Bitmoji - Above text */}
-                <div className="flex justify-center mb-6 md:hidden pointer-events-none">
-                  <ScaleIn delay={0.1} className="relative group">
-                    <div className="relative w-32 h-32 pointer-events-none">
-                      <img
-                        src={bitmojiImage}
-                      loading="lazy"
-                        alt="Markus Fourie - Full-Stack Developer"
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                      />
-                      {/* Floating elements around the avatar */}
-                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary/20 rounded-full animate-pulse pointer-events-none"></div>
-                      <div className="absolute -bottom-3 -left-3 w-3 h-3 bg-accent/20 rounded-full animate-pulse delay-1000 pointer-events-none"></div>
-                      <div className="absolute top-1/2 -left-3 w-2 h-2 bg-primary/30 rounded-full animate-pulse delay-500 pointer-events-none"></div>
-                    </div>
-                  </ScaleIn>
-                </div>
-
-                <div className="space-y-6 pointer-events-none">
-                  <div className="space-y-4 pointer-events-none">
-                    <SplitText
-                      text="Hi, I'm Markus" 
-                      className="text-5xl md:text-7xl lg:text-8xl font-bold pointer-events-none"
-                      splitType="words"
-                      delay={230}
-                      duration={1.2}
-                      ease="power3.out"
-                      from={{ opacity: 0, y: 50, scale: 0.9 }}
-                      to={{ opacity: 1, y: 0, scale: 1 }}
-                      tag="h1"
-                      threshold={0.1}
-                      rootMargin="-50px"
-                    />
-                    <FadeIn delay={0.3} direction="up">
-                      <div className="flex items-center gap-3 justify-center lg:justify-start flex-wrap pointer-events-none">
-                        <div className="px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 text-primary text-sm md:text-base font-medium flex items-center gap-2 pointer-events-none">
-                          <Sparkles className="w-5 h-5" />
-                          <ShinyText text="Full-Stack Developer" className="font-medium" />
-                        </div>
-                        <div className="px-4 py-2 rounded-full bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 text-blue-700 dark:text-blue-400 text-sm md:text-base font-medium pointer-events-none">
-                          <ShinyText text="Graduate" className="font-medium" />
-                        </div>
-                        <div className="px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-accent/30 text-accent-foreground text-sm md:text-base font-medium pointer-events-none">
-                          <ShinyText text="BSc Computer & Information Sciences" className="font-medium" />
-                        </div>
-                      </div>
-                    </FadeIn>
-                  </div>
-
-                  <FadeIn delay={0.5} direction="up">
-                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed pointer-events-none">
-                      I build and develop computer-based solutions that make a real impact with a strong foundation in React, Node.js and ASP.NET.
-                    </p>
-                  </FadeIn>
-
-                  <FadeIn delay={0.7} direction="up">
-                    <div className="flex gap-4 pt-4 justify-center lg:justify-start flex-wrap pointer-events-none">
-                      <Link to="/projects" className="pointer-events-auto">
-                        <Button size="lg" className="flex items-center gap-2 hover:scale-105 transition-transform text-base px-8 py-6">
-                          View My Projects
-                          <ArrowRight className="w-5 h-5" />
-                        </Button>
-                      </Link>
-                      <Link to="/contact" className="pointer-events-auto">
-                        <Button size="lg" variant="outline" className="hover:scale-105 transition-transform text-base px-8 py-6">
-                          Get in Touch
-                        </Button>
-                      </Link>
-                    </div>
-                  </FadeIn>
-                </div>
-
-                {/* Stats Grid */}
-                <FadeIn delay={0.9} direction="up">
-                  <div className="pt-8 border-t border-border/50 pointer-events-none">
-                    <StaggerReveal className="grid grid-cols-3 gap-6 lg:gap-8 pointer-events-none" stagger={0.1}>
-                      {stats.map((stat, index) => {
-                        const Icon = stat.icon;
-                        return (
-                          <div key={index} className="text-center pointer-events-none">
-                            <div className="inline-flex items-center justify-center p-3 rounded-xl bg-background/80 backdrop-blur-sm border border-primary/20 mb-3 hover:scale-110 hover:rotate-6 transition-all pointer-events-none">
-                              <Icon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
-                            </div>
-                            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground pointer-events-none">{stat.value}</p>
-                            <p className="text-xs md:text-sm text-muted-foreground mt-1 pointer-events-none">{stat.label}</p>
-                          </div>
-                        );
-                      })}
-                    </StaggerReveal>
-                  </div>
-                </FadeIn>
-              </div>
+        <div className="ed-grid12">
+          <Reveal className="contact-head">
+            <h2 className="contact-title">
+              Let's <em>work</em> <br/>together.
+            </h2>
+          </Reveal>
+          <Reveal className="contact-primary">
+            <div className="contact-mail">
+              <a className="email" href={`mailto:${email}`}>{email}</a>
+              <button type="button" className="copy-mail" onClick={copyEmail}>
+                {copied ? 'Copied' : 'Copy'}
+              </button>
             </div>
+            <div className="availability">
+              <span className="status-dot" />
+              Available for new engagements from May 2026
+            </div>
+          </Reveal>
+          <Reveal className="contact-side" delay={120}>
+            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="linkedin" />LinkedIn</span><span className="lbl">Profile</span></a>
+            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="github" />GitHub</span><span className="lbl">ThePedalingDev</span></a>
+            <a href="https://www.strava.com/athletes/7756913" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="strava" />Strava</span><span className="lbl">Rides · Nº 97</span></a>
+            <a href="https://www.instagram.com/markuss.fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="instagram" />Instagram</span><span className="lbl">@markuss.fourie</span></a>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EdFooter() {
+  return (
+    <footer className="ed-footer">
+      <div className="ed-shell">
+        <div className="ed-footer-inner">
+          <div className="footer-mark">MF<em>.</em></div>
+          <div className="footer-meta">
+            <p>Markus Fourie</p>
+            <p>Full-stack developer</p>
+            <p>Pretoria · ZA</p>
+            <p style={{ marginTop: 12 }}>© {new Date().getFullYear()}</p>
+          </div>
+          <div className="footer-right">
+            <a href="#top">↑ Top</a>
+            <a href="#docs">Docs</a>
+            <a href="#contact">Contact</a>
+            <a href="mailto:markusfourie@icloud.com">markusfourie@icloud.com</a>
           </div>
         </div>
+      </div>
+      <p className="footer-word" aria-hidden="true">Fourie</p>
+    </footer>
+  );
+}
 
-        {/* Mobile Scroll Button */}
-        {isMobile && (
-          <FadeIn delay={1} direction="up" className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-            <Button
-              onClick={scrollToAbout}
-              size="lg"
-              className="bg-background/80 backdrop-blur-sm border border-primary/20 hover:bg-background/90 hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              <ChevronDown className="w-5 h-5 animate-bounce text-primary" />
-            </Button>
-          </FadeIn>
-        )}
-      </section>
+export function Home() {
+  const [heroKm, setHeroKm] = useState<string | null>(null);
+  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
+  const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
+  const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(JOURNEY);
+  const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
+  const [gearCoding, setGearCoding] = useState<GearItemT[]>(GEAR_CODING);
+  const [gearCycling, setGearCycling] = useState<GearItemT[]>(GEAR_CYCLING);
 
-      {/* About Section */}
-      <section id="about-section" className="w-full px-[var(--container-padding)] py-16 md:py-20 bg-gradient-to-br from-card/30 via-card/50 to-card/30 relative overflow-hidden">
-        <GradualBlur preset="top" strength={1.5} height="4rem" opacity={0.6} />
-        
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-primary rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-accent rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-primary/50 rounded-full blur-2xl"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div className="space-y-6">
-              <FadeIn direction="up">
-                <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                    About Me
-                  </h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full"></div>
-                </div>
-              </FadeIn>
-              
-              <FadeIn direction="up" delay={0.2}>
-                <div className="space-y-6">
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    I'm a passionate <span className="text-primary font-semibold">full-stack web developer</span> and <span className="text-blue-600 dark:text-blue-400 font-semibold">BSc IT student</span> specializing in Application Development. I've worked on several real-world projects ranging from mining management systems to charity websites and alarm monitoring dashboards.
-                  </p>
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    I love building solutions that make a difference, combining clean design with solid backend logic. My goal is to grow into a <span className="text-primary font-semibold">Solutions Architect</span> and design systems that scale globally.
-                  </p>
-                </div>
-              </FadeIn>
-              
-              <FadeIn direction="up" delay={0.4}>
-                <div className="space-y-4">
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Beyond code, I'm a <span className="text-green-600 dark:text-green-400 font-semibold">cross-country and road cycling enthusiast</span>, strength training advocate, and passionate self-learner who enjoys experimenting with new technologies in my home lab. I believe in continuous learning and staying ahead of tech trends through hands-on exploration and independent study.
-                  </p>
-                  
-                  {/* Skills Tags */}
-                  <div className="flex flex-wrap gap-3 pt-4">
-                    {['JavaScript', 'TypeScript', 'C#', 'React', 'Node.js'].map((skill) => (
-                      <div key={skill} className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
-                        {skill}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-            
-            {/* Visual Element */}
-            <FadeIn direction="left" delay={0.3}>
-              <div className="relative">
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 border border-primary/20 backdrop-blur-sm p-8 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                      <Code2 className="w-10 h-10 text-white" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold text-primary">Full-Stack Developer</h3>
-                      <p className="text-muted-foreground">Building the future, one line at a time</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-primary/20 rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-accent/20 rounded-full animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 -right-8 w-4 h-4 bg-primary/30 rounded-full animate-pulse delay-500"></div>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchStravaSummary(ac.signal)
+      .then((data) => {
+        if (!data.ytd) return;
+        const km = new Intl.NumberFormat('en-ZA').format(Math.round(data.ytd.distanceKm));
+        setHeroKm(km);
+      })
+      .catch(() => {
+        // Silently ignore; keep fallback "-"
+      });
+    return () => ac.abort();
+  }, []);
 
-      {/* Featured Projects */}
-      <section className="w-full px-[var(--container-padding)] py-16 md:py-20 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-20 w-40 h-40 bg-accent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-32 h-32 bg-primary rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <FadeIn direction="up" className="mb-12">
-            <div className="text-center space-y-4">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                Featured Projects
-              </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto"></div>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                A selection of real-world projects that showcase my full-stack capabilities and problem-solving approach
-              </p>
-            </div>
-          </FadeIn>
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContent<HeroContent>('hero', ac.signal)
+      .then((r) => setHeroContent(r.value))
+      .catch(() => {});
+    return () => ac.abort();
+  }, []);
 
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" stagger={0.15}>
-            {featuredProjects.map((project, index) => (
-              <ScaleIn key={index} delay={index * 0.1}>
-                <div className="group relative h-full">
-                  <Card className="h-full flex flex-col bg-background/50 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl overflow-hidden">
-                    {/* Glare Effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
-                      />
-                    </div>
-                    
-                    <CardHeader className="pb-4 relative z-10 flex-shrink-0">
-                      <div className="space-y-3">
-                        <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors leading-tight">
-                          {project.title}
-                        </CardTitle>
-                        <CardDescription className="text-sm leading-relaxed text-muted-foreground min-h-[3.5rem]">
-                          {project.description}
-                        </CardDescription>
-                      </div>
-                    </CardHeader>
-                    
-                    <CardContent className="flex-1 flex flex-col justify-between relative z-10">
-                      <div className="flex-1 flex flex-col justify-end">
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium hover:bg-primary/20 hover:scale-105 transition-all duration-200"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {project.link && project.link !== '#' ? (
-                        <div className="mt-4 pt-4 border-t border-border/50">
-                          <a 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group/link"
-                          >
-                            <span className="text-sm font-medium">View Project</span>
-                            <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                          </a>
-                        </div>
-                      ) : (
-                        <div className="mt-4 pt-4">
-                          {/* Empty space to maintain consistent card heights */}
-                        </div>
-                      )}
-                    </CardContent>
-                    
-                    {/* Subtle glow effect */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                  </Card>
-                </div>
-              </ScaleIn>
-            ))}
-          </StaggerReveal>
+  useEffect(() => {
+    const ac = new AbortController();
+    (async () => {
+      try {
+        const [about, journey, stack, gc, gr] = await Promise.all([
+          fetchContent<AboutContent>('about', ac.signal),
+          fetchContent<JourneyItem[]>('journey', ac.signal),
+          fetchContent<StackCat[]>('stack', ac.signal),
+          fetchContent<GearItemT[]>('gearCoding', ac.signal),
+          fetchContent<GearItemT[]>('gearCycling', ac.signal),
+        ]);
 
-          <FadeIn direction="up" delay={0.6} className="mt-12 text-center">
-            <Link to="/projects">
-              <Button 
-                size="lg" 
-                className="flex items-center gap-3 mx-auto hover:scale-105 transition-transform bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white border-0 px-8 py-6 text-lg font-semibold"
-              >
-                <span>Explore All Projects</span>
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </Link>
-          </FadeIn>
-        </div>
-      </section>
+        if (about.value) setAboutContent(about.value);
+        if (Array.isArray(journey.value) && journey.value.length) {
+          const stale = journey.value.some((item) =>
+            (item.year === '2021' && /computer/i.test(item.title))
+            || (item.year === '2026' && /graduat/i.test(`${item.title} ${item.desc}`)),
+          );
+          if (!stale) setJourneyItems(journey.value);
+        }
+        if (Array.isArray(stack.value) && stack.value.length) setStackCats(stack.value);
+        if (Array.isArray(gc.value) && gc.value.length) setGearCoding(gc.value);
+        if (Array.isArray(gr.value) && gr.value.length) setGearCycling(gr.value);
+      } catch {
+        // Keep fallbacks when backend is down.
+      }
+    })();
+    return () => ac.abort();
+  }, []);
 
-      {/* Technologies Section */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16 bg-card/50 relative">
-        <GradualBlur preset="top" strength={1.2} height="3rem" opacity={0.5} />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <FadeIn direction="up" className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold">Technologies & Skills</h2>
-            <p className="text-muted-foreground text-base md:text-lg mt-2">
-              Modern tools and frameworks I use to build production-grade applications
-            </p>
-          </FadeIn>
-
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" stagger={0.12}>
-            {technologies.map((tech, idx) => (
-              <div
-                key={idx}
-                className="group relative p-6 rounded-xl border bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-                  borderColor: 'rgba(255,255,255,0.1)'
-                }}
-              >
-                {/* Glare Effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                      transform: 'translateX(-100%) skewX(-12deg)',
-                      transition: 'transform 1s ease-out'
-                    }}
-                  />
-                </div>
-                
-                {/* Content */}
-                <div className="relative z-10">
-                  <h3 className="text-xl font-bold mb-4 text-primary group-hover:text-primary/80 transition-colors">
-                    {tech.category}
-                  </h3>
-                  <div className="space-y-3">
-                    {tech.items.map((item) => (
-                      <div
-                        key={item}
-                        className="flex items-center gap-3 group/item"
-                      >
-                        <div className="w-2 h-2 rounded-full bg-primary/60 group-hover/item:bg-primary group-hover/item:scale-125 transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground group-hover/item:text-foreground transition-colors duration-200 font-medium">
-                          {item}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Subtle glow effect */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              </div>
-            ))}
-          </StaggerReveal>
-        </div>
-      </section>
-
-      {/* Docs CTA Section */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn direction="up">
-            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl p-8 md:p-12 text-center space-y-6 hover:scale-[1.01] transition-transform backdrop-blur-sm border border-primary/20 relative overflow-hidden">
-              {/* Animated background elements */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-4 left-4 w-2 h-2 bg-blue-500/30 rounded-full animate-pulse"></div>
-                <div className="absolute top-8 right-8 w-3 h-3 bg-purple-500/30 rounded-full animate-pulse delay-1000"></div>
-                <div className="absolute bottom-6 left-8 w-2 h-2 bg-pink-500/30 rounded-full animate-pulse delay-500"></div>
-                <div className="absolute bottom-4 right-4 w-3 h-3 bg-blue-500/30 rounded-full animate-pulse delay-1500"></div>
-                <div className="absolute top-1/2 left-1/4 w-1 h-1 bg-purple-500/40 rounded-full animate-pulse delay-2000"></div>
-                <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-pink-500/30 rounded-full animate-pulse delay-3000"></div>
-              </div>
-              
-              <div className="relative z-10">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                    <FileText className="w-8 h-8 text-primary" />
-                  </div>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">View My Credentials</h2>
-                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-                  Explore my academic achievements, certifications, and official documentation. Download transcripts, view certifications, and verify my qualifications.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <Link to="/docs">
-                    <Button size="lg" className="flex items-center gap-2 hover:scale-105 transition-transform bg-primary hover:bg-primary/90">
-                      <Award className="w-5 h-5" />
-                      View Documents
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Download className="w-4 h-4" />
-                    <span>Certificates • Transcripts • Achievements</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Connect Section */}
-      <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
-        <div className="max-w-7xl mx-auto">
-          <ScaleIn delay={0.2} className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-8 md:p-12 text-center space-y-6 hover:scale-[1.01] transition-transform backdrop-blur-sm">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Let's Work Together</h2>
-              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Whether you're looking for a developer to join your team, collaborate on a project, or just want to chat about tech and cycling, I'd love to hear from you.
-              </p>
-            </div>
-
-            {/* Social Links */}
-            <StaggerReveal className="flex justify-center gap-4 flex-wrap pt-4" stagger={0.1}>
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`p-3 rounded-lg border bg-background hover:bg-primary/10 transition hover:scale-110 hover:rotate-6 ${social.color}`}
-                    title={social.label}
-                  >
-                    {social.isCustom ? <Icon className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
-                  </a>
-                );
-              })}
-            </StaggerReveal>
-
-            <div className="pt-4">
-              <Link to="/contact">
-                <Button size="lg" className="mx-auto flex items-center gap-2 hover:scale-105 transition-transform">
-                  Send Me a Message
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
-          </ScaleIn>
-        </div>
-      </section>
+  return (
+    <div className="editorial">
+      <EdNav />
+      <Hero ytdDistanceKm={heroKm} content={heroContent} />
+      <About content={aboutContent} />
+      <Journey items={journeyItems} />
+      <Cycling />
+      <Gallery />
+      <Engineering />
+      <Gear coding={gearCoding} cycling={gearCycling} />
+      <Projects />
+      <Stack cats={stackCats} />
+      <Philosophy />
+      <Docs />
+      <Contact />
+      <EdFooter />
     </div>
   );
 }

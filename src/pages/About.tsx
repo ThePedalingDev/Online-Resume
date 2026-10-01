@@ -14,7 +14,7 @@ export function About() {
     {
       degree: 'BSc. Computer and Information Science',
       status: 'Cum Laude (Expected December 2025)',
-      school: 'Varsity College – Pretoria Campus',
+      school: 'Varsity College, Pretoria Campus',
       details: '19 of 20 completed modules with distinctions. Member of Golden Key International Honour Society (2025).',
       icon: BookOpen,
     },

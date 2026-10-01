@@ -73,7 +73,7 @@ export function Navbar() {
   }, [location.pathname]);
 
   return (
-    <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+    <nav className={`sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-200 ease-out ${
       isTransparent 
         ? 'bg-transparent border-transparent backdrop-blur-none shadow-none' 
         : 'border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
@@ -105,7 +105,7 @@ export function Navbar() {
                 <Link key={item.path} to={item.path}>
                   <Button
                     variant="ghost"
-                    className={`text-base flex items-center gap-2 group hover:-translate-y-0.5 transition-all duration-200 ${isTransparent ? 'drop-shadow-lg text-shadow-lg' : ''}`}
+                    className={`text-base flex items-center gap-2 group transition-transform duration-200 ease-out hover:-translate-y-0.5 ${isTransparent ? 'drop-shadow-lg text-shadow-lg' : ''}`}
                   >
                     <Icon className="w-4 h-4 group-hover:text-primary transition-colors" />
                     {item.label}
@@ -150,7 +150,7 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent focus:outline-none hover:scale-110 transition-transform"
+              className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent focus:outline-none transition-transform duration-150 ease-out hover:scale-110 active:scale-[0.97]"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
