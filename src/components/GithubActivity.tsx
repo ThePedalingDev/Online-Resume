@@ -66,7 +66,7 @@ export function GithubActivity() {
       {failed ? <span className="gh-empty">Activity unavailable</span> : null}
       {days ? (
         <span className="gh-scroll">
-          <span className="gh-months" style={{ gridTemplateColumns: `repeat(${weeks.length}, 10px)` }}>
+          <span className="gh-months">
             {weeks.map((week, index) => (
               <span key={days[Math.min(index * 7, days.length - 1)].date + index}>
                 {monthLabel(week, weeks[index - 1])}

@@ -912,6 +912,7 @@ html {
 .editorial .gh-weeks {
   display: grid;
   grid-auto-flow: column;
+  grid-auto-columns: 10px;
   gap: 3px;
 }
 .editorial .gh-months {
@@ -1052,6 +1053,7 @@ html {
 .editorial .about-img.one,
 .editorial .about-img.two { aspect-ratio: 4 / 5; }
 @media (max-width: 800px) {
+  .editorial { overflow-x: visible; }
   .editorial .about-visual { grid-template-columns: 1fr; grid-template-rows: none; }
   .editorial .about-img.one,
   .editorial .about-img.two,
@@ -1059,14 +1061,58 @@ html {
     grid-column: 1;
     grid-row: auto;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: auto;
+    display: block;
+  }
+  .editorial .about-img .cred-link {
+    position: relative;
+    inset: auto;
+    display: block;
+  }
+  .editorial .about-img.one img,
+  .editorial .about-img.two img,
+  .editorial .about-img.three img {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    height: auto;
+    flex: none;
+    object-fit: contain;
+    object-position: center;
+    transform: none;
+    background: #fff;
   }
   .editorial .about-graph,
-  .editorial .about-pattern {
+  .editorial .about-pattern,
+  .editorial .gh-scroll {
     grid-column: 1;
     grid-row: auto;
     height: auto;
+    min-width: 0;
+    max-width: 100%;
   }
+  .editorial .gh-scroll {
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+  .editorial .gh-months,
+  .editorial .gh-weeks { grid-auto-columns: 8px; gap: 2px; }
+  .editorial .gh-months { margin-left: 20px; height: 12px; }
+  .editorial .gh-months > span { width: 8px; }
+  .editorial .gh-weeks { grid-template-rows: repeat(7, 8px); }
+  .editorial .gh-day { width: 8px; height: 8px; }
+  .editorial .gh-dow {
+    grid-template-rows: repeat(7, 8px);
+    gap: 2px;
+    width: 16px;
+    font-size: 7px;
+    line-height: 8px;
+  }
+  .editorial .gh-foot { margin-left: 0; flex-wrap: wrap; }
   .editorial .about-lede,
   .editorial .about-side { grid-column: 1 / span 12; }
 }

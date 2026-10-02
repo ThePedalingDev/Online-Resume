@@ -1,3 +1,4 @@
+import { useLenis } from 'lenis/react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import heroCutout from '@/assets/images/hero-cutout.png';
 import gearEpic from '@/assets/gear/epic-sworks.jpg';
@@ -12,6 +13,7 @@ import gearMonitor from '@/assets/gear/alienware-aw2725dm.jpg';
 import gearLightBar from '@/assets/gear/xiaomi-monitor-light-bar.jpg';
 import gearHelmet from '@/assets/gear/met-manta.jpg';
 import gearShoes from '@/assets/gear/shimano-sh-xc903.jpg';
+import gearVictus from '@/assets/gear/hp-victus-15.jpg';
 import trailseekerWellington from '@/assets/images/trailseeker-wellington.jpg';
 import deskSetup from '@/assets/images/desk-setup.jpg';
 import raceReady from '@/assets/images/race-ready.jpg';
@@ -331,42 +333,146 @@ const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
   ],
 };
 
+const WHEEL_PER_IMAGE = 90;
+const MAX_IMAGES_PER_SEC = 4;
+const STACK_PARK = 0.2;
+
+function paintStack(frames: HTMLImageElement[], progress: number) {
+  const end = frames.length - 1;
+  const shown = Math.min(end, Math.max(0, progress));
+  frames.forEach((img, i) => {
+    const dist = Math.abs(shown - i);
+    const opacity = dist >= 1 ? 0 : dist <= 0.22 ? 1 : (1 - dist) / 0.78;
+    img.style.opacity = opacity.toFixed(3);
+    img.toggleAttribute('aria-hidden', opacity < 0.55);
+  });
+}
+
 function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
   const root = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useEffect(() => {
     const el = root.current;
     if (!el || stills.length < 2 || prefersReducedMotion()) return;
     const frames = [...el.querySelectorAll<HTMLImageElement>('img')];
+    const end = frames.length - 1;
+    const fine = window.matchMedia('(pointer: fine)').matches;
+    let progress = 0;
+    let active = false;
+    let armed = true;
+    let lastTick = 0;
     let raf = 0;
-    const sync = () => {
-      raf = 0;
+
+    const release = () => {
+      if (!active) return;
+      active = false;
+      armed = false;
+      progress = Math.min(end, Math.max(0, progress));
+      paintStack(frames, progress);
+      lenis?.start();
+    };
+
+    const engage = () => {
+      if (!lenis || active) return;
+      active = true;
+      lastTick = 0;
       const rect = el.getBoundingClientRect();
       const view = window.innerHeight || 1;
-      const travel = Math.max(view * 0.85, (frames.length - 1) * 240);
-      const raw = (view * 0.72 - rect.top) / travel;
-      const scaled = Math.min(frames.length - 1, Math.max(0, raw * (frames.length - 1)));
-      frames.forEach((img, i) => {
-        const opacity = Math.max(0, 1 - Math.abs(scaled - i));
-        img.style.opacity = opacity.toFixed(3);
-        img.toggleAttribute('aria-hidden', opacity < 0.5);
-      });
+      lenis.scrollTo(lenis.animatedScroll + (rect.top - view * STACK_PARK), { immediate: true, force: true });
+      lenis.stop();
     };
+
+    const onVirtual = (data: { deltaY: number; event: Event }) => {
+      if (!active || data.event.type.includes('touch')) return;
+      const now = performance.now();
+      const dt = lastTick ? (now - lastTick) / 1000 : 0.05;
+      lastTick = now;
+      const budget = Math.max(dt, 0.016) * MAX_IMAGES_PER_SEC;
+      const step = Math.sign(data.deltaY) * Math.min(Math.abs(data.deltaY) / WHEEL_PER_IMAGE, budget);
+      progress += step;
+      if (progress > end + 0.08 || progress < -0.08) {
+        progress = progress > end ? end : 0;
+        paintStack(frames, progress);
+        release();
+        return;
+      }
+      paintStack(frames, progress);
+    };
+
+    const onKey = (event: KeyboardEvent) => {
+      if (!active) return;
+      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, button, a')) return;
+      const down = event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ';
+      const up = event.key === 'ArrowUp' || event.key === 'PageUp';
+      if (!down && !up) return;
+      event.preventDefault();
+      progress += down ? 0.34 : -0.34;
+      if (progress > end + 0.2 || progress < -0.2) {
+        progress = progress > end ? end : 0;
+        paintStack(frames, progress);
+        release();
+        return;
+      }
+      paintStack(frames, progress);
+    };
+
+    const onClick = (event: MouseEvent) => {
+      if (!active) return;
+      const anchor = event.composedPath().find((node): node is HTMLAnchorElement => node instanceof HTMLAnchorElement);
+      if (anchor?.hash) release();
+    };
+
+    const syncLinked = () => {
+      const rect = el.getBoundingClientRect();
+      const view = window.innerHeight || 1;
+      const travel = Math.max(view * 1.6, end * view * 0.95);
+      const raw = (view * 0.62 - rect.top) / travel;
+      progress = Math.min(end, Math.max(0, raw * end));
+      paintStack(frames, progress);
+    };
+
+    const sync = () => {
+      raf = 0;
+      if (!fine) {
+        syncLinked();
+        return;
+      }
+      if (active || !lenis) return;
+      const rect = el.getBoundingClientRect();
+      const view = window.innerHeight || 1;
+      const inBand = rect.top < view * 0.55 && rect.bottom > view * 0.4;
+      if (!inBand) armed = true;
+      if (!armed) return;
+      const dir = lenis.direction;
+      const parked = rect.top <= view * STACK_PARK && rect.bottom > view * 0.45;
+      if (dir > 0 && progress < end - 0.02 && parked) engage();
+      else if (dir < 0 && progress > 0.02 && rect.bottom > view * 0.45 && rect.top < view * 0.55) engage();
+    };
+
     const onScroll = () => {
       if (raf) return;
       raf = window.requestAnimationFrame(sync);
     };
-    sync();
+
+    paintStack(frames, 0);
+    lenis?.on('virtual-scroll', onVirtual);
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('lenis-frame', onScroll);
     window.addEventListener('resize', onScroll);
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('click', onClick, true);
     return () => {
+      if (active) lenis?.start();
+      lenis?.off('virtual-scroll', onVirtual);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('lenis-frame', onScroll);
       window.removeEventListener('resize', onScroll);
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('click', onClick, true);
       if (raf) window.cancelAnimationFrame(raf);
     };
-  }, [stills.length]);
+  }, [lenis, stills.length, year]);
 
   if (stills.length === 1) {
     const still = stills[0];
@@ -787,7 +893,7 @@ function Engineering() {
 
 const GEAR_CODING: GearItemT[] = [
   { name: 'ROG Zephyrus G16', spec: '16-inch daily driver', cat: 'Compute', href: 'https://rog.asus.com/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/' },
-  { name: 'HP Victus 14', spec: 'Home lab', cat: 'Lab', href: 'https://www.hp.com/us-en/gaming/laptops/victus.html' },
+  { name: 'HP Victus 15', spec: '15-inch home lab', cat: 'Lab', href: 'https://www.hp.com/us-en/shop/pdp/victus-gaming-laptop-15-fb3025nr' },
   { name: 'Alienware AW2725DM', spec: 'Dell · 27-inch QHD', cat: 'Display', href: 'https://www.dell.com/en-us/shop/alienware-27-gaming-monitor-aw2725dm/apd/210-bpky/monitors-monitor-accessories' },
   { name: 'Xiaomi Monitor Light Bar', spec: 'Mounts on the monitor', cat: 'Light', href: 'https://www.mi.com/uk/product/mi-computer-monitor-light-bar/' },
   { name: 'Corsair Vanguard 96', spec: '96% mechanical · 8,000 Hz', cat: 'Input', href: 'https://www.corsair.com/us/en/p/keyboards/ch-91e911e-na/vanguard-96-mechanical-gaming-keyboard-corsair-mlx-quantum-ch-91e911e-na' },
@@ -813,6 +919,7 @@ const GEAR_MARKS: Record<string, BrandMarkName> = {
 
 const GEAR_IMAGES: Record<string, string> = {
   'ROG Zephyrus G16': gearLaptop,
+  'HP Victus 15': gearVictus,
   'Alienware AW2725DM': gearMonitor,
   'Xiaomi Monitor Light Bar': gearLightBar,
   'Corsair Vanguard 96': gearKeyboard,
@@ -910,7 +1017,7 @@ const PROJECTS = [
   { n: '02', name: 'Afrisist', mark: afrisistMark, markFit: 'word', shot: afrisistFleet, desc: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure. Operators watch incoming alarms, assign them, and get notified as the events arrive.', tags: 'React · Node · Supabase · WebSocket · Azure' },
   { n: '03', name: 'Eridge RDA', href: 'https://www.eridgerda.org.uk/', mark: rdaMark, shot: eridgeRda, desc: 'Site and CMS for the Eridge group of Riding for the Disabled. Programmes, a photo gallery, volunteer applications, and a protected admin for the people who keep it current.', tags: 'React · Vite · Supabase' },
   { n: '04', name: 'Skillance', href: 'https://skillance.co.za/', mark: skillanceMark, shot: skillanceHome, desc: 'Verified freelance marketplace for South Africa. Discover a professional, review the profile, and book with payment held until the work is approved. Coming soon on iOS and Android. Built with Kyle Nel.', tags: 'React · Fastify · Postgres' },
-  { n: '05', name: 'Home lab + tooling', desc: 'An HP Victus 14, used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
+  { n: '05', name: 'Home lab + tooling', desc: 'An HP Victus 15, used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
 ];
 
 function Projects() {
