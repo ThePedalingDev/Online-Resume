@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { apiUrl } from '@/lib/api';
 
 type CmsKey = 'hero' | 'about' | 'journey' | 'cycling' | 'gallery' | 'stack' | 'gearCoding' | 'gearCycling' | 'docs';
 type AdminPanel = CmsKey | 'integrations';
@@ -12,23 +13,23 @@ type ContentResponse = {
 };
 
 async function me(): Promise<{ authed: boolean }> {
-  const res = await fetch('/api/admin/me', { credentials: 'include' });
+  const res = await fetch(apiUrl('/api/admin/me'), { credentials: 'include' });
   if (!res.ok) throw new Error(`Auth check failed (${res.status})`);
   return (await res.json()) as { authed: boolean };
 }
 
 async function logout() {
-  await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+  await fetch(apiUrl('/api/admin/logout'), { method: 'POST', credentials: 'include' });
 }
 
 async function getContent(key: CmsKey): Promise<ContentResponse> {
-  const res = await fetch(`/api/content/${key}`, { credentials: 'include' });
+  const res = await fetch(apiUrl(`/api/content/${key}`), { credentials: 'include' });
   if (!res.ok) throw new Error(`Load failed (${res.status})`);
   return (await res.json()) as ContentResponse;
 }
 
 async function putContent(key: CmsKey, value: unknown) {
-  const res = await fetch(`/api/content/_admin/${key}`, {
+  const res = await fetch(apiUrl(`/api/content/_admin/${key}`), {
     method: 'PUT',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -43,7 +44,7 @@ async function putContent(key: CmsKey, value: unknown) {
 async function uploadFile(file: File): Promise<{ url: string }> {
   const fd = new FormData();
   fd.append('file', file);
-  const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd, credentials: 'include' });
+  const res = await fetch(apiUrl('/api/admin/uploads'), { method: 'POST', body: fd, credentials: 'include' });
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as { error?: string } | null;
     throw new Error(body?.error || `Upload failed (${res.status})`);
@@ -57,13 +58,13 @@ async function getIntegrationsStatus(): Promise<{
   strava: { connected: boolean; updatedAt: string | null };
   instagram: { configured: boolean; updatedAt: string | null };
 }> {
-  const res = await fetch('/api/admin/integrations/status', { credentials: 'include' });
+  const res = await fetch(apiUrl('/api/admin/integrations/status'), { credentials: 'include' });
   if (!res.ok) throw new Error(`Load failed (${res.status})`);
   return (await res.json()) as any;
 }
 
 async function saveInstagramConfig(token: string, userId: string) {
-  const res = await fetch('/api/admin/integrations/instagram', {
+  const res = await fetch(apiUrl('/api/admin/integrations/instagram'), {
     method: 'PUT',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -262,7 +263,7 @@ export function Admin() {
                       </div>
                       <div className="ed-admin-row">
                         <Button asChild>
-                          <a href="/api/strava/auth" target="_blank" rel="noopener noreferrer">
+                          <a href={apiUrl('/api/strava/auth')} target="_blank" rel="noopener noreferrer">
                             Connect Strava
                           </a>
                         </Button>

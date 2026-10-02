@@ -1,3 +1,5 @@
+import { apiUrl } from '@/lib/api';
+
 export type CmsKey = 'hero' | 'about' | 'journey' | 'cycling' | 'gallery' | 'stack' | 'gearCoding' | 'gearCycling' | 'docs';
 
 export type CmsResponse<T> = {
@@ -20,7 +22,7 @@ function stripEmDashes<T>(value: T): T {
 }
 
 export async function fetchContent<T>(key: CmsKey, signal?: AbortSignal): Promise<CmsResponse<T>> {
-  const res = await fetch(`/api/content/${key}`, { signal, credentials: 'include' });
+  const res = await fetch(apiUrl(`/api/content/${key}`), { signal, credentials: 'include' });
   if (!res.ok) throw new Error(`Content load failed (${res.status})`);
   return stripEmDashes((await res.json()) as CmsResponse<T>);
 }

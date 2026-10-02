@@ -32,6 +32,7 @@ import capeFriends from '@/assets/images/cape-friends.jpg';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
+import { apiUrl } from '@/lib/api';
 
 function useInView<T extends HTMLElement>(threshold = 0.2, rootMargin = '-40px 0px') {
   const ref = useRef<T | null>(null);
@@ -606,7 +607,7 @@ function Cycling() {
                     {error.authUrl ? (
                       <>
                         {' '}·{' '}
-                        <a href={error.authUrl} target="_blank" rel="noopener noreferrer">Connect Strava</a>
+                        <a href={error.authUrl.startsWith('http') ? error.authUrl : apiUrl(error.authUrl)} target="_blank" rel="noopener noreferrer">Connect Strava</a>
                       </>
                     ) : null}
                   </span>

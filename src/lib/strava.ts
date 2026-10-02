@@ -1,3 +1,5 @@
+import { apiUrl } from '@/lib/api';
+
 export type StravaStatBlock = {
   label: string;
   val: string;
@@ -38,7 +40,7 @@ export type StravaUnavailable = {
 };
 
 export async function fetchStravaSummary(signal?: AbortSignal): Promise<StravaSummary> {
-  const res = await fetch('/api/strava/summary', { signal });
+  const res = await fetch(apiUrl('/api/strava/summary'), { signal });
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as StravaUnavailable | null;
     const message = body?.error || `Request failed (${res.status})`;
