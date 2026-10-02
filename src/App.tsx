@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Navigate, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { SmoothScroll } from '@/components/SmoothScroll';
 import { RootLayout } from '@/layouts/RootLayout';
 import { Suspense, lazy } from 'react';
 import { AdminLogin } from '@/pages/AdminLogin';
@@ -24,6 +25,7 @@ const PageLoader = () => (
 function App() {
   return (
     <ThemeProvider>
+      <SmoothScroll>
       <Router>
         <Routes>
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -68,6 +70,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      </SmoothScroll>
     </ThemeProvider>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import pfpImage from '@/assets/images/PFP.jpg';
+import pfpImage from '@/assets/images/hero-portrait.jpg';
 import gearEpic from '@/assets/gear/epic-sworks.jpg';
 import gearGarmin from '@/assets/gear/garmin-edge-840.jpg';
 import gearHeadset from '@/assets/gear/arctis-nova-pro.webp';
@@ -14,8 +14,10 @@ import raceReady from '@/assets/images/race-ready.jpg';
 import longRide from '@/assets/images/long-ride.jpg';
 import sworksUpgrades from '@/assets/images/sworks-upgrades.jpg';
 import graduationPhoto from '@/assets/images/graduation-kyle.jpg';
+import graduationSolo from '@/assets/images/graduation.jpg';
 import topAchieverPhoto from '@/assets/images/top-achiever.jpg';
 import goldenKeyBadge from '@/assets/images/golden-key.png';
+import bigBen from '@/assets/images/big-ben.jpg';
 import skillanceMark from '@/assets/images/skillance-mark.png';
 import kcsMark from '@/assets/projects/kcs.webp';
 import afrisistMark from '@/assets/projects/afrisist.png';
@@ -31,7 +33,7 @@ import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
 
-function useInView<T extends HTMLElement>(threshold = 0.2) {
+function useInView<T extends HTMLElement>(threshold = 0.2, rootMargin = '-40px 0px') {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -39,16 +41,16 @@ function useInView<T extends HTMLElement>(threshold = 0.2) {
     if (!el) return;
     const obs = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) setInView(true); }),
-      { threshold, rootMargin: '-40px 0px' }
+      { threshold, rootMargin }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [threshold, rootMargin]);
   return { ref, inView };
 }
 
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.12, '0px 0px -10% 0px');
   return (
     <div
       ref={ref}
@@ -61,15 +63,39 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; 
 }
 
 const NAV_LINKS = [
-  ['#about', 'About'],
-  ['#journey', 'Journey'],
-  ['#projects', 'Work'],
-  ['#stack', 'Stack'],
-  ['#docs', 'Docs'],
-  ['#contact', 'Contact'],
+  ['#about', 'About', '01'],
+  ['#journey', 'Journey', '02'],
+  ['#projects', 'Work', '07'],
+  ['#stack', 'Stack', '08'],
+  ['#docs', 'Docs', '10'],
+  ['#contact', 'Contact', '11'],
 ] as const;
 
 function EdNav() {
+  const drawer = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const el = drawer.current;
+    if (!el) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') el.open = false;
+    };
+    const onPointer = (event: PointerEvent) => {
+      if (!el.open || !(event.target instanceof Node) || el.contains(event.target)) return;
+      el.open = false;
+    };
+    window.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+    };
+  }, []);
+
+  const closeDrawer = () => {
+    if (drawer.current) drawer.current.open = false;
+  };
+
   return (
     <nav className="ed-nav">
       <div className="ed-nav-inner">
@@ -84,11 +110,17 @@ function EdNav() {
           Available
         </div>
         <a className="ed-nav-cta" href="#contact">Get in touch</a>
-        <details className="ed-nav-drawer">
-          <summary>Menu</summary>
+        <details className="ed-nav-drawer" ref={drawer}>
+          <summary>
+            <span className="ed-nav-burger" aria-hidden="true"><i /><i /><i /></span>
+            <span className="ed-nav-summary-label">Menu</span>
+          </summary>
           <div className="ed-nav-drawer-links">
-            {NAV_LINKS.map(([href, label]) => (
-              <a key={href} href={href}>{label}</a>
+            {NAV_LINKS.map(([href, label, num]) => (
+              <a key={href} href={href} onClick={closeDrawer}>
+                <span>{num}</span>
+                {label}
+              </a>
             ))}
           </div>
         </details>
@@ -242,6 +274,12 @@ function About({ content }: { content?: AboutContent | null }) {
               <span>{img('three')?.meta || '23 Apr 2025'}</span>
               <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
             </Reveal>
+            <div className="about-pattern" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
         </div>
       </div>
@@ -267,21 +305,117 @@ const JOURNEY: JourneyItem[] = [
     tags: ['Rimitso', 'KCS', 'Trailseeker'] },
 ];
 
-const JOURNEY_STILLS: Record<string, { src: string; pos?: string }> = {
-  '2024': { src: eridgeRda },
-  '2025': { src: graduationPhoto, pos: 'center 40%' },
-  '2026': { src: rmsHome },
+type JourneyStill = { src: string; alt: string; pos?: string; fit?: 'cover' | 'contain' };
+
+const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
+  '2024': [
+    { src: eridgeRda, alt: 'Eridge RDA site' },
+  ],
+  '2025': [
+    { src: graduationPhoto, alt: 'Markus Fourie at graduation with Kyle Nel', pos: 'center 40%' },
+    { src: graduationSolo, alt: 'Markus Fourie in his graduation gown', fit: 'contain' },
+    { src: topAchieverPhoto, alt: 'Varsity College Top Achiever award, 2025', pos: 'center 55%' },
+    { src: goldenKeyBadge, alt: 'Golden Key Top Performer certificate, 23 April 2025', fit: 'contain' },
+    { src: bigBen, alt: 'Elizabeth Tower in London, from a trip to England', fit: 'contain' },
+  ],
+  '2026': [
+    { src: rmsHome, alt: 'Katanga RMS home screen' },
+    { src: trailseekerWellington, alt: 'Markus Fourie at Ford Trailseeker #6 Wellington' },
+  ],
 };
+
+function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
+  const track = useRef<HTMLDivElement>(null);
+  const indexRef = useRef(0);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const el = track.current;
+    if (!el || stills.length < 2) return;
+    const count = stills.length;
+    let frame = 0;
+    const sync = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const view = window.innerHeight || 1;
+      const start = view * 0.78;
+      const end = view * 0.22;
+      const progress = (start - (rect.top + rect.height / 2)) / Math.max(start - end, 1);
+      const next = Math.min(count - 1, Math.max(0, Math.round(progress * (count - 1))));
+      const left = next * el.clientWidth;
+      if (Math.abs(el.scrollLeft - left) > 1) el.scrollLeft = left;
+      if (indexRef.current !== next) {
+        indexRef.current = next;
+        setIndex(next);
+      }
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(sync);
+    };
+    sync();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [stills.length]);
+
+  if (stills.length === 1) {
+    const still = stills[0];
+    return (
+      <img
+        className={`m-photo${still.fit === 'contain' ? ' is-contain' : ''}`}
+        src={still.src}
+        alt={still.alt}
+        style={still.pos ? { objectPosition: still.pos } : undefined}
+      />
+    );
+  }
+
+  const go = (dir: number) => {
+    const el = track.current;
+    if (!el) return;
+    const next = Math.min(stills.length - 1, Math.max(0, index + dir));
+    indexRef.current = next;
+    setIndex(next);
+    el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="m-stack">
+      <div
+        className="m-track"
+        ref={track}
+        tabIndex={0}
+        aria-label={`${year} photos`}
+      >
+        {stills.map((still) => (
+          <div key={still.src} className={`m-slide${still.fit === 'contain' ? ' is-contain' : ''}`}>
+            <img src={still.src} alt={still.alt} style={still.pos ? { objectPosition: still.pos } : undefined} />
+          </div>
+        ))}
+      </div>
+      <div className="m-stack-bar">
+        <button type="button" onClick={() => go(-1)} disabled={index === 0}>Prev</button>
+        <span>{String(index + 1).padStart(2, '0')} / {String(stills.length).padStart(2, '0')}</span>
+        <button type="button" onClick={() => go(1)} disabled={index === stills.length - 1}>Next</button>
+      </div>
+    </div>
+  );
+}
 
 function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
   const { ref, inView } = useInView<HTMLDivElement>(0.4);
-  const still = JOURNEY_STILLS[year];
+  const stills = JOURNEY_STILLS[year];
   return (
     <div ref={ref} className={`milestone ${inView ? 'is-in' : ''}`}>
       <div className="m-year">
         {year}
         <span className="m-chip">{chip}</span>
-        {still ? <img className="m-photo" src={still.src} alt="" style={still.pos ? { objectPosition: still.pos } : undefined} /> : null}
+        {stills?.length ? <YearStack year={year} stills={stills} /> : null}
       </div>
       <div className="m-anchor"><span className="m-node" /></div>
       <div className="m-card">
@@ -348,7 +482,9 @@ function Cycling() {
         const err = e as (Error & { detail?: StravaUnavailable });
         const detail = err.detail;
         setError({
-          message: err?.message || 'Strava data unavailable',
+          message: detail?.code === 'STRAVA_UNAVAILABLE'
+            ? 'Strava needs a fresh connection'
+            : (err?.message || 'Strava data unavailable'),
           authUrl: detail?.setup?.authUrl,
         });
         setStats(null);
@@ -577,6 +713,16 @@ function TerminalLine({ children }: { children: ReactNode }) {
   return <span className="t-line">{children}</span>;
 }
 
+function FedoraPrompt() {
+  return (
+    <>
+      <span className="pr-user">[markus@fedora</span>
+      <span className="pr-path"> ~</span>
+      <span className="pr-user">]$</span>
+    </>
+  );
+}
+
 function Engineering() {
   return (
     <section id="engineering">
@@ -603,24 +749,24 @@ function Engineering() {
             <Reveal>
               <div className="eng-terminal">
                 <div className="t-bar">
-                  <span className="dot r" /><span className="dot y" /><span className="dot g" />
-                  <span className="t-label">markus@skillance ~ </span>
+                  <span className="t-title">Terminal</span>
+                  <span className="t-label">markus@fedora: ~</span>
                 </div>
-                <TerminalLine><span className="pr">$</span> ./deploy rms --env prod</TerminalLine>
+                <TerminalLine><FedoraPrompt /> ./deploy rms --env prod</TerminalLine>
                 <TerminalLine><span className="dim">→ building 3 artefacts…</span></TerminalLine>
                 <TerminalLine><span className="dim">→ running migrations (017_audit_trail)</span></TerminalLine>
                 <TerminalLine><span className="dim">→ health check: api, worker, gateway</span></TerminalLine>
                 <TerminalLine><span className="ok">✓ deploy complete · 14.2s · 0 errors</span></TerminalLine>
                 <TerminalLine>&nbsp;</TerminalLine>
-                <TerminalLine><span className="pr">$</span> tail -f /var/log/rms/audit.log</TerminalLine>
+                <TerminalLine><FedoraPrompt /> tail -f /var/log/rms/audit.log</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:01]</span> OP_CHECKOUT · user:214 · asset:crane-07 · ok</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:09]</span> OP_CHECKOUT · user:198 · asset:wheel-12 · ok</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:17]</span> OP_RETURN   · user:214 · asset:crane-07 · 4.2h</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:44]</span> <span className="egg">OP_CHECKOUT · user:markus · asset:legs · zone:4 · hill:accepted</span></TerminalLine>
                 <TerminalLine>&nbsp;</TerminalLine>
-                <TerminalLine><span className="pr">$</span> which weekend</TerminalLine>
+                <TerminalLine><FedoraPrompt /> which weekend</TerminalLine>
                 <TerminalLine><span className="egg">/usr/local/bin/long-ride</span></TerminalLine>
-                <TerminalLine><span className="pr">$</span> <span className="t-cursor" /></TerminalLine>
+                <TerminalLine><FedoraPrompt /> <span className="t-cursor" /></TerminalLine>
               </div>
             </Reveal>
             <Reveal delay={120}>
@@ -649,6 +795,9 @@ function Engineering() {
 
 const GEAR_CODING: GearItemT[] = [
   { name: 'ROG Zephyrus G16', spec: '16-inch daily driver', cat: 'Compute', href: 'https://rog.asus.com/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/' },
+  { name: 'HP Victus 14', spec: 'Home lab', cat: 'Lab', href: 'https://www.hp.com/us-en/gaming/laptops/victus.html' },
+  { name: 'Alienware AW2725DM', spec: 'Dell · 27-inch QHD', cat: 'Display', href: 'https://www.dell.com/en-us/shop/alienware-27-gaming-monitor-aw2725dm/apd/210-bpky/monitors-monitor-accessories' },
+  { name: 'Xiaomi Monitor Light Bar', spec: 'Mounts on the monitor', cat: 'Light', href: 'https://www.mi.com/uk/product/mi-computer-monitor-light-bar/' },
   { name: 'Corsair Vanguard 96', spec: '96% mechanical · 8,000 Hz', cat: 'Input', href: 'https://www.corsair.com/us/en/p/keyboards/ch-91e911e-na/vanguard-96-mechanical-gaming-keyboard-corsair-mlx-quantum-ch-91e911e-na' },
   { name: 'Logitech G Pro', spec: 'LIGHTSPEED wireless', cat: 'Input', href: 'https://www.logitechg.com/en-us/shop/p/pro-wireless-mouse' },
   { name: 'Arctis Nova Pro Wireless', spec: 'SteelSeries · ANC · hot-swap battery', cat: 'Audio', href: 'https://steelseries.com/gaming-headsets/arctis-nova-pro' },
@@ -657,6 +806,8 @@ const GEAR_CODING: GearItemT[] = [
 const GEAR_CYCLING: GearItemT[] = [
   { name: 'Epic S-Works 7', spec: 'Specialized · full-suspension XC', cat: 'MTB', href: 'https://www.specialized.com/us/en/s-works-epic-sram-xx1-axs-rockshox-ultimate-brain/p/205828' },
   { name: 'Rave SLR ID2', spec: 'Wilier · gravel race bike', cat: 'Gravel', href: 'https://www.wilier.com/en/bikes/gravel/rave-slr-id2' },
+  { name: 'MET Manta', spec: 'Holographic colour helmet', cat: 'Helmet', href: 'https://www.met-helmets.com/en/shop/cycling-helmets/tri-aero-helmets/manta-mips/' },
+  { name: 'Shimano SH-XC903', spec: 'Wide unisex MTB shoes', cat: 'Shoes', href: 'https://ride.shimano.com/products/sh-xc903' },
   { name: 'Aeroshade 2.0 Titanium', spec: 'Scicon · cycling eyewear', cat: 'Eyewear', href: 'https://sciconsports.com/en/products/aeroshade-2-0-titanium-ey440801' },
   { name: 'Garmin Edge 840', spec: 'GPS bike computer', cat: 'Compute', href: 'https://www.garmin.com/en-US/p/798777/' },
 ];
@@ -763,7 +914,7 @@ const PROJECTS = [
   { n: '02', name: 'Afrisist', mark: afrisistMark, markFit: 'word', shot: afrisistFleet, desc: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure. Operators watch incoming alarms, assign them, and get notified as the events arrive.', tags: 'React · Node · Supabase · WebSocket · Azure' },
   { n: '03', name: 'Eridge RDA', href: 'https://www.eridgerda.org.uk/', mark: rdaMark, shot: eridgeRda, desc: 'Site and CMS for the Eridge group of Riding for the Disabled. Programmes, a photo gallery, volunteer applications, and a protected admin for the people who keep it current.', tags: 'React · Vite · Supabase' },
   { n: '04', name: 'Skillance', href: 'https://skillance.co.za/', mark: skillanceMark, shot: skillanceHome, desc: 'Verified freelance marketplace for South Africa. Discover a professional, review the profile, and book with payment held until the work is approved. Coming soon on iOS and Android. Built with Kyle Nel.', tags: 'React · Fastify · Postgres' },
-  { n: '05', name: 'Home lab + tooling', desc: 'An old laptop, turned into a home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
+  { n: '05', name: 'Home lab + tooling', desc: 'An HP Victus 14, used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
 ];
 
 function Projects() {
@@ -824,23 +975,39 @@ function Projects() {
 }
 
 const STACK: StackCat[] = [
-  { name: 'Languages', items: [
-    { n: 'TypeScript', y: '4 yrs' }, { n: 'C#', y: '4 yrs' }, { n: 'JavaScript', y: '5 yrs' },
-    { n: 'SQL', y: '4 yrs' }, { n: 'Python', y: '2 yrs' }, { n: 'Go', y: 'learning' },
+  { name: 'Web', items: [
+    { n: 'HTML, CSS, JavaScript', y: '5 yrs' },
+    { n: 'TypeScript', y: '4 yrs' },
+    { n: 'React', y: '4 yrs' },
+    { n: 'Tailwind', y: '3 yrs' },
+    { n: 'Node.js / Express', y: '4 yrs' },
+    { n: 'SQL', y: '4 yrs' },
+    { n: 'PostgreSQL', y: '3 yrs' },
+    { n: 'C#', y: '4 yrs' },
+    { n: 'ASP.NET Core', y: '3 yrs' },
+    { n: 'Entity Framework', y: '3 yrs' },
+    { n: 'REST / OpenAPI', y: 'in use' },
+    { n: 'Next.js', y: '2 yrs' },
+    { n: 'Supabase', y: '2 yrs' },
+    { n: 'GSAP', y: '2 yrs' },
+    { n: 'Three.js', y: '1 yr' },
+    { n: 'Python', y: '2 yrs' },
+    { n: 'Go', y: 'learning' },
   ]},
-  { name: 'Frontend', items: [
-    { n: 'React', y: '4 yrs' }, { n: 'Next.js', y: '2 yrs' }, { n: 'Tailwind', y: '3 yrs' },
-    { n: 'Three.js', y: '1 yr' }, { n: 'GSAP', y: '2 yrs' }, { n: 'CSS variables', y: '-' },
+  { name: 'Mobile', items: [
+    { n: 'iOS and Android', y: 'in progress' },
   ]},
-  { name: 'Backend', items: [
-    { n: 'Node.js / Express', y: '4 yrs' }, { n: 'ASP.NET Core', y: '3 yrs' },
-    { n: 'Entity Framework', y: '3 yrs' }, { n: 'PostgreSQL', y: '3 yrs' },
-    { n: 'Supabase', y: '2 yrs' }, { n: 'REST / OpenAPI', y: '-' },
+  { name: 'Cloud and network', items: [
+    { n: 'Linux', y: 'in use' },
+    { n: 'Docker', y: '2 yrs' },
+    { n: 'Nginx', y: '2 yrs' },
+    { n: 'GitHub Actions', y: '2 yrs' },
+    { n: 'Azure', y: '1 yr' },
+    { n: 'Cloudflare tunnels', y: '1 yr' },
   ]},
-  { name: 'Ops & tooling', items: [
-    { n: 'Docker', y: '2 yrs' }, { n: 'Nginx', y: '2 yrs' },
-    { n: 'GitHub Actions', y: '2 yrs' }, { n: 'Cloudflare tunnels', y: '1 yr' },
-    { n: 'Linux', y: '-' }, { n: 'Azure', y: '1 yr' },
+  { name: 'Security', items: [
+    { n: 'Environment secrets', y: 'in use' },
+    { n: 'Role-based access', y: 'in use' },
   ]},
 ];
 
@@ -848,6 +1015,7 @@ const STACK_MARKS: Partial<Record<string, BrandMarkName>> = {
   TypeScript: 'typescript',
   'C#': 'csharp',
   JavaScript: 'javascript',
+  'HTML, CSS, JavaScript': 'javascript',
   Python: 'python',
   Go: 'go',
   React: 'react',
@@ -874,36 +1042,39 @@ function Stack({ cats }: { cats: StackCat[] }) {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">08 · Stack</span>
-          <span className="num">Tools · what I reach for</span>
+          <span className="num">Roadmap · learned in order</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="stack-head">
             <h2 className="section-title">
-              A small, <em>opinionated</em> toolbox.
+              The road, <em>in order</em>.
             </h2>
           </Reveal>
           <Reveal className="stack-intro" delay={120}>
             <p>
-              The boring choices, mostly. I favour well-trodden, long-lived tools
-              over the new and shiny, and I expect every tool to earn its place
-              against the next three years of maintenance.
+              Web first, the way it is actually learned: the page, then the typed language, then the server and the database. Cloud and network come after something is worth hosting. Security is the lock on that door. Mobile is the next build.
             </p>
           </Reveal>
           <div className="stack-grid">
             {cats.map((cat, i) => (
               <Reveal key={cat.name} className="stack-cat" delay={i * 80}>
-                <h4>{cat.name} <span className="cnt">[{cat.items.length}]</span></h4>
-                <ul>
-                  {cat.items.map((it) => (
+                <h4>
+                  <span className="road-kicker">{String(i + 1).padStart(2, '0')}</span>
+                  {cat.name}
+                  <span className="cnt">[{cat.items.length}]</span>
+                </h4>
+                <ol className="road">
+                  {cat.items.map((it, step) => (
                     <li key={it.n}>
+                      <span className="road-node" aria-hidden="true">{String(step + 1).padStart(2, '0')}</span>
                       <span className="stack-name">
                         {STACK_MARKS[it.n] ? <BrandMark name={STACK_MARKS[it.n]!} /> : null}
                         {it.n}
                       </span>
-                      <span className="yr">{it.y}</span>
+                      <span className={`yr${it.y === 'learning' || it.y === 'in progress' ? ' is-next' : ''}`}>{it.y}</span>
                     </li>
                   ))}
-                </ul>
+                </ol>
               </Reveal>
             ))}
           </div>
@@ -1139,9 +1310,12 @@ export function Home() {
           );
           if (!stale) setJourneyItems(journey.value);
         }
-        if (Array.isArray(stack.value) && stack.value.length) setStackCats(stack.value);
-        if (Array.isArray(gc.value) && gc.value.length) setGearCoding(gc.value);
-        if (Array.isArray(gr.value) && gr.value.length) setGearCycling(gr.value);
+        if (Array.isArray(stack.value) && stack.value.length) {
+          const stale = stack.value.some((cat) => /languages|frontend|ops/i.test(cat.name));
+          if (!stale) setStackCats(stack.value);
+        }
+        if (Array.isArray(gc.value) && gc.value.some((item) => /alienware|victus/i.test(item.name))) setGearCoding(gc.value);
+        if (Array.isArray(gr.value) && gr.value.some((item) => /manta|xc903/i.test(item.name))) setGearCycling(gr.value);
       } catch {
         // Keep fallbacks when backend is down.
       }
