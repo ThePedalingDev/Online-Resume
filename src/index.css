@@ -1914,9 +1914,11 @@ html {
   min-width: 0;
   height: 100%;
 }
-.editorial .gear-track > :first-child { grid-column: 1 / -1; }
+.editorial .gear-track > :first-child { grid-column: 1 / -1; width: 100%; }
 .editorial .gear-track-head {
   display: flex; justify-content: space-between; align-items: baseline;
+  width: 100%;
+  gap: 32px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--ink);
 }
