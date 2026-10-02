@@ -452,6 +452,24 @@ html {
 .editorial .ed-admin-link { font-size: 13px; color: var(--muted); transition: color .2s; }
 .editorial .ed-admin-link:hover { color: var(--ink); }
 .editorial .ed-admin-error { margin-top: 12px; font-size: 13px; color: var(--accent); }
+.editorial .ed-admin-status {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.editorial .ed-admin-status.is-bad {
+  border-color: #e7b8b4;
+  background: #fdf4f3;
+  color: #8f1d14;
+}
+.editorial .ed-admin-status.is-ok {
+  border-color: #b7d7c6;
+  background: #f3faf6;
+  color: #0f5c38;
+}
 .editorial .ed-admin-layout { grid-column: 1 / span 12; display: grid; grid-template-columns: 260px 1fr; gap: 24px; }
 @media (max-width: 900px) { .editorial .ed-admin-layout { grid-template-columns: 1fr; } }
 .editorial .ed-admin-aside {
@@ -499,6 +517,7 @@ html {
   outline: none;
 }
 .editorial .ed-admin-textarea:focus { border-color: var(--accent-line); box-shadow: 0 0 0 4px var(--accent-soft); }
+.editorial .ed-admin-textarea.is-short { min-height: 96px; font-family: var(--f-body); font-size: 15px; }
 .editorial .ed-admin-stack { display: grid; gap: 14px; }
 .editorial .ed-admin-panel { border: 1px solid var(--line-soft); background: var(--bg); border-radius: 14px; padding: 14px; }
 .editorial .ed-admin-panel-title { font-family: var(--f-display); font-size: 18px; letter-spacing: -0.01em; }

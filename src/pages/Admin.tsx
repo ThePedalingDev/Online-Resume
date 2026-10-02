@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { CmsFields } from '@/components/CmsFields';
 import { apiUrl } from '@/lib/api';
+import { resolveDraft, SECTION_LABELS } from '@/lib/siteDefaults';
 
 type CmsKey = 'hero' | 'about' | 'journey' | 'cycling' | 'gallery' | 'stack' | 'gearCoding' | 'gearCycling' | 'docs';
 type AdminPanel = CmsKey | 'integrations';
@@ -80,8 +82,9 @@ export function Admin() {
   const nav = useNavigate();
   const [activeKey, setActiveKey] = useState<AdminPanel>('journey');
   const [loading, setLoading] = useState(true);
-  const [raw, setRaw] = useState<string>('{}');
+  const [draft, setDraft] = useState<unknown>(null);
   const [savedAt, setSavedAt] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [igToken, setIgToken] = useState('');
@@ -91,28 +94,19 @@ export function Admin() {
     instagram: { configured: boolean; updatedAt: string | null };
   }>(null);
 
-  const parsed = useMemo(() => {
-    try {
-      return { ok: true as const, value: JSON.parse(raw) as unknown };
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Invalid JSON';
-      return { ok: false as const, error: msg };
-    }
-  }, [raw]);
-
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
         const r = await me();
         if (!r.authed) {
-          nav('/admin/login');
+          nav('/admin/login', { replace: true, state: { reason: 'session' } });
           return;
         }
         if (!mounted) return;
         setLoading(false);
       } catch {
-        nav('/admin/login');
+        nav('/admin/login', { replace: true, state: { reason: 'session' } });
       }
     })();
     return () => {
@@ -123,6 +117,7 @@ export function Admin() {
   useEffect(() => {
     const ac = new AbortController();
     setError(null);
+    setNotice(null);
     setSavedAt(null);
     (async () => {
       try {
@@ -130,12 +125,12 @@ export function Admin() {
           const st = await getIntegrationsStatus();
           setIntegrations(st);
           setSavedAt(st.instagram.updatedAt ?? st.strava.updatedAt ?? null);
-          setRaw('{}');
+          setDraft(null);
           return;
         }
 
         const data = await getContent(activeKey);
-        setRaw(JSON.stringify(data.value ?? {}, null, 2));
+        setDraft(resolveDraft(activeKey, data.value));
         setSavedAt(data.updatedAt);
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : 'Failed to load';
@@ -153,7 +148,7 @@ export function Admin() {
         <div className="ed-shell">
           <div className="eyebrow-row">
             <span className="section-marker">CMS</span>
-            <span className="num">Admin · Local</span>
+            <span className="num">Admin</span>
           </div>
 
           <div className="ed-grid12">
@@ -167,7 +162,7 @@ export function Admin() {
                       onClick={() => setActiveKey(k)}
                       className={`ed-admin-nav-item ${k === activeKey ? 'is-active' : ''}`}
                     >
-                      {k}
+                      {SECTION_LABELS[k]}
                     </button>
                   ))}
                   <button
@@ -204,7 +199,7 @@ export function Admin() {
                   className="ed-admin-upload"
                 />
                 <div className="ed-admin-note">
-                  Writes into <code>frontend/public/assets/cms</code>. Redeploy to publish.
+                  The file is stored on the API. Its address is copied so you can paste it into an image field.
                 </div>
 
                 <div className="ed-admin-divider" />
@@ -223,22 +218,27 @@ export function Admin() {
               <div className="ed-admin-main">
                 <div className="ed-admin-head">
                   <div>
-                    <div className="ed-admin-title">{activeKey}</div>
-                    <div className="ed-admin-meta">{savedAt ? `Updated · ${savedAt}` : ' '}</div>
+                    <div className="ed-admin-title">{activeKey === 'integrations' ? 'Integrations' : SECTION_LABELS[activeKey]}</div>
+                    <div className="ed-admin-meta">
+                      {savedAt ? `Stored · ${savedAt}` : 'Showing the copy already on the site. Save to keep edits.'}
+                    </div>
                   </div>
                   <div>
                     {activeKey === 'integrations' ? null : (
                       <Button
                         variant="outline"
-                        disabled={!parsed.ok || busy}
+                        disabled={draft == null || busy}
                         onClick={async () => {
                           try {
                             setBusy(true);
-                            await putContent(activeKey, parsed.value);
+                            await putContent(activeKey, draft);
                             const refreshed = await getContent(activeKey);
+                            setDraft(resolveDraft(activeKey, refreshed.value));
                             setSavedAt(refreshed.updatedAt);
+                            setNotice('Saved. The site is using this copy.');
                             setError(null);
                           } catch (e: unknown) {
+                            setNotice(null);
                             setError(e instanceof Error ? e.message : 'Save failed');
                           } finally {
                             setBusy(false);
@@ -251,8 +251,8 @@ export function Admin() {
                   </div>
                 </div>
 
-                {error ? <div className="ed-admin-error">{error}</div> : null}
-                {!parsed.ok ? <div className="ed-admin-error">{parsed.error}</div> : null}
+                {error ? <div className="ed-admin-status is-bad" role="status">{error}</div> : null}
+                {notice ? <div className="ed-admin-status is-ok" role="status">{notice}</div> : null}
 
                 {activeKey === 'integrations' ? (
                   <div className="ed-admin-stack">
@@ -322,13 +322,10 @@ export function Admin() {
                       </div>
                     </div>
                   </div>
+                ) : draft == null ? (
+                  <p className="ed-admin-note">Loading the copy on the site.</p>
                 ) : (
-                  <textarea
-                    value={raw}
-                    onChange={(e) => setRaw(e.target.value)}
-                    spellCheck={false}
-                    className="ed-admin-textarea"
-                  />
+                  <CmsFields section={activeKey} value={draft} onChange={setDraft} />
                 )}
               </div>
             </div>

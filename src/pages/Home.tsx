@@ -151,9 +151,11 @@ function EdNav() {
 type HeroContent = {
   imageUrl?: string;
   imageAlt?: string;
-  photoMeta?: string;
-  captionLeft?: string;
-  captionRight?: string;
+  kicker?: string;
+  lead?: string;
+  sub?: string;
+  work?: string;
+  employment?: string;
 };
 
 function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; content?: HeroContent | null }) {
@@ -165,14 +167,13 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
       <div className="ed-shell">
         <Reveal className="hero-main" delay={180}>
           <h1 className="hero-name">Markus Fourie</h1>
-          <p className="hero-kicker">Full-stack developer · Pretoria, ZA</p>
+          <p className="hero-kicker">{content?.kicker || 'Full-stack developer · Pretoria, ZA'}</p>
           <div className="hero-text">
             <p className="hero-lead">
-              I build structured systems for the real world: resource platforms,
-              operational tooling, and charity sites.
+              {content?.lead || 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.'}
             </p>
             <p className="hero-sub">
-              React, Node.js, and ASP.NET. BSc Computer &amp; Information Sciences.
+              {content?.sub || 'React, Node.js, and ASP.NET. BSc Computer & Information Sciences.'}
             </p>
           </div>
           <div className="hero-actions">
@@ -180,8 +181,8 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
             <a className="btn-text" href="#contact">Get in touch</a>
           </div>
           <div className="hero-stats">
-            <div className="hero-stat"><span>Work</span><span className="v">Rimitso · KCS</span></div>
-            <div className="hero-stat"><span>Employment</span><span className="v">Full time</span></div>
+            <div className="hero-stat"><span>Work</span><span className="v">{content?.work || 'Rimitso · KCS'}</span></div>
+            <div className="hero-stat"><span>Employment</span><span className="v">{content?.employment || 'Full time'}</span></div>
             <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
           </div>
         </Reveal>
@@ -564,6 +565,7 @@ function Cycling() {
   const [stats, setStats] = useState<StravaStatBlock[] | null>(null);
   const [meta, setMeta] = useState<{ updatedAt: string } | null>(null);
   const [error, setError] = useState<{ message: string; authUrl?: string } | null>(null);
+  const [introHtml, setIntroHtml] = useState<string | null>(null);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -588,6 +590,11 @@ function Cycling() {
         setStats(null);
         setMeta(null);
       });
+    fetchContent<{ introHtml?: string }>('cycling', ac.signal)
+      .then((r) => {
+        if (r.value?.introHtml) setIntroHtml(r.value.introHtml);
+      })
+      .catch(() => {});
     return () => ac.abort();
   }, []);
 
@@ -650,12 +657,16 @@ function Cycling() {
             </h2>
           </Reveal>
           <Reveal className="cycling-intro" delay={120}>
-            <p>
-              Cross-country marathon and endurance.
-              In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>.
-              In 2026 I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington on 12 September at Bosman Family Vineyards.
-              The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.
-            </p>
+            {introHtml ? (
+              <p dangerouslySetInnerHTML={{ __html: introHtml }} />
+            ) : (
+              <p>
+                Cross-country marathon and endurance.
+                In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>.
+                In 2026 I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington on 12 September at Bosman Family Vineyards.
+                The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.
+              </p>
+            )}
           </Reveal>
           <Reveal className="cycling-visual">
             <figure className="cycling-film">
@@ -743,6 +754,7 @@ function Gallery() {
         if (!Array.isArray(r.value) || !r.value.length) return;
         setItems(r.value.map((item) => {
           if (item.url) return item;
+          if (item.cls === 'g-1') return { ...item, url: trailseekerWellington };
           if (item.cls === 'g-2') {
             const placeholder = !item.l || item.n === 'IMG / 11' || /6:42/i.test(item.l);
             return placeholder
@@ -1225,6 +1237,25 @@ function Philosophy() {
 }
 
 function Docs() {
+  const [intro, setIntro] = useState<string | null>(null);
+  const [items, setItems] = useState<Array<{ label: string; href: string; note: string }> | null>(null);
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContent<{ intro?: string; items?: Array<{ label: string; href: string; note: string }> }>('docs', ac.signal)
+      .then((r) => {
+        if (r.value?.intro) setIntro(r.value.intro);
+        if (Array.isArray(r.value?.items) && r.value.items.length) setItems(r.value.items);
+      })
+      .catch(() => {});
+    return () => ac.abort();
+  }, []);
+  const rows = items ?? [
+    { label: 'CV', href: '/cert-docs/251024%20Markus%20Fourie%20CV.pdf', note: 'October 2025 · Full' },
+    { label: 'Abridged CV', href: '/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf', note: 'October 2025 · One page' },
+    { label: 'Golden Key', href: '/cert-docs/VC_GoldenKey.pdf', note: 'Top Performer · 23 April 2025' },
+    { label: 'Golden Key verify', href: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455', note: 'External record' },
+    { label: 'Academic results', href: '/cert-docs/VarsityCollege_Results.zip', note: 'Varsity College · ZIP' },
+  ];
   return (
     <section id="docs">
       <div className="ed-shell">
@@ -1238,31 +1269,16 @@ function Docs() {
           </Reveal>
           <Reveal className="docs-intro" delay={120}>
             <p>
-              CV from October 2025, the Golden Key record, and the Varsity College results.
-              The college is now Emeris. The degree's final year was 2025.
+              {intro || 'CV from October 2025, the Golden Key record, and the Varsity College results. The college is now Emeris. The degree\'s final year was 2025.'}
             </p>
           </Reveal>
           <div className="docs-list">
-            <div className="doc-row">
-              <a href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>CV</a>
-              <span>October 2025 · Full</span>
-            </div>
-            <div className="doc-row">
-              <a href="/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf" download>Abridged CV</a>
-              <span>October 2025 · One page</span>
-            </div>
-            <div className="doc-row">
-              <a href="/cert-docs/VC_GoldenKey.pdf" download>Golden Key</a>
-              <span>Top Performer · 23 April 2025</span>
-            </div>
-            <div className="doc-row">
-              <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key verify</a>
-              <span>External record</span>
-            </div>
-            <div className="doc-row">
-              <a href="/cert-docs/VarsityCollege_Results.zip" download>Academic results</a>
-              <span>Varsity College · ZIP</span>
-            </div>
+            {rows.map((row) => (
+              <div className="doc-row" key={row.href}>
+                <a href={row.href} {...(row.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : { download: true })}>{row.label}</a>
+                <span>{row.note}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
