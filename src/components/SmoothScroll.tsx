@@ -1,5 +1,6 @@
-import { ReactLenis } from 'lenis/react';
+import { ReactLenis, useLenis } from 'lenis/react';
 import { useEffect, type ReactNode } from 'react';
+import { ScrollTrigger } from '@/lib/gsap';
 
 const options = {
   autoRaf: true,
@@ -10,6 +11,23 @@ const options = {
   anchors: true,
   stopInertiaOnNavigate: true,
 };
+
+function LenisFrames() {
+  useLenis(() => {
+    ScrollTrigger.update();
+    window.dispatchEvent(new Event('lenis-frame'));
+  });
+  useEffect(() => {
+    const refresh = () => ScrollTrigger.refresh();
+    const id = requestAnimationFrame(refresh);
+    window.addEventListener('load', refresh);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener('load', refresh);
+    };
+  }, []);
+  return null;
+}
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -32,6 +50,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
   return (
     <ReactLenis root options={options}>
+      <LenisFrames />
       {children}
     </ReactLenis>
   );

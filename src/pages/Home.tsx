@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import pfpImage from '@/assets/images/hero-portrait.jpg';
+import heroCutout from '@/assets/images/hero-cutout.png';
 import gearEpic from '@/assets/gear/epic-sworks.jpg';
 import gearGarmin from '@/assets/gear/garmin-edge-840.jpg';
 import gearHeadset from '@/assets/gear/arctis-nova-pro.webp';
@@ -8,6 +8,10 @@ import gearLaptop from '@/assets/gear/rog-zephyrus-g16.jpg';
 import gearMouse from '@/assets/gear/logitech-g-pro.jpg';
 import gearScicon from '@/assets/gear/scicon-aeroshade.jpg';
 import gearWilier from '@/assets/gear/wilier-rave.png';
+import gearMonitor from '@/assets/gear/alienware-aw2725dm.jpg';
+import gearLightBar from '@/assets/gear/xiaomi-monitor-light-bar.jpg';
+import gearHelmet from '@/assets/gear/met-manta.jpg';
+import gearShoes from '@/assets/gear/shimano-sh-xc903.jpg';
 import trailseekerWellington from '@/assets/images/trailseeker-wellington.jpg';
 import deskSetup from '@/assets/images/desk-setup.jpg';
 import raceReady from '@/assets/images/race-ready.jpg';
@@ -33,25 +37,41 @@ import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
+import { GithubActivity } from '@/components/GithubActivity';
 
-function useInView<T extends HTMLElement>(threshold = 0.2, rootMargin = '-40px 0px') {
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function useLenisEnter<T extends HTMLElement>(line = 0.88) {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) setInView(true); }),
-      { threshold, rootMargin }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold, rootMargin]);
+    if (prefersReducedMotion()) {
+      setInView(true);
+      return;
+    }
+    const check = () => {
+      if (el.getBoundingClientRect().top >= window.innerHeight * line) return;
+      setInView(true);
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('lenis-frame', check);
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('lenis-frame', check);
+    check();
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('lenis-frame', check);
+    };
+  }, [line]);
   return { ref, inView };
 }
 
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
-  const { ref, inView } = useInView<HTMLDivElement>(0.12, '0px 0px -10% 0px');
+  const { ref, inView } = useLenisEnter<HTMLDivElement>(0.88);
   return (
     <div
       ref={ref}
@@ -106,10 +126,6 @@ function EdNav() {
             <a key={href} href={href}>{label}</a>
           ))}
         </div>
-        <div className="ed-nav-meta">
-          <span className="status-dot" />
-          Available
-        </div>
         <a className="ed-nav-cta" href="#contact">Get in touch</a>
         <details className="ed-nav-drawer" ref={drawer}>
           <summary>
@@ -140,22 +156,15 @@ type HeroContent = {
 
 function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; content?: HeroContent | null }) {
   const year = new Date().getFullYear();
-  const heroImg = content?.imageUrl || pfpImage;
+  const heroImg = content?.imageUrl || heroCutout;
   const heroAlt = content?.imageAlt || 'Markus Fourie';
   return (
     <section id="top" className="hero">
-      <figure className="hero-plate">
-        <img
-          src={trailseekerWellington}
-          alt="Markus Fourie at the start of Ford Trailseeker #6 Wellington"
-        />
-        <figcaption>Ford Trailseeker · Wellington</figcaption>
-      </figure>
       <div className="ed-shell">
-        <div className="hero-copy">
-          <div className="hero-main">
-            <h1 className="hero-name">Markus Fourie</h1>
-            <p className="hero-kicker">Full-stack developer · Pretoria, ZA</p>
+        <Reveal className="hero-main" delay={180}>
+          <h1 className="hero-name">Markus Fourie</h1>
+          <p className="hero-kicker">Full-stack developer · Pretoria, ZA</p>
+          <div className="hero-text">
             <p className="hero-lead">
               I build structured systems for the real world: resource platforms,
               operational tooling, and charity sites.
@@ -163,20 +172,20 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
             <p className="hero-sub">
               React, Node.js, and ASP.NET. BSc Computer &amp; Information Sciences.
             </p>
-            <div className="hero-actions">
-              <a className="btn-solid" href="#projects">View work</a>
-              <a className="btn-text" href="#contact">Get in touch</a>
-            </div>
           </div>
-          <div className="hero-media">
-            <img src={heroImg} alt={heroAlt} />
+          <div className="hero-actions">
+            <a className="btn-solid" href="#projects">View work</a>
+            <a className="btn-text" href="#contact">Get in touch</a>
           </div>
-        </div>
-        <div className="hero-stats">
-          <div className="hero-stat"><span>Work</span><span className="v">Rimitso · KCS</span></div>
-          <div className="hero-stat"><span>Employment</span><span className="v">Full time</span></div>
-          <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
-        </div>
+          <div className="hero-stats">
+            <div className="hero-stat"><span>Work</span><span className="v">Rimitso · KCS</span></div>
+            <div className="hero-stat"><span>Employment</span><span className="v">Full time</span></div>
+            <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
+          </div>
+        </Reveal>
+        <Reveal className="hero-media" delay={0}>
+          <img src={heroImg} alt={heroAlt} />
+        </Reveal>
       </div>
     </section>
   );
@@ -275,12 +284,9 @@ function About({ content }: { content?: AboutContent | null }) {
               <span>{img('three')?.meta || '23 Apr 2025'}</span>
               <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
             </Reveal>
-            <div className="about-pattern" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
+            <Reveal className="about-graph" delay={280}>
+              <GithubActivity />
+            </Reveal>
           </div>
         </div>
       </div>
@@ -326,41 +332,39 @@ const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
 };
 
 function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
-  const track = useRef<HTMLDivElement>(null);
-  const indexRef = useRef(0);
-  const [index, setIndex] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = track.current;
-    if (!el || stills.length < 2) return;
-    const count = stills.length;
-    let frame = 0;
+    const el = root.current;
+    if (!el || stills.length < 2 || prefersReducedMotion()) return;
+    const frames = [...el.querySelectorAll<HTMLImageElement>('img')];
+    let raf = 0;
     const sync = () => {
-      frame = 0;
+      raf = 0;
       const rect = el.getBoundingClientRect();
       const view = window.innerHeight || 1;
-      const start = view * 0.78;
-      const end = view * 0.22;
-      const progress = (start - (rect.top + rect.height / 2)) / Math.max(start - end, 1);
-      const next = Math.min(count - 1, Math.max(0, Math.round(progress * (count - 1))));
-      const left = next * el.clientWidth;
-      if (Math.abs(el.scrollLeft - left) > 1) el.scrollLeft = left;
-      if (indexRef.current !== next) {
-        indexRef.current = next;
-        setIndex(next);
-      }
+      const travel = Math.max(view * 0.85, (frames.length - 1) * 240);
+      const raw = (view * 0.72 - rect.top) / travel;
+      const scaled = Math.min(frames.length - 1, Math.max(0, raw * (frames.length - 1)));
+      frames.forEach((img, i) => {
+        const opacity = Math.max(0, 1 - Math.abs(scaled - i));
+        img.style.opacity = opacity.toFixed(3);
+        img.toggleAttribute('aria-hidden', opacity < 0.5);
+      });
     };
     const onScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(sync);
+      if (raf) return;
+      raf = window.requestAnimationFrame(sync);
     };
     sync();
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('lenis-frame', onScroll);
     window.addEventListener('resize', onScroll);
     return () => {
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('lenis-frame', onScroll);
       window.removeEventListener('resize', onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
+      if (raf) window.cancelAnimationFrame(raf);
     };
   }, [stills.length]);
 
@@ -376,50 +380,37 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
     );
   }
 
-  const go = (dir: number) => {
-    const el = track.current;
-    if (!el) return;
-    const next = Math.min(stills.length - 1, Math.max(0, index + dir));
-    indexRef.current = next;
-    setIndex(next);
-    el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' });
-  };
-
   return (
-    <div className="m-stack">
-      <div
-        className="m-track"
-        ref={track}
-        tabIndex={0}
-        aria-label={`${year} photos`}
-      >
-        {stills.map((still) => (
-          <div key={still.src} className={`m-slide${still.fit === 'contain' ? ' is-contain' : ''}`}>
-            <img src={still.src} alt={still.alt} style={still.pos ? { objectPosition: still.pos } : undefined} />
-          </div>
-        ))}
-      </div>
-      <div className="m-stack-bar">
-        <button type="button" onClick={() => go(-1)} disabled={index === 0}>Prev</button>
-        <span>{String(index + 1).padStart(2, '0')} / {String(stills.length).padStart(2, '0')}</span>
-        <button type="button" onClick={() => go(1)} disabled={index === stills.length - 1}>Next</button>
-      </div>
+    <div className="m-stack" ref={root} aria-label={`${year} photos`}>
+      {stills.map((still, i) => (
+        <img
+          key={still.src}
+          className={still.fit === 'contain' ? 'is-contain' : undefined}
+          src={still.src}
+          alt={still.alt}
+          aria-hidden={i === 0 ? undefined : true}
+          style={{
+            opacity: i === 0 ? 1 : 0,
+            ...(still.pos ? { objectPosition: still.pos } : {}),
+          }}
+        />
+      ))}
     </div>
   );
 }
 
 function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
-  const { ref, inView } = useInView<HTMLDivElement>(0.4);
+  const { ref, inView } = useLenisEnter<HTMLDivElement>(0.82);
   const stills = JOURNEY_STILLS[year];
   return (
     <div ref={ref} className={`milestone ${inView ? 'is-in' : ''}`}>
-      <div className="m-year">
+      <div className="m-year" style={{ transitionDelay: '0ms' }}>
         {year}
         <span className="m-chip">{chip}</span>
         {stills?.length ? <YearStack year={year} stills={stills} /> : null}
       </div>
-      <div className="m-anchor"><span className="m-node" /></div>
-      <div className="m-card">
+      <div className="m-anchor" style={{ transitionDelay: '120ms' }}><span className="m-node" /></div>
+      <div className="m-card" style={{ transitionDelay: '220ms' }}>
         <h3 className="m-title">{title}</h3>
         <p className="m-desc">{desc}</p>
         <div className="m-tags">
@@ -822,11 +813,15 @@ const GEAR_MARKS: Record<string, BrandMarkName> = {
 
 const GEAR_IMAGES: Record<string, string> = {
   'ROG Zephyrus G16': gearLaptop,
+  'Alienware AW2725DM': gearMonitor,
+  'Xiaomi Monitor Light Bar': gearLightBar,
   'Corsair Vanguard 96': gearKeyboard,
   'Logitech G Pro': gearMouse,
   'Arctis Nova Pro Wireless': gearHeadset,
   'Epic S-Works 7': gearEpic,
   'Rave SLR ID2': gearWilier,
+  'MET Manta': gearHelmet,
+  'Shimano SH-XC903': gearShoes,
   'Aeroshade 2.0 Titanium': gearScicon,
   'Garmin Edge 840': gearGarmin,
 };
