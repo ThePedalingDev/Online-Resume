@@ -1,40 +1,44 @@
 import { useLenis } from 'lenis/react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import heroCutout from '@/assets/images/hero-cutout.png';
-import gearEpic from '@/assets/gear/epic-sworks.jpg';
-import gearGarmin from '@/assets/gear/garmin-edge-840.jpg';
+import gearEpic from '@/assets/gear/epic-sworks.webp';
+import gearGarmin from '@/assets/gear/garmin-edge-840.webp';
 import gearHeadset from '@/assets/gear/arctis-nova-pro.webp';
-import gearKeyboard from '@/assets/gear/corsair-vanguard-96.jpg';
-import gearLaptop from '@/assets/gear/rog-zephyrus-g16.jpg';
-import gearMouse from '@/assets/gear/logitech-g-pro.jpg';
-import gearScicon from '@/assets/gear/scicon-aeroshade.jpg';
-import gearWilier from '@/assets/gear/wilier-rave.png';
-import gearMonitor from '@/assets/gear/alienware-aw2725dm.jpg';
-import gearLightBar from '@/assets/gear/xiaomi-monitor-light-bar.jpg';
-import gearHelmet from '@/assets/gear/met-manta.jpg';
-import gearShoes from '@/assets/gear/shimano-sh-xc903.jpg';
-import gearVictus from '@/assets/gear/hp-victus-15.jpg';
-import trailseekerWellington from '@/assets/images/trailseeker-wellington.jpg';
-import deskSetup from '@/assets/images/desk-setup.jpg';
-import raceReady from '@/assets/images/race-ready.jpg';
-import longRide from '@/assets/images/long-ride.jpg';
-import sworksUpgrades from '@/assets/images/sworks-upgrades.jpg';
-import graduationPhoto from '@/assets/images/graduation-kyle.jpg';
-import graduationSolo from '@/assets/images/graduation.jpg';
-import topAchieverPhoto from '@/assets/images/top-achiever.jpg';
-import goldenKeyBadge from '@/assets/images/golden-key.png';
-import bigBen from '@/assets/images/big-ben.jpg';
+import gearKeyboard from '@/assets/gear/corsair-vanguard-96.webp';
+import gearLaptop from '@/assets/gear/rog-zephyrus-g16.webp';
+import gearMouse from '@/assets/gear/logitech-g-pro.webp';
+import gearScicon from '@/assets/gear/scicon-aeroshade.webp';
+import gearWilier from '@/assets/gear/wilier-rave.webp';
+import gearMonitor from '@/assets/gear/alienware-aw2725dm.webp';
+import gearLightBar from '@/assets/gear/xiaomi-monitor-light-bar.webp';
+import gearHelmet from '@/assets/gear/met-manta.webp';
+import gearShoes from '@/assets/gear/shimano-sh-xc903.webp';
+import gearVictus from '@/assets/gear/hp-victus-15.webp';
+import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
+import deskSetup from '@/assets/images/desk-setup.webp';
+import raceReady from '@/assets/images/race-ready.webp';
+import longRide from '@/assets/images/long-ride.webp';
+import sworksUpgrades from '@/assets/images/sworks-upgrades.webp';
+import graduationPhoto from '@/assets/images/graduation-kyle.webp';
+import graduationSolo from '@/assets/images/graduation.webp';
+import topAchieverPhoto from '@/assets/images/top-achiever.webp';
+import goldenKeyBadge from '@/assets/images/golden-key.webp';
+import bigBen from '@/assets/images/big-ben.webp';
 import skillanceMark from '@/assets/images/skillance-mark.png';
 import kcsMark from '@/assets/projects/kcs.webp';
-import afrisistMark from '@/assets/projects/afrisist.png';
-import afrisistFleet from '@/assets/projects/afrisist-fleet.jpg';
-import rmsHome from '@/assets/projects/rms-home.jpg';
-import skillanceHome from '@/assets/projects/skillance-home.jpg';
+import afrisistMark from '@/assets/projects/afrisist.webp';
+import afrisistFleet from '@/assets/projects/afrisist-fleet.webp';
+import rmsHome from '@/assets/projects/rms-home.webp';
+import skillanceHome from '@/assets/projects/skillance-home.webp';
 import rdaMark from '@/assets/projects/rda-logo.svg';
-import eridgeRda from '@/assets/projects/eridge-rda.jpg';
+import eridgeRda from '@/assets/projects/eridge-rda.webp';
 import capePeninsula from '@/assets/video/cape-peninsula.mp4';
 import capePeninsulaPoster from '@/assets/video/cape-peninsula.jpg';
-import capeFriends from '@/assets/images/cape-friends.jpg';
+import capeFriends from '@/assets/images/cape-friends.webp';
+
+const HERO_AVIF_SRCSET = '/images/hero/hero-444.avif 444w, /images/hero/hero-888.avif 888w';
+const HERO_WEBP_SRCSET = '/images/hero/hero-444.webp 444w, /images/hero/hero-888.webp 888w';
+const HERO_SIZES = '(max-width: 768px) min(88vw, 360px), 444px';
+const HERO_FALLBACK = '/images/hero/hero-888.webp';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
@@ -160,7 +164,7 @@ type HeroContent = {
 
 function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; content?: HeroContent | null }) {
   const year = new Date().getFullYear();
-  const heroImg = content?.imageUrl || heroCutout;
+  const cmsHero = content?.imageUrl?.trim() || '';
   const heroAlt = content?.imageAlt || 'Markus Fourie';
   return (
     <section id="top" className="hero">
@@ -187,7 +191,24 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
           </div>
         </Reveal>
         <Reveal className="hero-media" delay={0}>
-          <img src={heroImg} alt={heroAlt} />
+          {cmsHero ? (
+            <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={888} height={1332} />
+          ) : (
+            <picture>
+              <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
+              <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
+              <img
+                src={HERO_FALLBACK}
+                srcSet={HERO_WEBP_SRCSET}
+                sizes={HERO_SIZES}
+                alt={heroAlt}
+                fetchPriority="high"
+                decoding="async"
+                width={888}
+                height={1332}
+              />
+            </picture>
+          )}
         </Reveal>
       </div>
     </section>
@@ -267,7 +288,7 @@ function About({ content }: { content?: AboutContent | null }) {
           </Reveal>
           <div className="about-visual">
             <Reveal className="about-img one ph">
-              <img src={img('one')?.url || graduationPhoto} alt={gradCaption ? 'Markus Fourie at graduation with Kyle Nel' : gradLabel} />
+              <img src={img('one')?.url || graduationPhoto} alt={gradCaption ? 'Markus Fourie at graduation with Kyle Nel' : gradLabel} loading="lazy" decoding="async" />
               <span>{img('one')?.meta || 'BSc · 2025'}</span>
               <span className="ph-label">
                 {gradCaption ? (
@@ -276,13 +297,13 @@ function About({ content }: { content?: AboutContent | null }) {
               </span>
             </Reveal>
             <Reveal className="about-img two ph" delay={140}>
-              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} />
+              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} loading="lazy" decoding="async" />
               <span>{img('two')?.meta || 'Varsity College'}</span>
               <span className="ph-label">{img('two')?.label || 'Top Achiever · 2025'}</span>
             </Reveal>
             <Reveal className="about-img three ph" delay={260}>
               <a className="cred-link" href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">
-                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} />
+                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} loading="lazy" decoding="async" />
               </a>
               <span>{img('three')?.meta || '23 Apr 2025'}</span>
               <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
@@ -482,6 +503,8 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
         className={`m-photo${still.fit === 'contain' ? ' is-contain' : ''}`}
         src={still.src}
         alt={still.alt}
+        loading="lazy"
+        decoding="async"
         style={still.pos ? { objectPosition: still.pos } : undefined}
       />
     );
@@ -495,6 +518,8 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
           className={still.fit === 'contain' ? 'is-contain' : undefined}
           src={still.src}
           alt={still.alt}
+          loading="lazy"
+          decoding="async"
           aria-hidden={i === 0 ? undefined : true}
           style={{
             opacity: i === 0 ? 1 : 0,
@@ -602,25 +627,29 @@ function Cycling() {
     const el = filmRef.current;
     if (!el) return;
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let inView = false;
     const sync = () => {
-      if (mq.matches) {
+      if (mq.matches || document.hidden || !inView) {
         el.pause();
         return;
       }
       el.play().catch(() => {});
     };
-    const onVisible = () => {
-      if (document.hidden) return;
-      sync();
-    };
-    el.addEventListener('canplay', sync);
-    document.addEventListener('visibilitychange', onVisible);
-    sync();
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? false;
+        sync();
+      },
+      { rootMargin: '120px 0px', threshold: 0.2 },
+    );
+    io.observe(el);
+    document.addEventListener('visibilitychange', sync);
     mq.addEventListener('change', sync);
     return () => {
-      el.removeEventListener('canplay', sync);
-      document.removeEventListener('visibilitychange', onVisible);
+      io.disconnect();
+      document.removeEventListener('visibilitychange', sync);
       mq.removeEventListener('change', sync);
+      el.pause();
     };
   }, []);
 
@@ -674,11 +703,10 @@ function Cycling() {
                 ref={filmRef}
                 src={capePeninsula}
                 poster={capePeninsulaPoster}
-                autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 aria-label="Markus Fourie cycling the Cape Peninsula"
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
@@ -693,7 +721,7 @@ function Cycling() {
           </Reveal>
           <Reveal className="cycling-still" delay={80}>
             <figure className="cycling-shot">
-              <img src={capeFriends} alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula" />
+              <img src={capeFriends} alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula" loading="lazy" decoding="async" />
               <figcaption>With Matthew Waldeck</figcaption>
             </figure>
           </Reveal>
@@ -742,45 +770,52 @@ function Gallery() {
     { cls: 'g-3', n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades },
     { cls: 'g-4', n: 'Race', l: 'Always race ready', url: raceReady },
     { cls: 'g-5', n: 'Ride', l: 'Long gravel ride', url: longRide },
-    { cls: 'g-6', n: 'IMG / 15', l: 'Jotting · Field book' },
-    { cls: 'g-7', n: 'IMG / 16', l: 'Sunset · Descent' },
   ];
   const [items, setItems] = useState<GalleryItem[]>(defaultItems);
 
   useEffect(() => {
     const ac = new AbortController();
+    const isEmptyTile = (item: GalleryItem) =>
+      /^IMG\s*\/\s*(15|16)$/i.test(item.n)
+      || /jotting|field book|sunset|descent/i.test(item.l)
+      || (!item.url && (item.cls === 'g-6' || item.cls === 'g-7'));
+
     fetchContent<GalleryItem[]>('gallery', ac.signal)
       .then((r) => {
         if (!Array.isArray(r.value) || !r.value.length) return;
-        setItems(r.value.map((item) => {
-          if (item.url) return item;
-          if (item.cls === 'g-1') return { ...item, url: trailseekerWellington };
-          if (item.cls === 'g-2') {
-            const placeholder = !item.l || item.n === 'IMG / 11' || /6:42/i.test(item.l);
-            return placeholder
-              ? { ...item, n: 'Studio', l: 'Work from home desk setup', url: deskSetup }
-              : { ...item, url: deskSetup };
-          }
-          if (item.cls === 'g-3') {
-            const placeholder = !item.l || item.n === 'IMG / 12' || /chain, worn/i.test(item.l);
-            return placeholder
-              ? { ...item, n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades }
-              : { ...item, url: sworksUpgrades };
-          }
-          if (item.cls === 'g-4') {
-            const placeholder = !item.l || item.n === 'IMG / 13' || /nº 97/i.test(item.l);
-            return placeholder
-              ? { ...item, n: 'Race', l: 'Always race ready', url: raceReady }
-              : { ...item, url: raceReady };
-          }
-          if (item.cls === 'g-5') {
-            const placeholder = !item.l || item.n === 'IMG / 14' || /rock garden/i.test(item.l);
-            return placeholder
-              ? { ...item, n: 'Ride', l: 'Long gravel ride', url: longRide }
-              : { ...item, url: longRide };
-          }
-          return item;
-        }));
+        const mapped = r.value
+          .filter((item) => !isEmptyTile(item))
+          .map((item) => {
+            if (item.url) return item;
+            if (item.cls === 'g-1') return { ...item, url: trailseekerWellington };
+            if (item.cls === 'g-2') {
+              const placeholder = !item.l || item.n === 'IMG / 11' || /6:42/i.test(item.l);
+              return placeholder
+                ? { ...item, n: 'Studio', l: 'Work from home desk setup', url: deskSetup }
+                : { ...item, url: deskSetup };
+            }
+            if (item.cls === 'g-3') {
+              const placeholder = !item.l || item.n === 'IMG / 12' || /chain, worn/i.test(item.l);
+              return placeholder
+                ? { ...item, n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades }
+                : { ...item, url: sworksUpgrades };
+            }
+            if (item.cls === 'g-4') {
+              const placeholder = !item.l || item.n === 'IMG / 13' || /nº 97/i.test(item.l);
+              return placeholder
+                ? { ...item, n: 'Race', l: 'Always race ready', url: raceReady }
+                : { ...item, url: raceReady };
+            }
+            if (item.cls === 'g-5') {
+              const placeholder = !item.l || item.n === 'IMG / 14' || /rock garden/i.test(item.l);
+              return placeholder
+                ? { ...item, n: 'Ride', l: 'Long gravel ride', url: longRide }
+                : { ...item, url: longRide };
+            }
+            return item;
+          })
+          .filter((item) => Boolean(item.url));
+        if (mapped.length) setItems(mapped);
       })
       .catch(() => {});
     return () => ac.abort();
@@ -807,7 +842,7 @@ function Gallery() {
           <div className="gallery-grid">
             {items.map((g, i) => (
               <Reveal key={g.cls} className={`g-item ${g.cls} ph`} delay={i * 60}>
-                {g.url ? <img src={g.url} alt={g.l} /> : null}
+                {g.url ? <img src={g.url} alt={g.l} loading="lazy" decoding="async" /> : null}
                 <span>{g.n}</span>
                 <span className="ph-label">{g.l}</span>
               </Reveal>
@@ -952,7 +987,7 @@ function GearItem({ item, idx }: { item: GearItemT; idx: number }) {
     <Reveal delay={idx * 60}>
       <article className="gear-item">
         <div className="gear-render">
-          {image ? <img src={image} alt={item.name} /> : null}
+          {image ? <img src={image} alt={item.name} loading="lazy" decoding="async" /> : null}
         </div>
         <div className="gear-body">
           <div>
@@ -1067,10 +1102,10 @@ function Projects() {
                   onBlur={() => setHover(null)}
                   tabIndex={0}
                 >
-                  {shot ? <img className="proj-shot" src={shot} alt="" /> : null}
+                  {shot ? <img className="proj-shot" src={shot} alt="" loading="lazy" decoding="async" /> : null}
                   <div className="proj-body">
                     <span className="proj-name">
-                      {mark ? <img className={`proj-mark${word ? ' is-word' : ''}`} src={mark} alt="" /> : null}
+                      {mark ? <img className={`proj-mark${word ? ' is-word' : ''}`} src={mark} alt="" loading="lazy" decoding="async" /> : null}
                       {href ? (
                         <a href={href} target="_blank" rel="noopener noreferrer">{p.name}</a>
                       ) : p.name}

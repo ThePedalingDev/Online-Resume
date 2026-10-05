@@ -40,6 +40,17 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://markusfourie.dev/" />
+
+    <!-- LCP hero: responsive AVIF first, WebP fallback -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/hero-888.avif"
+      type="image/avif"
+      imagesrcset="/images/hero/hero-444.avif 444w, /images/hero/hero-888.avif 888w"
+      imagesizes="(max-width: 768px) min(88vw, 360px), 444px"
+      fetchpriority="high"
+    />
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
