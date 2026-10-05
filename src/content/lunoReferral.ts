@@ -1,7 +1,7 @@
 export const lunoReferral = {
   code: 'EE98ZR',
   url: 'https://www.luno.com/wallet/rewards/enter_code?code=EE98ZR',
-  eyebrow: 'ON THE SIDE',
+  eyebrow: 'On the side',
   title: 'Trading crypto',
   body: 'Away from code and the bike, I trade a small amount of crypto. Luno is the exchange I use.',
   buttonLabel: 'Join Luno with my referral',

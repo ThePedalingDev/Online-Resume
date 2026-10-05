@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { lunoReferral } from '@/content/site';
 
 type HobbyCardProps = {
@@ -31,12 +31,32 @@ const chevron = (
   </svg>
 );
 
-export function HobbyCard({ variant }: HobbyCardProps) {
-  if (variant !== 'referral') return null;
+const referralLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Offer',
+  name: 'Luno referral',
+  url: lunoReferral.url,
+  description: `Referral code ${lunoReferral.code}. If you sign up and qualify, we both get R50 in Bitcoin.`,
+  identifier: {
+    '@type': 'PropertyValue',
+    name: 'Referral code',
+    value: lunoReferral.code,
+  },
+};
 
+export function HobbyCard({ variant }: HobbyCardProps) {
   const [copied, setCopied] = useState(false);
   const codeRef = useRef<HTMLSpanElement>(null);
   const liveRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  if (variant !== 'referral') return null;
 
   const copyCode = async () => {
     const { code } = lunoReferral;
@@ -61,62 +81,80 @@ export function HobbyCard({ variant }: HobbyCardProps) {
     }
     if (liveRef.current) liveRef.current.textContent = 'Code copied';
     setCopied(true);
-    window.setTimeout(() => {
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => {
       setCopied(false);
       if (liveRef.current) liveRef.current.textContent = '';
+      timerRef.current = null;
     }, 2000);
   };
 
   const { code, url } = lunoReferral;
 
   return (
-    <article className="hobby-card" aria-labelledby="hobby-card-title">
-      <p className="hobby-eyebrow">{lunoReferral.eyebrow}</p>
-      <h3 id="hobby-card-title" className="hobby-title">{lunoReferral.title}</h3>
-      <p className="hobby-body">{lunoReferral.body}</p>
-
-      <div className="hobby-actions">
-        <a
-          className="hobby-btn-outline"
-          href={url}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-        >
-          {lunoReferral.buttonLabel}
-          {externalArrow}
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
-        <div className="hobby-code-chip">
-          <span className="hobby-code-text">
-            {lunoReferral.codeLabel}{' '}
-            <span ref={codeRef} className="hobby-code-value">{code}</span>
-          </span>
-          <button
-            type="button"
-            className="hobby-copy-btn"
-            onClick={copyCode}
-            aria-label={`Copy referral code ${code}`}
-          >
-            {copied ? lunoReferral.copiedLabel : lunoReferral.copyLabel}
-          </button>
+    <article
+      className="hobby-card"
+      aria-labelledby="hobby-card-title"
+      data-referral-code={code}
+      data-referral-provider="Luno"
+    >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(referralLd) }} />
+      <div className="hobby-main">
+        <div className="hobby-heading">
+          <img
+            className="hobby-logo"
+            src="/images/luno-logo.png"
+            alt="Luno"
+            width={409}
+            height={128}
+          />
+          <h2 id="hobby-card-title" className="hobby-title">{lunoReferral.title}</h2>
         </div>
+        <p className="hobby-body">{lunoReferral.body}</p>
+        <p className="hobby-disclosure">{lunoReferral.disclosure}</p>
       </div>
-
-      <div ref={liveRef} className="hobby-live" aria-live="polite" />
-
-      <details className="hobby-details">
-        <summary className="hobby-summary">
-          {lunoReferral.summaryLabel}
-          {chevron}
-        </summary>
-        <ol className="hobby-steps">
-          {lunoReferral.steps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-      </details>
-
-      <p className="hobby-disclosure">{lunoReferral.disclosure}</p>
+      <div className="hobby-aside">
+        <div className="hobby-actions">
+          <a
+            className="hobby-btn"
+            href={url}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+          >
+            {lunoReferral.buttonLabel}
+            {externalArrow}
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <div className="hobby-code-chip">
+            <span className="hobby-code-text">
+              {lunoReferral.codeLabel}{' '}
+              <span ref={codeRef} className="hobby-code-value">{code}</span>
+            </span>
+            <button type="button" className="hobby-copy-btn" onClick={copyCode}>
+              {copied ? lunoReferral.copiedLabel : (
+                <>
+                  {lunoReferral.copyLabel}
+                  <span className="sr-only"> {code}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+        <div ref={liveRef} className="hobby-live" aria-live="polite" />
+        <details className="hobby-details">
+          <summary className="hobby-summary">
+            {lunoReferral.summaryLabel}
+            {chevron}
+          </summary>
+          <ol className="hobby-steps">
+            {lunoReferral.steps.map((step) => (
+              <li key={step}>
+                <span className="hobby-step-text">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </details>
+      </div>
     </article>
   );
 }

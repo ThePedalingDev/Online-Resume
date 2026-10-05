@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Mail, Instagram } from 'lucide-react';
-import { StravaIcon } from '@/components/icons/StravaIcon';
+import { Mail } from 'lucide-react';
+import { GitHubMark, InstagramMark, LinkedInMark, StravaMark } from '@/components/BrandMarks';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
@@ -12,7 +12,7 @@ const SOCIAL_PROFILES = [
     platform: 'GitHub',
     description: 'Check out my repositories, contributions, and open-source projects.',
     url: 'https://github.com/ThePedalingDev',
-    icon: Github,
+    icon: GitHubMark,
     color: 'hover:bg-slate-900/10 dark:hover:bg-slate-100/10',
     iconColor: 'text-slate-900 dark:text-slate-100',
     isCustom: false,
@@ -21,7 +21,7 @@ const SOCIAL_PROFILES = [
     platform: 'LinkedIn',
     description: 'Connect with me professionally and view my full work experience.',
     url: 'https://www.linkedin.com/in/markus-fourie/',
-    icon: Linkedin,
+    icon: LinkedInMark,
     color: 'hover:bg-blue-600/10',
     iconColor: 'text-blue-600',
     isCustom: false,
@@ -30,7 +30,7 @@ const SOCIAL_PROFILES = [
     platform: 'Instagram',
     description: 'Follow my personal life, cycling adventures, and fitness journey.',
     url: 'https://www.instagram.com/markuss.fourie/',
-    icon: Instagram,
+    icon: InstagramMark,
     color: 'hover:bg-pink-600/10',
     iconColor: 'text-pink-600',
     isCustom: false,
@@ -39,7 +39,7 @@ const SOCIAL_PROFILES = [
     platform: 'Strava',
     description: 'Track my cycling activities, training routes, and personal records.',
     url: 'https://www.strava.com/athletes/7756913',
-    icon: StravaIcon,
+    icon: StravaMark,
     color: 'hover:bg-orange-600/10',
     iconColor: 'text-orange-600',
     isCustom: true,

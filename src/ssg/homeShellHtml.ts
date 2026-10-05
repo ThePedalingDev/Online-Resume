@@ -1,4 +1,17 @@
-import { hobbyCardShellHtml } from './hobbyCardShellHtml';
+import { lunoReferral } from '../content/lunoReferral';
+
+const referralJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Offer',
+  name: 'Luno referral',
+  url: lunoReferral.url,
+  description: `Referral code ${lunoReferral.code}. If you sign up and qualify, we both get R50 in Bitcoin.`,
+  identifier: {
+    '@type': 'PropertyValue',
+    name: 'Referral code',
+    value: lunoReferral.code,
+  },
+}).replace(/</g, '\\u003c');
 
 /** Static HTML embedded into index.html at build time so crawlers and no-JS clients see real content. */
 export const HOME_SHELL_HTML = `
@@ -42,6 +55,6 @@ export const HOME_SHELL_HTML = `
       </picture>
     </div>
   </section>
-  ${hobbyCardShellHtml()}
+  <script type="application/ld+json">${referralJsonLd}</script>
 </main>
 `;

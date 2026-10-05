@@ -24,6 +24,9 @@ const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt'
 const CV_HREF = '/cert-docs/markus-fourie-resume.pdf';
 const EMAIL = 'markusfourie@icloud.com';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
+import { BrandLink, GitHubMark, InstagramMark, LinkedInMark, StravaMark } from '@/components/BrandMarks';
+import { isAnchorNav } from '@/lib/anchorNav';
+import { ScrollTrigger } from '@/lib/gsap';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
@@ -39,6 +42,7 @@ import {
   journeyCopy,
   journeyNodes,
   lifeCopy,
+  lunoReferral,
   paperTrail,
   stackCopy,
   stackGroups,
@@ -315,8 +319,19 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || stills.length < 2 || prefersReducedMotion()) return;
+    if (!el || stills.length < 2) return;
     const frames = [...el.querySelectorAll<HTMLImageElement>('img')];
+    const onImg = () => ScrollTrigger.refresh();
+    frames.forEach((img) => {
+      if (!img.complete) img.addEventListener('load', onImg);
+    });
+    if (prefersReducedMotion()) {
+      frames.forEach((img, i) => {
+        img.style.opacity = i === 0 ? '1' : '0';
+        img.toggleAttribute('aria-hidden', i !== 0);
+      });
+      return () => frames.forEach((img) => img.removeEventListener('load', onImg));
+    }
     const end = frames.length - 1;
     const fine = window.matchMedia('(pointer: fine)').matches;
     let progress = 0;
@@ -335,7 +350,7 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
     };
 
     const engage = () => {
-      if (!lenis || active) return;
+      if (!lenis || active || isAnchorNav()) return;
       active = true;
       lastTick = 0;
       const rect = el.getBoundingClientRect();
@@ -424,6 +439,7 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
     window.addEventListener('keydown', onKey);
     window.addEventListener('click', onClick, true);
     return () => {
+      frames.forEach((img) => img.removeEventListener('load', onImg));
       if (active) lenis?.start();
       lenis?.off('virtual-scroll', onVirtual);
       window.removeEventListener('scroll', onScroll);
@@ -522,25 +538,49 @@ function Journey({ items }: { items: JourneyItem[] }) {
               return <Milestone key={`${m.year}-${m.chip}`} {...m} tags={tags} />;
             })}
           </div>
-          <Reveal className="paper-trail">
-            <h3 className="section-title paper-trail-title">{journeyCopy.paperTrailTitle}</h3>
-            <p className="section-intro">{journeyCopy.paperTrailIntro}</p>
-            <div className="docs-list">
-              {paperTrail.map((row) => (
-                <div className="doc-row" key={row.href}>
-                  <a
-                    href={row.href}
-                    {...(row.external
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : { download: true })}
-                  >
-                    {row.label}
-                  </a>
-                  <span>{row.note}</span>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function OnTheSide() {
+  return (
+    <section id="on-the-side" aria-labelledby="hobby-card-title">
+      <div className="ed-shell">
+        <div className="eyebrow-row">
+          <span className="section-marker">{lunoReferral.eyebrow}</span>
+        </div>
+        <div className="hobby-wrap">
+          <HobbyCard variant="referral" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PaperTrail() {
+  return (
+    <section id="paper-trail" aria-labelledby="paper-trail-title">
+      <div className="ed-shell">
+        <div className="paper-trail">
+          <h2 id="paper-trail-title" className="section-title paper-trail-title">{journeyCopy.paperTrailTitle}</h2>
+          <p className="section-intro">{journeyCopy.paperTrailIntro}</p>
+          <div className="docs-list">
+            {paperTrail.map((row) => (
+              <div className="doc-row" key={row.href}>
+                <a
+                  href={row.href}
+                  {...(row.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : { download: true })}
+                >
+                  {row.label}
+                </a>
+                <span>{row.note}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -669,12 +709,15 @@ function Cycling() {
             <p className="uses-link">
               <a href="/uses">{lifeCopy.usesLabel} <span aria-hidden="true">→</span></a>
             </p>
-            <p className="life-social">
-              {lifeCopy.socialLabel}:{' '}
-              <a href="https://www.strava.com/athletes/7756913" target="_blank" rel="noopener noreferrer">Strava <span aria-hidden="true">↗</span></a>
-              {' · '}
-              <a href="https://www.instagram.com/markuss.fourie/" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span></a>
-            </p>
+            <div className="life-social">
+              <span className="life-social-label">{lifeCopy.socialLabel}</span>
+              <BrandLink href="https://www.strava.com/athletes/7756913" label="Strava">
+                <StravaMark />
+              </BrandLink>
+              <BrandLink href="https://www.instagram.com/markuss.fourie/" label="Instagram">
+                <InstagramMark />
+              </BrandLink>
+            </div>
           </Reveal>
           {ytd ? (
             <Reveal className="life-lead-stat">
@@ -741,9 +784,6 @@ function Cycling() {
               </div>
             </Reveal>
           </div>
-          <Reveal className="hobby-wrap">
-            <HobbyCard variant="referral" />
-          </Reveal>
           <GalleryGrid />
         </div>
       </div>
@@ -1263,8 +1303,8 @@ function Contact() {
             </div>
           </Reveal>
           <Reveal className="contact-side" delay={120}>
-            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="linkedin" />LinkedIn</span><span className="lbl">Work history</span></a>
-            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="github" />GitHub</span><span className="lbl">Code</span></a>
+            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><span className="contact-name"><LinkedInMark />LinkedIn</span><span className="sr-only"> (opens in a new tab)</span><span className="lbl">Work history</span></a>
+            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><span className="contact-name"><GitHubMark />GitHub</span><span className="sr-only"> (opens in a new tab)</span><span className="lbl">Code</span></a>
             <a href={CV_HREF} download><span className="contact-name">Resume</span><span className="lbl">October 2026</span></a>
           </Reveal>
         </div>
@@ -1364,6 +1404,8 @@ export function Home() {
       <HowIBuild />
       <Stack cats={stackCats} />
       <Journey items={journeyItems} />
+      <OnTheSide />
+      <PaperTrail />
       <Cycling />
       <Contact />
       <EdFooter />

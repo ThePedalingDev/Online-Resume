@@ -1,12 +1,12 @@
-import { Github, Linkedin, Mail, Instagram } from 'lucide-react';
-import { StravaIcon } from './icons/StravaIcon';
+import { Mail } from 'lucide-react';
+import { GitHubMark, InstagramMark, LinkedInMark, StravaMark } from './BrandMarks';
 
 export function Footer() {
   const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/ThePedalingDev', color: 'hover:text-gray-800 dark:hover:text-white' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/markus-fourie/', color: 'hover:text-blue-600' },
-    { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/markuss.fourie/', color: 'hover:text-pink-600' },
-    { icon: StravaIcon, label: 'Strava', href: 'https://www.strava.com/athletes/7756913', color: 'hover:text-orange-600', isCustom: true },
+    { icon: GitHubMark, label: 'GitHub', href: 'https://github.com/ThePedalingDev', color: 'hover:text-gray-800 dark:hover:text-white' },
+    { icon: LinkedInMark, label: 'LinkedIn', href: 'https://www.linkedin.com/in/markus-fourie/', color: 'hover:text-blue-600' },
+    { icon: InstagramMark, label: 'Instagram', href: 'https://www.instagram.com/markuss.fourie/', color: 'hover:text-pink-600' },
+    { icon: StravaMark, label: 'Strava', href: 'https://www.strava.com/athletes/7756913', color: 'hover:text-orange-600' },
     { icon: Mail, label: 'Email', href: 'mailto:markusfourie@icloud.com', color: 'hover:text-red-600' },
   ];
 
@@ -24,11 +24,12 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-2 rounded-lg border bg-background/50 hover:bg-primary/10 transition hover:scale-110 ${social.color}`}
+                  className={`inline-flex items-center justify-center min-h-11 min-w-11 p-2 rounded-lg border bg-background/50 hover:bg-primary/10 transition hover:scale-110 ${social.color}`}
                   title={social.label}
-                  aria-label={social.label}
+                  aria-label={`${social.label} (opens in a new tab)`}
                 >
-                  {social.isCustom ? <Icon className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                  <Icon className="w-5 h-5" />
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               );
             })}
