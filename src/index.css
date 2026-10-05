@@ -982,20 +982,13 @@ html {
   color: var(--ink-2);
 }
 .editorial .uses-link a {
-  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-/* Invisible hit-area grow for inline text links (keeps glyph size/line look). */
-.editorial .uses-link a::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(100%, 44px);
-  height: 44px;
-  transform: translate(-50%, -50%);
+  /* Inline padding grows the hit box without changing line layout. */
+  padding-block: 14px;
+  padding-inline: 4px;
+  margin-inline: -4px;
 }
 .editorial .uses-back {
   grid-column: 1 / span 12;
@@ -1198,26 +1191,20 @@ html {
 .editorial .about-img.one img { object-position: center; }
 .editorial .about-img.two img { object-position: center 62%; }
 .editorial .about-side a {
-  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
+  padding-block: 14px;
+  padding-inline: 4px;
+  margin-inline: -4px;
 }
 .editorial .about-img.one .ph-label a {
-  position: relative;
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-.editorial .about-side a::before,
-.editorial .about-img.one .ph-label a::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(100%, 44px);
-  height: 44px;
-  transform: translate(-50%, -50%);
+  padding-block: 14px;
+  padding-inline: 4px;
+  margin-inline: -4px;
 }
 .editorial .about-side a:focus-visible,
 .editorial .about-img.one .ph-label a:focus-visible {
@@ -1533,19 +1520,12 @@ html {
   outline-offset: 3px;
 }
 .editorial .cycling-intro a {
-  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-.editorial .cycling-intro a::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(100%, 44px);
-  height: 44px;
-  transform: translate(-50%, -50%);
+  padding-block: 14px;
+  padding-inline: 4px;
+  margin-inline: -4px;
 }
 .editorial .cycling-still { grid-column: 5 / span 4; margin-top: 48px; }
 .editorial .cycling-shot {
@@ -2070,6 +2050,7 @@ html {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  min-width: 44px;
   font-family: var(--f-display);
   font-size: clamp(22px, 2vw, 28px);
   letter-spacing: -0.02em;
