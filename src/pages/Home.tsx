@@ -108,6 +108,7 @@ const NAV_LINKS = [
 
 function EdNav() {
   const drawer = useRef<HTMLDetailsElement>(null);
+  const [brandVisible, setBrandVisible] = useState(false);
 
   useEffect(() => {
     const el = drawer.current;
@@ -127,6 +128,34 @@ function EdNav() {
     };
   }, []);
 
+  useEffect(() => {
+    const heading = document.getElementById('hero-name');
+    if (!heading) {
+      setBrandVisible(true);
+      return;
+    }
+    if (prefersReducedMotion()) {
+      // Still hide while the H1 is on screen; skip only the fade animation via CSS.
+      const sync = () => {
+        const rect = heading.getBoundingClientRect();
+        setBrandVisible(rect.bottom <= 0);
+      };
+      window.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+      sync();
+      return () => {
+        window.removeEventListener('scroll', sync);
+        window.removeEventListener('resize', sync);
+      };
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => setBrandVisible(!(entry?.isIntersecting ?? true)),
+      { threshold: 0, rootMargin: '0px' },
+    );
+    io.observe(heading);
+    return () => io.disconnect();
+  }, []);
+
   const closeDrawer = () => {
     if (drawer.current) drawer.current.open = false;
   };
@@ -134,7 +163,14 @@ function EdNav() {
   return (
     <nav className="ed-nav">
       <div className="ed-nav-inner">
-        <a href="#top" className="ed-nav-brand">Markus Fourie</a>
+        <a
+          href="#top"
+          className={`ed-nav-brand${brandVisible ? ' is-visible' : ''}`}
+          tabIndex={brandVisible ? 0 : -1}
+          aria-hidden={brandVisible ? undefined : true}
+        >
+          Markus Fourie
+        </a>
         <div className="ed-nav-links">
           {NAV_LINKS.map(([href, label]) => (
             <a key={href} href={href}>{label}</a>
@@ -173,13 +209,38 @@ type HeroContent = {
 function Hero({ content }: { content?: HeroContent | null }) {
   const cmsHero = content?.imageUrl?.trim() || '';
   const heroAlt = content?.imageAlt || HERO_ALT;
+  const photo = cmsHero ? (
+    <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
+  ) : (
+    <>
+      <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
+      <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
+      <img
+        src={HERO_FALLBACK}
+        srcSet={HERO_WEBP_SRCSET}
+        sizes={HERO_SIZES}
+        alt={heroAlt}
+        fetchPriority="high"
+        decoding="async"
+        width={1024}
+        height={1536}
+      />
+    </>
+  );
   return (
     <section id="top" className="hero" aria-labelledby="hero-name">
       <div className="hero-inner">
-        <div className="hero-copy">
+        <div className="hero-intro">
           <h1 id="hero-name" className="hero-name">{heroCopy.name}</h1>
           <p className="hero-role">{heroCopy.role}</p>
+          <p className="hero-status">
+            <span className="hero-status-dot" aria-hidden="true" />
+            {availabilityLine()}
+          </p>
           <p className="hero-tagline">{heroCopy.tagline}</p>
+        </div>
+        <picture className="hero-photo">{photo}</picture>
+        <div className="hero-actions">
           <p className="hero-subline">{heroCopy.subline}</p>
           <ul className="hero-ctas">
             <li>
@@ -211,31 +272,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
             </a>
           </nav>
-          <p className="hero-status">
-            <span className="hero-status-dot" aria-hidden="true" />
-            {availabilityLine()}
-          </p>
         </div>
-        <picture className="hero-photo">
-          {cmsHero ? (
-            <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
-          ) : (
-            <>
-              <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
-              <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
-              <img
-                src={HERO_FALLBACK}
-                srcSet={HERO_WEBP_SRCSET}
-                sizes={HERO_SIZES}
-                alt={heroAlt}
-                fetchPriority="high"
-                decoding="async"
-                width={1024}
-                height={1536}
-              />
-            </>
-          )}
-        </picture>
       </div>
     </section>
   );
