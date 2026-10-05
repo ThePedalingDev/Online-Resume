@@ -61,9 +61,8 @@ export const projectCopy: Array<{
     role: 'Full-stack developer',
     problem:
       'Katanga Contracting Services (KCS) needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
-    built: 'The Resource Management System for Katanga Contracting Services (KCS), hosted on Azure.',
-    // Usage numbers still pending confirmation — keep result qualitative for now.
-    result: 'In production for site teams, assets, and shift approvals.',
+    built: 'RMS for Katanga Contracting Services (KCS), hosted on Azure.',
+    result: '388 assets and 46 users run on it.',
     href: 'https://rms.rimitso.com/',
     cta: 'visit',
   },
@@ -253,7 +252,7 @@ export const journeyNodes: JourneyNode[] = [
     year: '2026',
     chip: 'Now',
     title: 'All in on operations software',
-    desc: "Studies done, I'm full time at Katanga Contracting Services (KCS), working on the Resource Management System.",
+    desc: "Studies done, I'm full time at Katanga Contracting Services (KCS), working on RMS.",
     tags: ['KCS'],
     project: 'katanga-rms',
   },
