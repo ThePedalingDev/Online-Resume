@@ -1,4 +1,13 @@
+import { heroCtas } from '../content/heroCtas';
 import { lunoReferral } from '../content/lunoReferral';
+
+const heroCtasHtml = heroCtas
+  .map((cta) => {
+    const cls = `hero-pill${cta.primary ? ' primary' : ''}`;
+    const download = cta.download ? ' download' : '';
+    return `<li><a class="${cls}" href="${cta.href}"${download}>${cta.label} <span aria-hidden="true">→</span></a></li>`;
+  })
+  .join('');
 
 const referralJsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -41,11 +50,7 @@ export const HOME_SHELL_HTML = `
         </div>
         <div class="hero-below">
           <p class="hero-subline">Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
-          <ul class="hero-ctas">
-            <li><a class="hero-pill primary" href="#work">See what I've built <span aria-hidden="true">→</span></a></li>
-            <li><a class="hero-pill" href="mailto:markusfourie@icloud.com">Start a conversation <span aria-hidden="true">→</span></a></li>
-            <li><a class="hero-pill" href="/cert-docs/markus-fourie-resume.pdf" download>Download my resume (PDF) <span aria-hidden="true">→</span></a></li>
-          </ul>
+          <ul class="hero-ctas">${heroCtasHtml}</ul>
         </div>
       </div>
       <picture class="hero-photo">

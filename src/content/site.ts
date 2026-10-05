@@ -26,6 +26,8 @@ export const siteStatus: Status = {
   timezone: availability.timezone,
 };
 
+export { heroCtas, type HeroCta } from './heroCtas';
+
 export const heroCopy = {
   name: 'Markus Fourie',
   role: 'Full-stack developer in Pretoria',

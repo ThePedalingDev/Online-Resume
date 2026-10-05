@@ -39,6 +39,7 @@ import {
   contactCopy,
   galleryCaptions,
   heroCopy,
+  heroCtas,
   journeyCopy,
   journeyNodes,
   lifeCopy,
@@ -241,21 +242,17 @@ function Hero({ content }: { content?: HeroContent | null }) {
           <div className="hero-below">
             <p className="hero-subline">{heroCopy.subline}</p>
             <ul className="hero-ctas">
-              <li>
-                <a className="hero-pill primary" href="#work">
-                  See what I&apos;ve built <span aria-hidden="true">→</span>
-                </a>
-              </li>
-              <li>
-                <a className="hero-pill" href={`mailto:${EMAIL}`}>
-                  Start a conversation <span aria-hidden="true">→</span>
-                </a>
-              </li>
-              <li>
-                <a className="hero-pill" href={CV_HREF} download>
-                  Download my resume (PDF) <span aria-hidden="true">→</span>
-                </a>
-              </li>
+              {heroCtas.map((cta) => (
+                <li key={cta.href}>
+                  <a
+                    className={`hero-pill${cta.primary ? ' primary' : ''}`}
+                    href={cta.href}
+                    {...(cta.download ? { download: true } : {})}
+                  >
+                    {cta.label} <span aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))}
             </ul>
             <nav className="hero-icons" aria-label="Quick links">
               <a href={`mailto:${EMAIL}`} aria-label="Email Markus">
