@@ -6,16 +6,18 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 export function RootLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
+  const isUses = pathname === '/uses';
   const isAdmin = pathname.startsWith('/admin');
+  const editorial = isHome || isUses;
 
   return (
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
-      {!isHome && !isAdmin && <Navbar />}
+      {!editorial && !isAdmin && <Navbar />}
       <main className="flex-1">
         <Outlet />
       </main>
-      {!isHome && !isAdmin && <Footer />}
+      {!editorial && !isAdmin && <Footer />}
     </div>
   );
 }

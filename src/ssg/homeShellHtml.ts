@@ -27,6 +27,7 @@ export const HOME_SHELL_HTML = `
         </div>
         <div class="hero-actions">
           <a class="btn-solid" href="#projects">View work</a>
+          <a class="btn-outline" href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>Download CV (PDF)</a>
           <a class="btn-text" href="#contact">Get in touch</a>
         </div>
       </div>

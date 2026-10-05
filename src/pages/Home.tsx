@@ -1,18 +1,5 @@
 import { useLenis } from 'lenis/react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import gearEpic from '@/assets/gear/epic-sworks.webp';
-import gearGarmin from '@/assets/gear/garmin-edge-840.webp';
-import gearHeadset from '@/assets/gear/arctis-nova-pro.webp';
-import gearKeyboard from '@/assets/gear/corsair-vanguard-96.webp';
-import gearLaptop from '@/assets/gear/rog-zephyrus-g16.webp';
-import gearMouse from '@/assets/gear/logitech-g-pro.webp';
-import gearScicon from '@/assets/gear/scicon-aeroshade.webp';
-import gearWilier from '@/assets/gear/wilier-rave.webp';
-import gearMonitor from '@/assets/gear/alienware-aw2725dm.webp';
-import gearLightBar from '@/assets/gear/xiaomi-monitor-light-bar.webp';
-import gearHelmet from '@/assets/gear/met-manta.webp';
-import gearShoes from '@/assets/gear/shimano-sh-xc903.webp';
-import gearVictus from '@/assets/gear/hp-victus-15.webp';
 import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
 import deskSetup from '@/assets/images/desk-setup.webp';
 import raceReady from '@/assets/images/race-ready.webp';
@@ -184,6 +171,13 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
           </div>
           <div className="hero-actions">
             <a className="btn-solid" href="#projects">View work</a>
+            <a
+              className="btn-outline"
+              href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf"
+              download
+            >
+              Download CV (PDF)
+            </a>
             <a className="btn-text" href="#contact">Get in touch</a>
           </div>
           <div className="hero-stats">
@@ -232,7 +226,6 @@ type JourneyItem = {
 };
 
 type StackCat = { name: string; items: Array<{ n: string; y: string }> };
-type GearItemT = { name: string; spec: string; cat: string; href: string };
 
 const JOURNEY: JourneyItem[] = [
   { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
@@ -638,6 +631,10 @@ function Cycling() {
                 The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.
               </p>
             )}
+            <p className="uses-link">
+              <a href="/uses">See my setup</a>
+              {' '}for desk and cycling kit.
+            </p>
           </Reveal>
           <Reveal className="cycling-visual">
             <figure className="cycling-film">
@@ -888,127 +885,6 @@ function HowIBuild() {
               <h3>03 · Honest tools</h3>
               <p>The system should tell you what it's actually doing. Audit logs, health checks, dashboards that earn their glance.</p>
             </Reveal>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const GEAR_CODING: GearItemT[] = [
-  { name: 'ROG Zephyrus G16', spec: '16-inch daily driver', cat: 'Compute', href: 'https://rog.asus.com/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/' },
-  { name: 'HP Victus 15', spec: '15-inch home lab', cat: 'Lab', href: 'https://www.hp.com/us-en/shop/pdp/victus-gaming-laptop-15-fb3025nr' },
-  { name: 'Alienware AW2725DM', spec: 'Dell · 27-inch QHD', cat: 'Display', href: 'https://www.dell.com/en-us/shop/alienware-27-gaming-monitor-aw2725dm/apd/210-bpky/monitors-monitor-accessories' },
-  { name: 'Xiaomi Monitor Light Bar', spec: 'Mounts on the monitor', cat: 'Light', href: 'https://www.mi.com/uk/product/mi-computer-monitor-light-bar/' },
-  { name: 'Corsair Vanguard 96', spec: '96% mechanical · 8,000 Hz', cat: 'Input', href: 'https://www.corsair.com/us/en/p/keyboards/ch-91e911e-na/vanguard-96-mechanical-gaming-keyboard-corsair-mlx-quantum-ch-91e911e-na' },
-  { name: 'Logitech G Pro', spec: 'LIGHTSPEED wireless', cat: 'Input', href: 'https://www.logitechg.com/en-us/shop/p/pro-wireless-mouse' },
-  { name: 'Arctis Nova Pro Wireless', spec: 'SteelSeries · ANC · hot-swap battery', cat: 'Audio', href: 'https://steelseries.com/gaming-headsets/arctis-nova-pro' },
-];
-
-const GEAR_CYCLING: GearItemT[] = [
-  { name: 'Epic S-Works 7', spec: 'Specialized · full-suspension XC', cat: 'MTB', href: 'https://www.specialized.com/us/en/s-works-epic-sram-xx1-axs-rockshox-ultimate-brain/p/205828' },
-  { name: 'Rave SLR ID2', spec: 'Wilier · gravel race bike', cat: 'Gravel', href: 'https://www.wilier.com/en/bikes/gravel/rave-slr-id2' },
-  { name: 'MET Manta', spec: 'Holographic colour helmet', cat: 'Helmet', href: 'https://www.met-helmets.com/en/shop/cycling-helmets/tri-aero-helmets/manta-mips/' },
-  { name: 'Shimano SH-XC903', spec: 'Wide unisex MTB shoes', cat: 'Shoes', href: 'https://ride.shimano.com/products/sh-xc903' },
-  { name: 'Aeroshade 2.0 Titanium', spec: 'Scicon · cycling eyewear', cat: 'Eyewear', href: 'https://sciconsports.com/en/products/aeroshade-2-0-titanium-ey440801' },
-  { name: 'Garmin Edge 840', spec: 'GPS bike computer', cat: 'Compute', href: 'https://www.garmin.com/en-US/p/798777/' },
-];
-
-const GEAR_MARKS: Record<string, BrandMarkName> = {
-  'Corsair Vanguard 96': 'corsair',
-  'Logitech G Pro': 'logitech',
-  'Arctis Nova Pro Wireless': 'steelseries',
-  'Garmin Edge 840': 'garmin',
-};
-
-const GEAR_IMAGES: Record<string, string> = {
-  'ROG Zephyrus G16': gearLaptop,
-  'HP Victus 15': gearVictus,
-  'Alienware AW2725DM': gearMonitor,
-  'Xiaomi Monitor Light Bar': gearLightBar,
-  'Corsair Vanguard 96': gearKeyboard,
-  'Logitech G Pro': gearMouse,
-  'Arctis Nova Pro Wireless': gearHeadset,
-  'Epic S-Works 7': gearEpic,
-  'Rave SLR ID2': gearWilier,
-  'MET Manta': gearHelmet,
-  'Shimano SH-XC903': gearShoes,
-  'Aeroshade 2.0 Titanium': gearScicon,
-  'Garmin Edge 840': gearGarmin,
-};
-
-function GearItem({ item, idx }: { item: GearItemT; idx: number }) {
-  const image = GEAR_IMAGES[item.name];
-  const mark = GEAR_MARKS[item.name];
-  return (
-    <Reveal delay={idx * 60}>
-      <article className="gear-item">
-        <div className="gear-render">
-          {image ? <img src={image} alt={item.name} loading="lazy" decoding="async" /> : null}
-        </div>
-        <div className="gear-body">
-          <div>
-            <h4>{mark ? <BrandMark name={mark} /> : null}{item.name}</h4>
-            <p className="gear-spec">{item.spec}</p>
-          </div>
-          <div className="gear-meta">
-            <span className="gm-cat">{item.cat}</span>
-            {item.href !== '#' ? (
-              <a href={item.href} target="_blank" rel="noopener noreferrer">View →</a>
-            ) : (
-              <span className="gm-cat">Internal</span>
-            )}
-          </div>
-        </div>
-      </article>
-    </Reveal>
-  );
-}
-
-export function Gear({ coding, cycling }: { coding: GearItemT[]; cycling: GearItemT[] }) {
-  return (
-    <section id="gear">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">06 · My gear</span>
-          <span className="num">Tools in hand · 2026</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="gear-head">
-            <h2 className="section-title">
-              The <em>tools</em> I reach for: desk and dirt.
-            </h2>
-          </Reveal>
-          <Reveal className="gear-intro" delay={120}>
-            <p>
-              Two tracks, same philosophy: buy once, use daily, maintain it well.
-            </p>
-          </Reveal>
-
-          <div className="gear-tracks">
-            <div className="gear-track">
-              <Reveal>
-                <div className="gear-track-head">
-                  <h3>Coding <em>kit</em></h3>
-                  <span className="cnt">{coding.length} items</span>
-                </div>
-              </Reveal>
-              {coding.map((item, i) => (
-                <GearItem key={`${item.name}-${i}`} item={item} idx={i} />
-              ))}
-            </div>
-
-            <div className="gear-track">
-              <Reveal>
-                <div className="gear-track-head">
-                  <h3>Cycling <em>kit</em></h3>
-                  <span className="cnt">{cycling.length} items</span>
-                </div>
-              </Reveal>
-              {cycling.map((item, i) => (
-                <GearItem key={`${item.name}-${i}`} item={item} idx={i} />
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -1418,8 +1294,6 @@ export function Home() {
   const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(JOURNEY);
   const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
-  const [gearCoding, setGearCoding] = useState<GearItemT[]>(GEAR_CODING);
-  const [gearCycling, setGearCycling] = useState<GearItemT[]>(GEAR_CYCLING);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -1447,12 +1321,10 @@ export function Home() {
     const ac = new AbortController();
     (async () => {
       try {
-        const [about, journey, stack, gc, gr] = await Promise.all([
+        const [about, journey, stack] = await Promise.all([
           fetchContent<AboutContent>('about', ac.signal),
           fetchContent<JourneyItem[]>('journey', ac.signal),
           fetchContent<StackCat[]>('stack', ac.signal),
-          fetchContent<GearItemT[]>('gearCoding', ac.signal),
-          fetchContent<GearItemT[]>('gearCycling', ac.signal),
         ]);
 
         if (about.value) setAboutContent(about.value);
@@ -1467,18 +1339,12 @@ export function Home() {
           const stale = stack.value.some((cat) => /languages|frontend|ops/i.test(cat.name));
           if (!stale) setStackCats(stack.value);
         }
-        if (Array.isArray(gc.value) && gc.value.some((item) => /alienware|victus/i.test(item.name))) setGearCoding(gc.value);
-        if (Array.isArray(gr.value) && gr.value.some((item) => /manta|xc903/i.test(item.name))) setGearCycling(gr.value);
       } catch {
         // Keep fallbacks when backend is down.
       }
     })();
     return () => ac.abort();
   }, []);
-
-  // gearCoding / gearCycling stay wired to the CMS for the upcoming /uses page.
-  void gearCoding;
-  void gearCycling;
 
   return (
     <div className="editorial">
@@ -1492,6 +1358,10 @@ export function Home() {
       <Docs />
       <Contact />
       <EdFooter />
+      <div className="mobile-contact-bar">
+        <a className="btn-solid" href="#contact">Get in touch</a>
+        <a className="btn-outline" href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>Download CV</a>
+      </div>
     </div>
   );
 }

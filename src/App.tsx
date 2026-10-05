@@ -12,6 +12,7 @@ const Projects = lazy(() => import('@/pages/Projects').then(module => ({ default
 const Contact = lazy(() => import('@/pages/Contact').then(module => ({ default: module.Contact })));
 const Skills = lazy(() => import('@/pages/Skills').then(module => ({ default: module.Skills })));
 const Social = lazy(() => import('@/pages/Social').then(module => ({ default: module.Social })));
+const Uses = lazy(() => import('@/pages/Uses').then(module => ({ default: module.Uses })));
 const NotFound = lazy(() => import('@/pages/NotFound').then(module => ({ default: module.NotFound })));
 
 const PageLoader = () => (
@@ -65,6 +66,11 @@ function App() {
                 </Suspense>
               } />
               <Route path="/docs" element={<Navigate to="/#docs" replace />} />
+              <Route path="/uses" element={
+                <Suspense fallback={<PageLoader />}>
+                  <Uses />
+                </Suspense>
+              } />
               <Route path="*" element={
                 <Suspense fallback={<PageLoader />}>
                   <NotFound />
