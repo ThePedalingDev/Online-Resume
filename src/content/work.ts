@@ -18,7 +18,6 @@ export type WorkProject = {
   name: string;
   client?: string;
   kind: string;
-  /** Omit for Afrisist until Markus confirms the year. */
   year?: string;
   outcome: string;
   role: string;
@@ -65,7 +64,7 @@ export const workProjects: WorkProject[] = [
       'Every shift on a Katanga site produces numbers: hours worked, meter readings, which asset went where. I built the system that holds all of it, end to end, with an approval step so unchecked numbers never reach a report.',
     caseStudy:
       'Every shift on a Katanga site produces numbers: hours worked, meter readings, which asset went where. I built the system that holds all of it, end to end, with an approval step so unchecked numbers never reach a report.',
-    role: 'Full-stack developer',
+    role: 'Full-stack software developer at Katanga Contracting Services (KCS) / Rimitso',
     stack: getProjectTags('katanga-rms'),
     image: shot(
       'rms',
@@ -87,8 +86,9 @@ export const workProjects: WorkProject[] = [
     n: '02',
     name: 'Afrisist',
     kind: 'Fleet alarm desk',
+    year: '2025',
     outcome:
-      'One desk where fleet operators see every alarm as it lands, own it and follow it through.',
+      'A limited-duration engagement I handed over in October 2025. Operators see each alarm as it lands, own it, and follow it through.',
     role: 'Full-stack developer',
     stack: getProjectTags('afrisist'),
     image: shot(
@@ -132,7 +132,7 @@ export const workProjects: WorkProject[] = [
     year: 'Ongoing',
     outcome:
       'Verified South African freelancers, with payment held until the client approves the work.',
-    role: 'Co-built with Kyle',
+    role: 'Co-built with Kyle Nel',
     stack: getProjectTags('skillance'),
     image: shot(
       'skillance',

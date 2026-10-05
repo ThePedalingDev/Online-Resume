@@ -13,9 +13,9 @@ export function About() {
   const education = [
     {
       degree: 'BSc. Computer and Information Science',
-      status: 'Cum Laude (Expected December 2025)',
-      school: 'Varsity College, Pretoria Campus',
-      details: '19 of 20 completed modules with distinctions. Member of Golden Key International Honour Society (2025).',
+      status: 'Completed December 2025, Cum Laude',
+      school: 'Varsity College (now Emeris), Pretoria',
+      details: 'Varsity College Top Achiever (2025) and a Golden Key member.',
       icon: BookOpen,
     },
     {
@@ -132,16 +132,16 @@ export function About() {
               <CardContent className="p-8">
                 <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
                   <p>
-                Full-stack software- and applications developer, specialising in systems design, development, multi-language programming and systems maintenance, who will complete final year of BSc. Computer and Information Science Degree, expected to be received Cum Laude in December 2025.
+                I am a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, from 2025 to the present. I completed a BSc in Computer and Information Science, Cum Laude, in December 2025 at Varsity College (now Emeris) in Pretoria. I was a Varsity College Top Achiever in 2025 and a Golden Key member.
               </p>
               <p>
-                A proficient Software Developer, experienced in developing scalable, web-based, enterprise solutions, including the Resource Management System for Katanga Contracting Services (KCS) and the Afrisist Fleet Management Alarm Dashboard — both built while completing the final year of a BSc degree.
+                RMS is live in production at rms.rimitso.com, with 388 assets and 46 users. I handed the Afrisist fleet alarm desk over in October 2025 after a limited-duration engagement that year.
               </p>
               <p>
                 Always ready to take responsibility and initiative, to create high-quality and performance-driven systems and solutions, applying appropriate attention to critical details and pro-active problem-solving skills.
               </p>
               <p>
-                Content to work unsupervised, but always focussed on supporting teams and mentoring, developing and assisting others. Served as Varsity College student tutor, to both junior students and fellow students.
+                I am happy to work unsupervised when that is what the work needs, and I like supporting a team. I was a student tutor at Varsity College from 2023 to 2025.
               </p>
               <p>
                 Loyal, hard working and eager to make a difference, to grow and serve people, business and systems.
@@ -360,11 +360,11 @@ export function About() {
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-3">Want to know more?</h2>
                     <p className="text-base md:text-lg text-muted-foreground max-w-2xl">
-                      Download my resume to see my complete experience, projects, and professional references.
+                      Download my resume (October 2026) for the public one-page summary of my experience and projects.
                     </p>
                   </div>
                   <Button size="lg" className="flex items-center gap-2 hover:scale-105 transition-transform bg-primary hover:bg-primary/90 text-white border-0 px-8 py-6 text-lg font-semibold" asChild>
-                    <a href="/cert-docs/251024 Markus Fourie Abridged Resume.pdf" download>
+                    <a href="/cert-docs/markus-fourie-resume.pdf" download>
                       <Download className="w-5 h-5" />
                       Download Resume
                     </a>

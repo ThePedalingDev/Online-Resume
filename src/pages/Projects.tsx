@@ -19,7 +19,7 @@ const PROJECTS: Array<{
   {
     title: 'Resource Management System',
     period: '2025 to Present',
-    description: 'Designed and implemented the Resource Management System (RMS) for Katanga Contracting Services (KCS) using ASP.NET Core, PostgreSQL, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic. 388 assets and 46 users run on it.',
+    description: 'I design and build the Resource Management System (RMS) for Katanga Contracting Services (KCS). It is live in production at rms.rimitso.com, with 388 assets and 46 users. Stack: React, ASP.NET Core, EF Core, PostgreSQL, SignalR, Azure.',
     highlights: [
       'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
       'Improved asset tracking efficiency and data accuracy',
@@ -31,8 +31,8 @@ const PROJECTS: Array<{
   },
   {
     title: 'Afrisist - Alarm Monitoring System',
-    period: '2025 Limited Duration Project',
-    description: 'Built a real-time web application, hosted on Azure, using React, Node.js, and Supabase for managing vehicle alarms for large fleets. Implemented WebSocket-based live updates, context-based alarm assignment and automated notification logic.',
+    period: '2025, handed over October 2025',
+    description: 'A limited-duration 2025 engagement. I built a real-time alarm desk on React, Node.js and Supabase, hosted on Azure, then handed it over in October 2025.',
     highlights: [
       'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
       'Supporting animated tabs, filtering and real-time event streams',

@@ -21,7 +21,7 @@ const HERO_WEBP_SRCSET = '/images/hero/hero-480.webp 480w, /images/hero/hero-720
 const HERO_SIZES = '(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)';
 const HERO_FALLBACK = '/images/hero/hero-720.webp';
 const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt';
-const CV_HREF = '/cert-docs/251024%20Markus%20Fourie%20CV.pdf';
+const CV_HREF = '/cert-docs/markus-fourie-resume.pdf';
 const EMAIL = 'markusfourie@icloud.com';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
@@ -248,7 +248,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
               </li>
               <li>
                 <a className="hero-pill" href={CV_HREF} download>
-                  Download my CV (PDF) <span aria-hidden="true">→</span>
+                  Download my resume (PDF) <span aria-hidden="true">→</span>
                 </a>
               </li>
             </ul>
@@ -1061,9 +1061,7 @@ function FeaturedCard({ project }: { project: WorkProject }) {
 }
 
 function TileCard({ project }: { project: WorkProject }) {
-  const metaRight = project.private
-    ? 'Private'
-    : project.year || '';
+  const metaRight = [project.private ? 'Private' : '', project.year].filter(Boolean).join(' · ');
   return (
     <article className="work-tile">
       <div className="work-tile-media">
@@ -1263,7 +1261,7 @@ function Contact() {
           <Reveal className="contact-side" delay={120}>
             <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="linkedin" />LinkedIn</span><span className="lbl">Work history</span></a>
             <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="github" />GitHub</span><span className="lbl">Code</span></a>
-            <a href={CV_HREF} download><span className="contact-name">CV</span><span className="lbl">Download (PDF)</span></a>
+            <a href={CV_HREF} download><span className="contact-name">Resume</span><span className="lbl">October 2026</span></a>
           </Reveal>
         </div>
       </div>
@@ -1284,7 +1282,7 @@ function EdFooter() {
           <div className="footer-right">
             <a href="#top">Back to top ↑</a>
             <a href="#contact">Contact</a>
-            <a href={CV_HREF} download>CV</a>
+            <a href={CV_HREF} download>Resume</a>
           </div>
         </div>
       </div>
@@ -1367,7 +1365,7 @@ export function Home() {
       <EdFooter />
       <div className={`mobile-contact-bar${showMobileBar ? ' is-visible' : ''}`}>
         <a className="btn-solid" href={`mailto:${EMAIL}`}>Email me</a>
-        <a className="btn-outline" href={CV_HREF} download>Download CV</a>
+        <a className="btn-outline" href={CV_HREF} download>Download resume</a>
       </div>
     </div>
   );

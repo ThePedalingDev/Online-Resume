@@ -5,30 +5,27 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
-import { useState } from 'react';
 
 export function Docs() {
-  const [showComingSoon, setShowComingSoon] = useState(false);
-
   const certifications = [
     {
-      title: 'BSc Computer and Information Science (Cum Laude*)',
-      issuer: 'Varsity College, Pretoria Campus, RSA',
-      date: '2023 to December 2025',
+      title: 'BSc Computer and Information Science (Cum Laude)',
+      issuer: 'Varsity College (now Emeris), Pretoria',
+      date: 'Completed December 2025',
       type: 'Degree',
-      description: 'Bachelor of Science degree in Computer and Information Sciences. Expected to be received Cum Laude, passing 19 of 20 completed modules with distinctions.',
-      status: 'In Progress',
+      description: 'I completed a BSc in Computer and Information Science, Cum Laude, in December 2025 at Varsity College (now Emeris) in Pretoria. I was a Varsity College Top Achiever in 2025 and a Golden Key member.',
+      status: 'Completed',
       icon: GraduationCap,
       color: 'text-blue-600',
       bgColor: 'bg-blue-600/10',
-      downloadUrl: '#',
+      downloadUrl: '',
       verifyUrl: null,
-      isComingSoon: true,
+      isComingSoon: false,
     },
     {
       title: 'Golden Key International Honour Society',
       issuer: 'Golden Key International',
-      date: '2024',
+      date: '2025',
       type: 'Honour Society',
       description: 'Prestigious academic honour society recognizing top 15% of students for outstanding scholastic achievement and excellence.',
       status: 'Verified',
@@ -51,31 +48,23 @@ export function Docs() {
       isZip: true,
     },
     {
-      title: 'CV - Markus Fourie (Full Version)',
-      description: 'Complete curriculum vitae with detailed work experience, education, and qualifications.',
-      type: 'CV',
+      title: 'Resume - Markus Fourie',
+      description: 'Public resume, updated October 2026. One file covering experience, education and projects.',
+      type: 'Resume',
       icon: FileText,
-      downloadUrl: '/cert-docs/251024 Markus Fourie CV.pdf',
-      isZip: false,
-    },
-    {
-      title: 'Abridged CV - Markus Fourie',
-      description: 'Concise one-page CV highlighting key skills, experience, and achievements.',
-      type: 'CV',
-      icon: FileText,
-      downloadUrl: '/cert-docs/251024 Markus Fourie Abridged Resume.pdf',
+      downloadUrl: '/cert-docs/markus-fourie-resume.pdf',
       isZip: false,
     },
   ];
 
   const academicInfo = {
-    degree: 'BSc Computer and Information Science Degree (Cum Laude*)',
-    institution: 'Varsity College, Pretoria Campus, RSA',
-    period: '2023 to December 2025',
+    degree: 'BSc Computer and Information Science (Cum Laude)',
+    institution: 'Varsity College (now Emeris), Pretoria',
+    period: 'Completed December 2025',
     highlights: [
-      '*Expected to be received Cum Laude, passing 19 of 20 completed modules with distinctions.',
-      '3 Modules of BSc. degree remaining, in final semester up to November 2025.',
-      'Invited and joined as member of "Golden Key International Honour Society" in 2025.',
+      'Completed December 2025, Cum Laude.',
+      'Varsity College Top Achiever, 2025.',
+      'Golden Key member since 2025.',
     ]
   };
 
@@ -159,15 +148,7 @@ export function Docs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {cert.isComingSoon && showComingSoon ? (
-                      <div className="text-center py-4">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium">
-                          <GraduationCap className="w-4 h-4" />
-                          Coming Soon (End of 2025)
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex gap-2">
+                    <div className="flex gap-2">
                         {cert.verifyUrl ? (
                           <Button 
                             variant="default" 
@@ -180,17 +161,7 @@ export function Docs() {
                               Verify Online
                             </a>
                           </Button>
-                        ) : cert.isComingSoon ? (
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="flex-1 hover:scale-105 transition-transform"
-                            onClick={() => setShowComingSoon(true)}
-                          >
-                            <Download className="w-4 h-4 mr-2" />
-                            Download
-                          </Button>
-                        ) : (
+                        ) : cert.downloadUrl ? (
                           <>
                             <Button 
                               variant="outline" 
@@ -215,9 +186,8 @@ export function Docs() {
                               </a>
                             </Button>
                           </>
-                        )}
+                        ) : null}
                       </div>
-                    )}
                   </CardContent>
                 </Card>
               );

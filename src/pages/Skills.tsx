@@ -359,7 +359,7 @@ export function Skills() {
                 },
                 {
                   title: 'Academic Excellence',
-                  description: 'BSc Computer and Information Science (Cum Laude*) - 19 of 20 modules passed with distinctions.',
+                  description: 'BSc Computer and Information Science, completed December 2025, Cum Laude, at Varsity College (now Emeris), Pretoria.',
                   icon: GraduationCap,
                 },
                 {

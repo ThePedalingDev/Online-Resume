@@ -58,7 +58,7 @@ export const projectCopy: Array<{
     id: 'katanga-rms',
     n: '01',
     name: 'Resource Management System',
-    role: 'Full-stack developer',
+    role: 'Full-stack software developer at Katanga Contracting Services (KCS) / Rimitso',
     problem:
       'Katanga Contracting Services (KCS) needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
     built: 'RMS for Katanga Contracting Services (KCS), hosted on Azure.',
@@ -74,7 +74,7 @@ export const projectCopy: Array<{
     problem:
       'Vehicle fleet operators needed a desk to watch incoming alarms, assign them, and stay notified as events arrive.',
     built: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure, with WebSocket updates.',
-    result: 'Operators can watch, assign, and get notified as fleet alarms arrive.',
+    result: 'Handed over in October 2025 after a limited-duration engagement. Operators can watch, assign, and get notified as fleet alarms arrive.',
     cta: 'private',
     ctaLabel: 'Ask me for a walkthrough',
   },
@@ -94,7 +94,7 @@ export const projectCopy: Array<{
     id: 'skillance',
     n: '04',
     name: 'Skillance',
-    role: 'Co-built with Kyle',
+    role: 'Co-built with Kyle Nel',
     problem:
       'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
     built: 'Verified freelance marketplace for South Africa, co-built with Kyle, with iOS and Android apps still to come.',
@@ -230,30 +230,30 @@ export const journeyNodes: JourneyNode[] = [
     year: '2023',
     chip: 'Pretoria',
     title: 'Switching to computing',
-    desc: 'I started a BSc in Computer and Information Sciences at Varsity College (now Emeris), learning C#, Java and the web stack. I also tutored first-year IT students through 2024.',
+    desc: 'I started a BSc in Computer and Information Science at Varsity College (now Emeris) in Pretoria, learning C#, Java and the web stack. I was a student tutor there from 2023 to 2025.',
     tags: ['Emeris', 'C#', 'Java'],
   },
   {
     year: '2024',
     chip: 'First production work',
     title: 'Real users, real stakes',
-    desc: 'I shipped the Eridge RDA site and CMS for a UK charity, then built the Afrisist fleet alarm desk.',
-    tags: ['Eridge RDA', 'Afrisist'],
+    desc: 'I shipped the Eridge RDA site and CMS for a UK charity, so volunteers could keep programmes and events current.',
+    tags: ['Eridge RDA'],
     project: 'eridge-rda',
   },
   {
     year: '2025',
-    chip: 'Final year',
-    title: 'Degree and a first full-time role',
-    desc: 'I finished the BSc while working full time as a developer at Katanga Contracting Services (KCS), building the Resource Management System. I was named a Varsity College Top Achiever and a Golden Key Top Performer, and split the year between South Africa and the UK.',
-    tags: ['KCS', 'Emeris'],
+    chip: 'Degree and first role',
+    title: 'Cum Laude, and a first full-time role',
+    desc: 'I completed my BSc in Computer and Information Science in December 2025, Cum Laude, at Varsity College (now Emeris) in Pretoria. I was a Varsity College Top Achiever in 2025 and a Golden Key member. I started as a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, and I handed over the Afrisist fleet alarm desk in October 2025 after a limited-duration engagement that year.',
+    tags: ['KCS', 'Rimitso', 'Emeris', 'Afrisist'],
   },
   {
     year: '2026',
     chip: 'Now',
     title: 'All in on operations software',
-    desc: "Studies done, I'm full time at Katanga Contracting Services (KCS), working on RMS.",
-    tags: ['KCS'],
+    desc: "It's October 2026. I'm a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, 2025 to present, and RMS is live in production. I'm open to new work and new experiences.",
+    tags: ['KCS', 'Rimitso'],
     project: 'katanga-rms',
   },
 ];
@@ -288,8 +288,7 @@ export const contactCopy = {
 };
 
 export const paperTrail: Array<{ label: string; href: string; note: string; external?: boolean }> = [
-  { label: 'Full CV (PDF)', href: '/cert-docs/251024%20Markus%20Fourie%20CV.pdf', note: 'Full' },
-  { label: 'One-page CV (PDF)', href: '/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf', note: 'One page' },
+  { label: 'Resume (PDF)', href: '/cert-docs/markus-fourie-resume.pdf', note: 'October 2026' },
   { label: 'Golden Key certificate', href: '/cert-docs/VC_GoldenKey.pdf', note: 'Top Performer · 23 April 2025' },
   {
     label: 'Verify on Golden Key',
