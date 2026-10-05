@@ -544,6 +544,7 @@ html {
 }
 .editorial .ed-nav-brand {
   display: flex; align-items: center; gap: 10px;
+  min-height: 44px;
   font-family: var(--f-display);
   font-size: 17px; font-weight: 600; letter-spacing: -0.02em;
 }
@@ -981,9 +982,20 @@ html {
   color: var(--ink-2);
 }
 .editorial .uses-link a {
+  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+/* Invisible hit-area grow for inline text links (keeps glyph size/line look). */
+.editorial .uses-link a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 .editorial .uses-back {
   grid-column: 1 / span 12;
@@ -1186,14 +1198,26 @@ html {
 .editorial .about-img.one img { object-position: center; }
 .editorial .about-img.two img { object-position: center 62%; }
 .editorial .about-side a {
+  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 .editorial .about-img.one .ph-label a {
+  position: relative;
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+.editorial .about-side a::before,
+.editorial .about-img.one .ph-label a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 .editorial .about-side a:focus-visible,
 .editorial .about-img.one .ph-label a:focus-visible {
@@ -1204,6 +1228,8 @@ html {
   position: absolute;
   inset: 0;
   z-index: 1;
+  min-height: 44px;
+  min-width: 44px;
 }
 .editorial .about-img.three img {
   object-fit: contain;
@@ -1238,6 +1264,8 @@ html {
     position: relative;
     inset: auto;
     display: block;
+    min-height: 44px;
+    min-width: 44px;
   }
   .editorial .about-img.one img,
   .editorial .about-img.two img,
@@ -1486,13 +1514,18 @@ html {
   color: #f7f4ee;
 }
 .editorial .cycling-film button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
   color: inherit;
   background: transparent;
   border: 0;
-  padding: 8px 0;
+  padding: 0 8px;
   cursor: pointer;
 }
 .editorial .cycling-film button:focus-visible {
@@ -1500,9 +1533,19 @@ html {
   outline-offset: 3px;
 }
 .editorial .cycling-intro a {
+  position: relative;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+.editorial .cycling-intro a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 .editorial .cycling-still { grid-column: 5 / span 4; margin-top: 48px; }
 .editorial .cycling-shot {
@@ -2024,6 +2067,9 @@ html {
 }
 .editorial .doc-row:last-child { border-bottom: 1px solid var(--line); }
 .editorial .doc-row a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--f-display);
   font-size: clamp(22px, 2vw, 28px);
   letter-spacing: -0.02em;
@@ -2081,7 +2127,10 @@ html {
 }
 .editorial .copy-mail:hover { color: var(--bg); background: var(--ink); }
 .editorial .contact-primary .email {
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
+  min-height: 44px;
   font-family: var(--f-display);
   font-size: clamp(28px, 3.2vw, 44px);
   font-weight: 400;
@@ -2352,7 +2401,12 @@ html {
 }
 .editorial .gear-body .gear-meta a {
   color: var(--ink-2);
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 44px;
   transition: color .2s;
 }
 .editorial .gear-body .gear-meta a:hover { color: var(--accent); }
