@@ -22,10 +22,13 @@ import capePeninsula from '@/assets/video/cape-peninsula.mp4';
 import capePeninsulaPoster from '@/assets/video/cape-peninsula.jpg';
 import capeFriends from '@/assets/images/cape-friends.webp';
 
-const HERO_AVIF_SRCSET = '/images/hero/hero-444.avif 444w, /images/hero/hero-888.avif 888w';
-const HERO_WEBP_SRCSET = '/images/hero/hero-444.webp 444w, /images/hero/hero-888.webp 888w';
-const HERO_SIZES = '(max-width: 768px) min(88vw, 360px), 444px';
-const HERO_FALLBACK = '/images/hero/hero-888.webp';
+const HERO_AVIF_SRCSET = '/images/hero/hero-480.avif 480w, /images/hero/hero-720.avif 720w, /images/hero/hero-1024.avif 1024w';
+const HERO_WEBP_SRCSET = '/images/hero/hero-480.webp 480w, /images/hero/hero-720.webp 720w, /images/hero/hero-1024.webp 1024w';
+const HERO_SIZES = '(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)';
+const HERO_FALLBACK = '/images/hero/hero-720.webp';
+const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt';
+const CV_HREF = '/cert-docs/251024%20Markus%20Fourie%20CV.pdf';
+const EMAIL = 'markusfourie@icloud.com';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
 import { fetchContent } from '@/lib/content';
@@ -79,7 +82,7 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; 
 }
 
 const NAV_LINKS = [
-  ['#projects', 'Work', '01'],
+  ['#work', 'Work', '01'],
   ['#build', 'Build', '02'],
   ['#stack', 'Stack', '03'],
   ['#journey', 'Journey', '04'],
@@ -152,61 +155,72 @@ type HeroContent = {
   employment?: string;
 };
 
-function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; content?: HeroContent | null }) {
-  const year = new Date().getFullYear();
+function Hero({ content }: { content?: HeroContent | null }) {
   const cmsHero = content?.imageUrl?.trim() || '';
-  const heroAlt = content?.imageAlt || 'Markus Fourie';
+  const heroAlt = content?.imageAlt || HERO_ALT;
   return (
-    <section id="top" className="hero">
-      <div className="ed-shell">
-        <div className="hero-main">
-          <h1 className="hero-name">Markus Fourie</h1>
-          <p className="hero-kicker">{content?.kicker || 'Full-stack developer · Pretoria, ZA'}</p>
-          <div className="hero-text">
-            <p className="hero-lead">
-              {content?.lead || 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.'}
-            </p>
-            <p className="hero-sub">
-              {content?.sub || 'React, Node.js, and ASP.NET Core. BSc Computer & Information Sciences.'}
-            </p>
-          </div>
-          <div className="hero-actions">
-            <a className="btn-solid" href="#projects">View work</a>
-            <a
-              className="btn-outline"
-              href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf"
-              download
-            >
-              Download CV (PDF)
+    <section id="top" className="hero" aria-labelledby="hero-name">
+      <picture className="hero-photo">
+        {cmsHero ? (
+          <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
+        ) : (
+          <>
+            <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
+            <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
+            <img
+              src={HERO_FALLBACK}
+              srcSet={HERO_WEBP_SRCSET}
+              sizes={HERO_SIZES}
+              alt={heroAlt}
+              fetchPriority="high"
+              decoding="async"
+              width={1024}
+              height={1536}
+            />
+          </>
+        )}
+      </picture>
+      <div className="hero-copy">
+        <h1 id="hero-name" className="hero-name">Markus Fourie</h1>
+        <p className="hero-role">Full-stack developer in Pretoria</p>
+        <p className="hero-tagline">Software that holds up outside the office.</p>
+        <p className="hero-subline">
+          Right now that&apos;s the operations system Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity&apos;s website and a freelance marketplace.
+        </p>
+        <ul className="hero-ctas">
+          <li>
+            <a className="hero-pill primary" href="#work">
+              See what I&apos;ve built <span aria-hidden="true">→</span>
             </a>
-            <a className="btn-text" href="#contact">Get in touch</a>
-          </div>
-          <div className="hero-stats">
-            <div className="hero-stat"><span>Work</span><span className="v">{availability.employer}</span></div>
-            <div className="hero-stat"><span>Employment</span><span className="v">{availability.status}</span></div>
-            <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
-          </div>
-        </div>
-        <div className="hero-media">
-          {cmsHero ? (
-            <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={888} height={1332} />
-          ) : (
-            <picture>
-              <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
-              <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
-              <img
-                src={HERO_FALLBACK}
-                srcSet={HERO_WEBP_SRCSET}
-                sizes={HERO_SIZES}
-                alt={heroAlt}
-                fetchPriority="high"
-                decoding="async"
-                width={888}
-                height={1332}
-              />
-            </picture>
-          )}
-        </div>
+          </li>
+          <li>
+            <a className="hero-pill" href={`mailto:${EMAIL}`}>
+              Start a conversation <span aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li>
+            <a className="hero-pill" href={CV_HREF} download>
+              Download my CV (PDF) <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+        <nav className="hero-icons" aria-label="Quick links">
+          <a href={`mailto:${EMAIL}`} aria-label="Email Markus">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="Markus on LinkedIn (opens in a new tab)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.71 0-1.97 1.33-1.97 2.7V21h-4z" /></svg>
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="Markus on GitHub (opens in a new tab)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
+          </a>
+        </nav>
+        <p className="hero-status">
+          <span className="hero-status-dot" aria-hidden="true" />
+          Now at Rimitso · Pretoria, UTC+2
+        </p>
       </div>
     </section>
   );
@@ -535,6 +549,7 @@ function Cycling() {
   const [playing, setPlaying] = useState(false);
   const [stats, setStats] = useState<StravaStatBlock[] | null>(null);
   const [meta, setMeta] = useState<{ updatedAt: string } | null>(null);
+  const [ytd, setYtd] = useState<{ distanceKm: number; rideCount: number } | null>(null);
   const [error, setError] = useState<{ message: string; authUrl?: string } | null>(null);
   const [introHtml, setIntroHtml] = useState<string | null>(null);
 
@@ -545,6 +560,7 @@ function Cycling() {
       .then((data) => {
         setStats(data.blocks);
         setMeta({ updatedAt: data.updatedAt });
+        if (data.ytd) setYtd({ distanceKm: data.ytd.distanceKm, rideCount: data.ytd.rideCount });
       })
       .catch((e: unknown) => {
         // React dev (and quick route changes) can abort in-flight requests.
@@ -647,6 +663,13 @@ function Cycling() {
               {' '}for desk and cycling kit.
             </p>
           </Reveal>
+          {ytd ? (
+            <Reveal className="life-lead-stat">
+              <p>
+                {new Intl.NumberFormat('en-ZA').format(Math.round(ytd.distanceKm))} km so far in {new Date().getFullYear()}, across {new Intl.NumberFormat('en-ZA').format(ytd.rideCount)} rides.
+              </p>
+            </Reveal>
+          ) : null}
           <Reveal className="cycling-visual">
             <figure className="cycling-film">
               <video
@@ -985,7 +1008,7 @@ const PROJECTS: ProjectCase[] = [
 
 function Projects() {
   return (
-    <section id="projects">
+    <section id="work">
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">01 · Work</span>
@@ -1300,25 +1323,10 @@ function EdFooter() {
 }
 
 export function Home() {
-  const [heroKm, setHeroKm] = useState<string | null>(null);
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
   const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(JOURNEY);
   const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
-
-  useEffect(() => {
-    const ac = new AbortController();
-    fetchStravaSummary(ac.signal)
-      .then((data) => {
-        if (!data.ytd) return;
-        const km = new Intl.NumberFormat('en-ZA').format(Math.round(data.ytd.distanceKm));
-        setHeroKm(km);
-      })
-      .catch(() => {
-        // Silently ignore; keep fallback "-"
-      });
-    return () => ac.abort();
-  }, []);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -1360,7 +1368,7 @@ export function Home() {
   return (
     <div className="editorial">
       <EdNav />
-      <Hero ytdDistanceKm={heroKm} content={heroContent} />
+      <Hero content={heroContent} />
       <Projects />
       <HowIBuild />
       <Stack cats={stackCats} />
@@ -1371,7 +1379,7 @@ export function Home() {
       <EdFooter />
       <div className="mobile-contact-bar">
         <a className="btn-solid" href="#contact">Get in touch</a>
-        <a className="btn-outline" href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>Download CV</a>
+        <a className="btn-outline" href={CV_HREF} download>Download CV</a>
       </div>
     </div>
   );

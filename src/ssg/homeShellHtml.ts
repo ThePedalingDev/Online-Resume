@@ -5,7 +5,7 @@ export const HOME_SHELL_HTML = `
     <div class="ed-nav-inner">
       <a href="#top" class="ed-nav-brand">Markus Fourie</a>
       <div class="ed-nav-links">
-        <a href="#projects">Work</a>
+        <a href="#work">Work</a>
         <a href="#build">Build</a>
         <a href="#stack">Stack</a>
         <a href="#journey">Journey</a>
@@ -16,36 +16,24 @@ export const HOME_SHELL_HTML = `
       <a class="ed-nav-cta" href="#contact">Get in touch</a>
     </div>
   </nav>
-  <section id="top" class="hero">
-    <div class="ed-shell">
-      <div class="hero-main">
-        <h1 class="hero-name">Markus Fourie</h1>
-        <p class="hero-kicker">Full-stack developer · Pretoria, ZA</p>
-        <div class="hero-text">
-          <p class="hero-lead">I build structured systems for the real world: resource platforms, operational tooling, and charity sites.</p>
-          <p class="hero-sub">React, Node.js, and ASP.NET Core. BSc Computer &amp; Information Sciences.</p>
-        </div>
-        <div class="hero-actions">
-          <a class="btn-solid" href="#projects">View work</a>
-          <a class="btn-outline" href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>Download CV (PDF)</a>
-          <a class="btn-text" href="#contact">Get in touch</a>
-        </div>
-      </div>
-      <div class="hero-media">
-        <picture>
-          <source type="image/avif" srcset="/images/hero/hero-444.avif 444w, /images/hero/hero-888.avif 888w" sizes="(max-width: 768px) min(88vw, 360px), 444px" />
-          <source type="image/webp" srcset="/images/hero/hero-444.webp 444w, /images/hero/hero-888.webp 888w" sizes="(max-width: 768px) min(88vw, 360px), 444px" />
-          <img src="/images/hero/hero-888.webp" width="888" height="1332" alt="Markus Fourie" fetchpriority="high" decoding="async" />
-        </picture>
-      </div>
+  <section id="top" class="hero" aria-labelledby="hero-name">
+    <picture class="hero-photo">
+      <source type="image/avif" srcset="/images/hero/hero-480.avif 480w, /images/hero/hero-720.avif 720w, /images/hero/hero-1024.avif 1024w" sizes="(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)" />
+      <source type="image/webp" srcset="/images/hero/hero-480.webp 480w, /images/hero/hero-720.webp 720w, /images/hero/hero-1024.webp 1024w" sizes="(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)" />
+      <img src="/images/hero/hero-720.webp" width="1024" height="1536" alt="Markus Fourie in profile, wearing a cap and a dark polo shirt" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="hero-copy">
+      <h1 id="hero-name" class="hero-name">Markus Fourie</h1>
+      <p class="hero-role">Full-stack developer in Pretoria</p>
+      <p class="hero-tagline">Software that holds up outside the office.</p>
+      <p class="hero-subline">Right now that's the operations system Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
+      <ul class="hero-ctas">
+        <li><a class="hero-pill primary" href="#work">See what I've built <span aria-hidden="true">→</span></a></li>
+        <li><a class="hero-pill" href="mailto:markusfourie@icloud.com">Start a conversation <span aria-hidden="true">→</span></a></li>
+        <li><a class="hero-pill" href="/cert-docs/251024%20Markus%20Fourie%20CV.pdf" download>Download my CV (PDF) <span aria-hidden="true">→</span></a></li>
+      </ul>
+      <p class="hero-status"><span class="hero-status-dot" aria-hidden="true"></span>Now at Rimitso · Pretoria, UTC+2</p>
     </div>
   </section>
-  <section id="projects"><h2>Selected work</h2><p>Platforms and tools shipped for operations, fleets, charities, and marketplaces.</p></section>
-  <section id="build"><h2>How I build</h2><p>Structured tools for real operations.</p></section>
-  <section id="stack"><h2>Stack</h2></section>
-  <section id="journey"><h2>Journey and credentials</h2><p>I build operational software, and I race.</p></section>
-  <section id="life"><h2>Off the clock</h2></section>
-  <section id="docs"><h2>Docs</h2></section>
-  <section id="contact"><h2>Contact</h2><p><a href="mailto:markusfourie@icloud.com">markusfourie@icloud.com</a></p></section>
 </main>
-`.trim();
+`;
