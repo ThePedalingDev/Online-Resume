@@ -240,7 +240,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
             </p>
             <p className="hero-tagline">{heroCopy.tagline}</p>
           </div>
-          <div className="hero-actions">
+          <div className="hero-below">
             <p className="hero-subline">{heroCopy.subline}</p>
             <ul className="hero-ctas">
               <li>

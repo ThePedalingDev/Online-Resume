@@ -24,7 +24,7 @@ export const HOME_SHELL_HTML = `
           <p class="hero-status"><span class="hero-status-dot" aria-hidden="true"></span>Katanga Contracting Services · Open to new work and new experiences</p>
           <p class="hero-tagline">Software that holds up outside the office.</p>
         </div>
-        <div class="hero-actions">
+        <div class="hero-below">
           <p class="hero-subline">Right now that's the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
           <ul class="hero-ctas">
             <li><a class="hero-pill primary" href="#work">See what I've built <span aria-hidden="true">→</span></a></li>

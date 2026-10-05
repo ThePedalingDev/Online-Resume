@@ -803,7 +803,7 @@ html {
   position: relative;
   z-index: 1;
 }
-.editorial .hero-actions {
+.editorial .hero-below {
   position: relative;
   z-index: 2;
   width: 100%;
@@ -960,7 +960,7 @@ html {
     order: 0;
   }
   .editorial .hero-intro,
-  .editorial .hero-actions {
+  .editorial .hero-below {
     width: auto;
     max-width: none;
     margin: 0;
