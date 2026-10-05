@@ -158,7 +158,7 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
   return (
     <section id="top" className="hero">
       <div className="ed-shell">
-        <Reveal className="hero-main" delay={180}>
+        <div className="hero-main">
           <h1 className="hero-name">Markus Fourie</h1>
           <p className="hero-kicker">{content?.kicker || 'Full-stack developer · Pretoria, ZA'}</p>
           <div className="hero-text">
@@ -185,8 +185,8 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
             <div className="hero-stat"><span>Employment</span><span className="v">{availability.status}</span></div>
             <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
           </div>
-        </Reveal>
-        <Reveal className="hero-media" delay={0}>
+        </div>
+        <div className="hero-media">
           {cmsHero ? (
             <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={888} height={1332} />
           ) : (
@@ -205,7 +205,7 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
               />
             </picture>
           )}
-        </Reveal>
+        </div>
       </div>
     </section>
   );
