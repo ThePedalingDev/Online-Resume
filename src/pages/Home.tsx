@@ -28,6 +28,7 @@ import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from
 import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
+import { HobbyCard } from '@/components/HobbyCard';
 import { availability, availabilityLine } from '@/config/availability';
 import { getProjectTags } from '@/data/projectTags';
 import {
@@ -740,6 +741,9 @@ function Cycling() {
               </div>
             </Reveal>
           </div>
+          <Reveal className="hobby-wrap">
+            <HobbyCard variant="referral" />
+          </Reveal>
           <GalleryGrid />
         </div>
       </div>

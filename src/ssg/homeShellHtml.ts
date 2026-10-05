@@ -1,3 +1,5 @@
+import { hobbyCardShellHtml } from './hobbyCardShellHtml';
+
 /** Static HTML embedded into index.html at build time so crawlers and no-JS clients see real content. */
 export const HOME_SHELL_HTML = `
 <main class="editorial" data-prerender="home">
@@ -40,5 +42,6 @@ export const HOME_SHELL_HTML = `
       </picture>
     </div>
   </section>
+  ${hobbyCardShellHtml()}
 </main>
 `;
