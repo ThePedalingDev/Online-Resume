@@ -6,6 +6,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import { contactMailto } from '@/config/contact';
 
 const SOCIAL_PROFILES = [
   {
@@ -47,7 +48,7 @@ const SOCIAL_PROFILES = [
   {
     platform: 'Email',
     description: 'Send me an email directly for inquiries and business opportunities.',
-    url: 'mailto:markusfourie@icloud.com',
+    url: contactMailto,
     icon: Mail,
     color: 'hover:bg-red-600/10',
     iconColor: 'text-red-600',

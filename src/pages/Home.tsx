@@ -22,7 +22,7 @@ const HERO_SIZES = '(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)';
 const HERO_FALLBACK = '/images/hero/hero-720.webp';
 const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt';
 const CV_HREF = '/cert-docs/markus-fourie-resume.pdf';
-const EMAIL = 'markusfourie@icloud.com';
+import { CONTACT_EMAIL } from '@/config/contact';
 import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
 import { BrandLink, GitHubMark, InstagramMark, LinkedInMark, StravaMark } from '@/components/BrandMarks';
 import { isAnchorNav } from '@/lib/anchorNav';
@@ -255,7 +255,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
               ))}
             </ul>
             <nav className="hero-icons" aria-label="Quick links">
-              <a href={`mailto:${EMAIL}`} aria-label="Email Markus">
+              <a href={`mailto:${CONTACT_EMAIL}`} aria-label="Email Markus">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
               </a>
               <span aria-hidden="true">·</span>
@@ -1407,7 +1407,7 @@ export function Home() {
       <Contact />
       <EdFooter />
       <div className={`mobile-contact-bar${showMobileBar ? ' is-visible' : ''}`}>
-        <a className="btn-solid" href={`mailto:${EMAIL}`}>Email me</a>
+        <a className="btn-solid" href={`mailto:${CONTACT_EMAIL}`}>Email me</a>
         <a className="btn-outline" href={CV_HREF} download>Download resume</a>
       </div>
     </div>

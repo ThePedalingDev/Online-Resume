@@ -123,7 +123,7 @@ The website is deployed on **Vercel** with automatic deployments from the main b
 ## Contact
 
 - **Website**: [markusfourie.dev](https://markusfourie.dev/)
-- **Email**: markusfourie@icloud.com
+- **Email**: fourie.markus@outlook.com
 - **LinkedIn**: [linkedin.com/in/markus-fourie](https://www.linkedin.com/in/markus-fourie/)
 - **GitHub**: [github.com/ThePedalingDev](https://github.com/ThePedalingDev)
 

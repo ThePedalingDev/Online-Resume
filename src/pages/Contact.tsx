@@ -9,6 +9,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 import emailjs from '@emailjs/browser';
+import { CONTACT_EMAIL, contactMailto } from '@/config/contact';
 import { EMAILJS_CONFIG, EMAIL_TEMPLATE_PARAMS } from '@/config/emailjs';
 
 export function Contact() {
@@ -17,7 +18,7 @@ export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const contactDetails = [
-    { icon: Mail, label: 'Email', value: 'markusfourie@icloud.com', href: 'mailto:markusfourie@icloud.com' },
+    { icon: Mail, label: 'Email', value: CONTACT_EMAIL, href: contactMailto },
     { icon: Phone, label: 'Phone', value: '+27 66 220 3312', href: 'tel:+27662203312' },
     { icon: Linkedin, label: 'LinkedIn', value: 'Markus Fourie', href: 'https://linkedin.com/in/markus-fourie' },
   ];
@@ -225,7 +226,7 @@ export function Contact() {
                   </p>
                   <div className="flex justify-center gap-4">
                     <a 
-                      href="mailto:markusfourie@icloud.com"
+                      href={contactMailto}
                       className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm font-medium"
                     >
                       <Mail className="w-4 h-4" />

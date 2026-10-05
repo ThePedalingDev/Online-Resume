@@ -1,4 +1,5 @@
 import { Mail } from 'lucide-react';
+import { contactMailto } from '@/config/contact';
 import { GitHubMark, InstagramMark, LinkedInMark, StravaMark } from './BrandMarks';
 
 export function Footer() {
@@ -7,7 +8,7 @@ export function Footer() {
     { icon: LinkedInMark, label: 'LinkedIn', href: 'https://www.linkedin.com/in/markus-fourie/', color: 'hover:text-blue-600' },
     { icon: InstagramMark, label: 'Instagram', href: 'https://www.instagram.com/markuss.fourie/', color: 'hover:text-pink-600' },
     { icon: StravaMark, label: 'Strava', href: 'https://www.strava.com/athletes/7756913', color: 'hover:text-orange-600' },
-    { icon: Mail, label: 'Email', href: 'mailto:markusfourie@icloud.com', color: 'hover:text-red-600' },
+    { icon: Mail, label: 'Email', href: contactMailto, color: 'hover:text-red-600' },
   ];
 
   return (

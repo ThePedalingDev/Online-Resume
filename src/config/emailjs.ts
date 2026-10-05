@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from './contact';
+
 // EmailJS Configuration
 // To set up EmailJS:
 // 1. Go to https://www.emailjs.com/
@@ -15,7 +17,7 @@ export const EMAILJS_CONFIG = {
 
 // Email template variables that will be sent to your email
 export const EMAIL_TEMPLATE_PARAMS = {
-  to_email: 'markusfourie@icloud.com', // Your email address
+  to_email: CONTACT_EMAIL,
   name: '', // Will be filled from form
   email: '', // Will be filled from form
   message: '', // Will be filled from form

@@ -1,4 +1,5 @@
 import { availability, siteMetaDescription } from '@/config/availability';
+import { CONTACT_EMAIL } from '@/config/contact';
 import { getProjectTags, type ProjectTagId } from '@/data/projectTags';
 
 export type Status = {
@@ -288,7 +289,7 @@ export const contactCopy = {
   title: "Let's talk",
   intro:
     'Building something that has to work in the real world, or hiring someone who enjoys that kind of problem? Email me.',
-  email: 'markusfourie@icloud.com',
+  email: CONTACT_EMAIL,
 };
 
 export const paperTrail: Array<{ label: string; href: string; note: string; external?: boolean }> = [

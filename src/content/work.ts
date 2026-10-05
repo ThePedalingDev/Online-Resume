@@ -1,6 +1,5 @@
+import { CONTACT_EMAIL } from '@/config/contact';
 import { getProjectTags, type ProjectTagId } from '@/data/projectTags';
-
-const CONTACT_EMAIL = 'markusfourie@icloud.com';
 
 export type WorkImage = {
   srcsetAvif: string;
