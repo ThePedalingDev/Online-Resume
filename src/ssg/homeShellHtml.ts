@@ -5,10 +5,11 @@ export const HOME_SHELL_HTML = `
     <div class="ed-nav-inner">
       <a href="#top" class="ed-nav-brand">Markus Fourie</a>
       <div class="ed-nav-links">
-        <a href="#about">About</a>
-        <a href="#journey">Journey</a>
         <a href="#projects">Work</a>
+        <a href="#build">Build</a>
         <a href="#stack">Stack</a>
+        <a href="#journey">Journey</a>
+        <a href="#life">Life</a>
         <a href="#docs">Docs</a>
         <a href="#contact">Contact</a>
       </div>
@@ -38,10 +39,11 @@ export const HOME_SHELL_HTML = `
       </div>
     </div>
   </section>
-  <section id="about"><h2>About</h2><p>I build operational software, and I race. Small steps, a long view.</p></section>
-  <section id="journey"><h2>Journey</h2></section>
   <section id="projects"><h2>Selected work</h2><p>Platforms and tools shipped for operations, fleets, charities, and marketplaces.</p></section>
+  <section id="build"><h2>How I build</h2><p>Structured tools for real operations.</p></section>
   <section id="stack"><h2>Stack</h2></section>
+  <section id="journey"><h2>Journey and credentials</h2><p>I build operational software, and I race.</p></section>
+  <section id="life"><h2>Off the clock</h2></section>
   <section id="docs"><h2>Docs</h2></section>
   <section id="contact"><h2>Contact</h2><p><a href="mailto:markusfourie@icloud.com">markusfourie@icloud.com</a></p></section>
 </main>

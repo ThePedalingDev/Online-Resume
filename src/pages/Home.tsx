@@ -91,12 +91,13 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; 
 }
 
 const NAV_LINKS = [
-  ['#about', 'About', '01'],
-  ['#journey', 'Journey', '02'],
-  ['#projects', 'Work', '07'],
-  ['#stack', 'Stack', '08'],
-  ['#docs', 'Docs', '10'],
-  ['#contact', 'Contact', '11'],
+  ['#projects', 'Work', '01'],
+  ['#build', 'Build', '02'],
+  ['#stack', 'Stack', '03'],
+  ['#journey', 'Journey', '04'],
+  ['#life', 'Life', '05'],
+  ['#docs', 'Docs', '06'],
+  ['#contact', 'Contact', '07'],
 ] as const;
 
 function EdNav() {
@@ -232,92 +233,6 @@ type JourneyItem = {
 
 type StackCat = { name: string; items: Array<{ n: string; y: string }> };
 type GearItemT = { name: string; spec: string; cat: string; href: string };
-
-function About({ content }: { content?: AboutContent | null }) {
-  const side = content?.sideHtml?.length ? content.sideHtml : null;
-  const sideNamesKyle = side?.some((html) => /kyle nel/i.test(html)) ?? false;
-  const img = (slot: 'one' | 'two' | 'three') => content?.images?.find((i) => i.slot === slot) || null;
-  const gradLabel = img('one')?.label;
-  const gradCaption = !gradLabel || gradLabel === 'Graduation';
-  return (
-    <section id="about">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">01 · About</span>
-          <span className="num">Biographical · v1.1</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="about-lede">
-            {content?.ledeHtml ? (
-              <p dangerouslySetInnerHTML={{ __html: content.ledeHtml }} />
-            ) : (
-              <p>
-                I build operational software, and I race.
-                Small steps, a long view.
-              </p>
-            )}
-          </Reveal>
-          <Reveal className="about-side" delay={120}>
-            {side ? (
-              <>
-                {side.map((html, i) => <p key={i} dangerouslySetInnerHTML={{ __html: html }} />)}
-                {!sideNamesKyle && (
-                  <p>
-                    <a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>
-                    , a side hustle with{' '}
-                    <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>
-                    , a good friend and colleague. Launch still to come.
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                <p>
-                  Operational platforms for Rimitso Management Services and Katanga Contracting Services.
-                  BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025.
-                  {' '}<a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a>
-                  {' '}Top Performer, 23 April 2025.
-                </p>
-                <p>
-                  <a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>
-                  , a side hustle with{' '}
-                  <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>
-                  , a good friend and colleague. Launch still to come.
-                </p>
-              </>
-            )}
-          </Reveal>
-          <div className="about-visual">
-            <Reveal className="about-img one ph">
-              <img src={img('one')?.url || graduationPhoto} alt={gradCaption ? 'Markus Fourie at graduation with Kyle Nel' : gradLabel} loading="lazy" decoding="async" />
-              <span>{img('one')?.meta || 'BSc · 2025'}</span>
-              <span className="ph-label">
-                {gradCaption ? (
-                  <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">With Kyle Nel</a>
-                ) : gradLabel}
-              </span>
-            </Reveal>
-            <Reveal className="about-img two ph" delay={140}>
-              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} loading="lazy" decoding="async" />
-              <span>{img('two')?.meta || 'Varsity College'}</span>
-              <span className="ph-label">{img('two')?.label || 'Top Achiever · 2025'}</span>
-            </Reveal>
-            <Reveal className="about-img three ph" delay={260}>
-              <a className="cred-link" href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">
-                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} loading="lazy" decoding="async" />
-              </a>
-              <span>{img('three')?.meta || '23 Apr 2025'}</span>
-              <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
-            </Reveal>
-            <Reveal className="about-graph" delay={280}>
-              <GithubActivity />
-            </Reveal>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const JOURNEY: JourneyItem[] = [
   { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
@@ -554,13 +469,14 @@ function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
   );
 }
 
-function Journey({ items }: { items: JourneyItem[] }) {
+function Journey({ items, about }: { items: JourneyItem[]; about?: AboutContent | null }) {
+  const img = (slot: 'one' | 'two' | 'three') => about?.images?.find((i) => i.slot === slot) || null;
   return (
     <section id="journey">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">02 · Journey</span>
-          <span className="num">Timeline · 2021-2026</span>
+          <span className="section-marker">04 · Journey</span>
+          <span className="num">Timeline · Credentials · 2021-2026</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="journey-title">
@@ -569,14 +485,39 @@ function Journey({ items }: { items: JourneyItem[] }) {
             </h2>
           </Reveal>
           <Reveal className="journey-intro" delay={120}>
-            <p className="section-intro">
-              Each node below marks a decision that compounded: a project, a lesson,
-              a discipline adopted. No shortcuts, no resets.
-            </p>
+            {about?.ledeHtml ? (
+              <p className="section-intro" dangerouslySetInnerHTML={{ __html: about.ledeHtml }} />
+            ) : (
+              <p className="section-intro">
+                I build operational software, and I race. Each node below marks a decision that compounded: a project, a lesson, a discipline adopted.
+              </p>
+            )}
           </Reveal>
           <div className="timeline">
             <div className="timeline-rail" />
-            {items.map((m) => <Milestone key={`${m.year}-${m.chip}`} {...m} />)}
+            {items.map((m) => {
+              const tags = m.year === '2025'
+                ? Array.from(new Set([...m.tags, 'Top Achiever', 'Golden Key']))
+                : m.tags;
+              return <Milestone key={`${m.year}-${m.chip}`} {...m} tags={tags} />;
+            })}
+          </div>
+          <div className="about-visual journey-creds">
+            <Reveal className="about-img two ph">
+              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} loading="lazy" decoding="async" />
+              <span>{img('two')?.meta || 'Varsity College'}</span>
+              <span className="ph-label">{img('two')?.label || 'Top Achiever · 2025'}</span>
+            </Reveal>
+            <Reveal className="about-img three ph" delay={140}>
+              <a className="cred-link" href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">
+                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} loading="lazy" decoding="async" />
+              </a>
+              <span>{img('three')?.meta || '23 Apr 2025'}</span>
+              <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
+            </Reveal>
+            <Reveal className="about-graph" delay={220}>
+              <GithubActivity />
+            </Reveal>
           </div>
         </div>
       </div>
@@ -674,16 +615,16 @@ function Cycling() {
   ];
   const blocks = stats ?? fallbackStats;
   return (
-    <section id="cycling">
+    <section id="life" className="off-clock">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">03 · Cycling</span>
-          <span className="num">Season · Live from Strava</span>
+          <span className="section-marker">05 · Life</span>
+          <span className="num">Off the clock · Strava</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="cycling-head">
             <h2 className="section-title">
-              Trained <em>by the hills</em>, tracked by data.
+              Off the clock: trained <em>by the hills</em>, tracked by data.
             </h2>
           </Reveal>
           <Reveal className="cycling-intro" delay={120}>
@@ -756,6 +697,7 @@ function Cycling() {
               </div>
             </Reveal>
           </div>
+          <GalleryGrid />
         </div>
       </div>
     </section>
@@ -764,7 +706,7 @@ function Cycling() {
 
 type GalleryItem = { cls: string; n: string; l: string; url?: string };
 
-function Gallery() {
+function GalleryGrid() {
   const defaultItems: GalleryItem[] = [
     { cls: 'g-1', n: '12 Sep 2026', l: 'Trailseeker · Wellington', url: trailseekerWellington },
     { cls: 'g-2', n: 'Studio', l: 'Work from home desk setup', url: deskSetup },
@@ -822,36 +764,28 @@ function Gallery() {
     return () => ac.abort();
   }, []);
   return (
-    <section id="gallery">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">04 · Gallery</span>
-          <span className="num">Field · Studio · Trail</span>
-        </div>
-        <div className="ed-grid12">
-          <div className="gallery-head">
-            <Reveal>
-              <h2 className="section-title">Visual <em>field notes</em>.</h2>
-            </Reveal>
-            <Reveal delay={120}>
-              <p className="section-intro">
-                Moments from the studio and the trail. Captured on a phone,
-                colour-corrected lightly, honest about the light.
-              </p>
-            </Reveal>
-          </div>
-          <div className="gallery-grid">
-            {items.map((g, i) => (
-              <Reveal key={g.cls} className={`g-item ${g.cls} ph`} delay={i * 60}>
-                {g.url ? <img src={g.url} alt={g.l} loading="lazy" decoding="async" /> : null}
-                <span>{g.n}</span>
-                <span className="ph-label">{g.l}</span>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+    <>
+      <div className="gallery-head">
+        <Reveal>
+          <h3 className="section-title">Visual <em>field notes</em>.</h3>
+        </Reveal>
+        <Reveal delay={120}>
+          <p className="section-intro">
+            Moments from the studio and the trail. Captured on a phone,
+            colour-corrected lightly, honest about the light.
+          </p>
+        </Reveal>
       </div>
-    </section>
+      <div className="gallery-grid">
+        {items.map((g, i) => (
+          <Reveal key={g.cls} className={`g-item ${g.cls} ph`} delay={i * 60}>
+            {g.url ? <img src={g.url} alt={g.l} loading="lazy" decoding="async" /> : null}
+            <span>{g.n}</span>
+            <span className="ph-label">{g.l}</span>
+          </Reveal>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -869,13 +803,13 @@ function FedoraPrompt() {
   );
 }
 
-function Engineering() {
+function HowIBuild() {
   return (
-    <section id="engineering">
+    <section id="build">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">05 · Engineering</span>
-          <span className="num">Craft · Day-to-day</span>
+          <span className="section-marker">02 · Build</span>
+          <span className="num">How I build · Craft</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="eng-head">
@@ -931,6 +865,28 @@ function Engineering() {
                   <li><span className="idx">05</span><strong>Offline-first</strong><span className="d">Sync queues, conflict resolution.</span></li>
                 </ul>
               </div>
+            </Reveal>
+          </div>
+          <Reveal className="philo-inner build-principles">
+            <p className="philo-quote">
+              Discipline is a chain of <em>small, repeated decisions</em>.
+              The 5 am ride, the log line written for the version of you debugging at 2.
+              The shape is built the same way.
+            </p>
+            <div className="philo-attr">Operating principles</div>
+          </Reveal>
+          <div className="philo-pillars">
+            <Reveal className="pillar">
+              <h3>01 · Long view</h3>
+              <p>Optimise for the version of the system that exists in three years, under a team that isn't me.</p>
+            </Reveal>
+            <Reveal className="pillar" delay={100}>
+              <h3>02 · Shape over feature</h3>
+              <p>Get the primitives right and features come cheaply. Get them wrong and every feature costs twice.</p>
+            </Reveal>
+            <Reveal className="pillar" delay={200}>
+              <h3>03 · Honest tools</h3>
+              <p>The system should tell you what it's actually doing. Audit logs, health checks, dashboards that earn their glance.</p>
             </Reveal>
           </div>
         </div>
@@ -1009,7 +965,7 @@ function GearItem({ item, idx }: { item: GearItemT; idx: number }) {
   );
 }
 
-function Gear({ coding, cycling }: { coding: GearItemT[]; cycling: GearItemT[] }) {
+export function Gear({ coding, cycling }: { coding: GearItemT[]; cycling: GearItemT[] }) {
   return (
     <section id="gear">
       <div className="ed-shell">
@@ -1060,21 +1016,92 @@ function Gear({ coding, cycling }: { coding: GearItemT[]; cycling: GearItemT[] }
   );
 }
 
-const PROJECTS = [
-  { n: '01', name: 'Katanga RMS', href: 'https://rms.rimitso.com/', mark: kcsMark, shot: rmsHome, desc: 'Operations system for Katanga Contracting Services, hosted on Azure. Sites, assets, teams, and shift transactions such as hours and meter readings, reviewed through approval before they reach reports.', tags: 'React · ASP.NET Core · EF Core · Postgres · Azure' },
-  { n: '02', name: 'Afrisist', mark: afrisistMark, markFit: 'word', shot: afrisistFleet, desc: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure. Operators watch incoming alarms, assign them, and get notified as the events arrive.', tags: 'React · Node · Supabase · WebSocket · Azure' },
-  { n: '03', name: 'Eridge RDA', href: 'https://www.eridgerda.org.uk/', mark: rdaMark, shot: eridgeRda, desc: 'Site and CMS for the Eridge group of Riding for the Disabled. Programmes, a photo gallery, volunteer applications, and a protected admin for the people who keep it current.', tags: 'React · Vite · Supabase' },
-  { n: '04', name: 'Skillance', href: 'https://skillance.co.za/', mark: skillanceMark, shot: skillanceHome, desc: 'Verified freelance marketplace for South Africa. Discover a professional, review the profile, and book with payment held until the work is approved. Coming soon on iOS and Android. Built with Kyle Nel.', tags: 'React · Fastify · Postgres' },
-  { n: '05', name: 'Home lab + tooling', desc: 'An HP Victus 15, used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.', tags: 'Ollama · Plex · Linux' },
+type ProjectCase = {
+  n: string;
+  name: string;
+  href?: string;
+  mark?: string;
+  markFit?: 'word';
+  shot?: string;
+  role: string;
+  problem: string;
+  built: string;
+  result: string;
+  tags: string;
+  cta: 'visit' | 'private';
+};
+
+const PROJECTS: ProjectCase[] = [
+  {
+    n: '01',
+    name: 'Katanga RMS',
+    href: 'https://rms.rimitso.com/',
+    mark: kcsMark,
+    shot: rmsHome,
+    role: 'Full-stack developer at Rimitso Management Services',
+    problem: 'Katanga Contracting Services needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
+    built: 'Operations system for Katanga Contracting Services, hosted on Azure.',
+    result: 'Live on Azure for Katanga Contracting Services field and back-office workflows.',
+    tags: 'React · ASP.NET Core · EF Core · Postgres · Azure',
+    cta: 'visit',
+  },
+  {
+    n: '02',
+    name: 'Afrisist',
+    mark: afrisistMark,
+    markFit: 'word',
+    shot: afrisistFleet,
+    role: 'Full-stack developer',
+    problem: 'Vehicle fleet operators needed a desk to watch incoming alarms, assign them, and stay notified as events arrive.',
+    built: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure, with WebSocket updates.',
+    result: 'Operators can watch, assign, and get notified as fleet alarms arrive.',
+    tags: 'React · Node · Supabase · WebSocket · Azure',
+    cta: 'private',
+  },
+  {
+    n: '03',
+    name: 'Eridge RDA',
+    href: 'https://www.eridgerda.org.uk/',
+    mark: rdaMark,
+    shot: eridgeRda,
+    role: 'Full-stack developer',
+    problem: 'The Eridge group of Riding for the Disabled needed a public site and a way for volunteers to keep programmes and events current.',
+    built: 'Site and CMS with programmes, a photo gallery, volunteer applications, and a protected admin.',
+    result: 'Public site and volunteer CMS in use at eridgerda.org.uk.',
+    tags: 'React · Vite · Supabase',
+    cta: 'visit',
+  },
+  {
+    n: '04',
+    name: 'Skillance',
+    href: 'https://skillance.co.za/',
+    mark: skillanceMark,
+    shot: skillanceHome,
+    role: 'Co-builder with Kyle Nel',
+    problem: 'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
+    built: 'Verified freelance marketplace for South Africa, with iOS and Android apps still to come.',
+    result: 'Web product live at skillance.co.za; mobile launch still to come.',
+    tags: 'React · Fastify · Postgres',
+    cta: 'visit',
+  },
+  {
+    n: '05',
+    name: 'Home lab + tooling',
+    role: 'Personal systems',
+    problem: 'A home server for media and local model experiments.',
+    built: 'An HP Victus 15 used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.',
+    result: 'Local Plex and Ollama models running on Linux at home.',
+    tags: 'Ollama · Plex · Linux',
+    cta: 'private',
+  },
 ];
 
 function Projects() {
-  const [hover, setHover] = useState<number | null>(null);
   return (
     <section id="projects">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">07 · Projects</span>
+          <span className="section-marker">01 · Work</span>
           <span className="num">Selected work · {PROJECTS.length}</span>
         </div>
         <div className="ed-grid12">
@@ -1088,34 +1115,42 @@ function Projects() {
               </p>
             </Reveal>
           </div>
-          <div className="proj-list" onMouseLeave={() => setHover(null)}>
+          <div className="proj-cards">
             {PROJECTS.map((p, i) => {
-              const shot = 'shot' in p ? p.shot : undefined;
-              const mark = 'mark' in p ? p.mark : undefined;
-              const href = 'href' in p ? p.href : undefined;
-              const word = 'markFit' in p && p.markFit === 'word';
+              const word = p.markFit === 'word';
               return (
-                <div
-                  key={p.name}
-                  className={`proj-row${shot ? ' has-shot' : ''}${hover !== null && hover !== i ? ' is-dim' : ''}`}
-                  onMouseEnter={() => setHover(i)}
-                  onFocus={() => setHover(i)}
-                  onBlur={() => setHover(null)}
-                  tabIndex={0}
-                >
-                  {shot ? <img className="proj-shot" src={shot} alt="" loading="lazy" decoding="async" /> : null}
-                  <div className="proj-body">
-                    <span className="proj-name">
-                      {mark ? <img className={`proj-mark${word ? ' is-word' : ''}`} src={mark} alt="" loading="lazy" decoding="async" /> : null}
-                      {href ? (
-                        <a href={href} target="_blank" rel="noopener noreferrer">{p.name}</a>
-                      ) : p.name}
-                    </span>
-                    <span className="proj-desc">{p.desc}</span>
+                <Reveal key={p.name} className="proj-card" delay={i * 60}>
+                  {p.shot ? (
+                    <img className="proj-shot" src={p.shot} alt="" loading="lazy" decoding="async" />
+                  ) : null}
+                  <div className="proj-card-body">
+                    <div className="proj-card-top">
+                      <span className="proj-n">{p.n}</span>
+                      <span className="proj-name">
+                        {p.mark ? (
+                          <img className={`proj-mark${word ? ' is-word' : ''}`} src={p.mark} alt="" loading="lazy" decoding="async" />
+                        ) : null}
+                        {p.name}
+                      </span>
+                    </div>
+                    <dl className="proj-case">
+                      <div><dt>Role</dt><dd>{p.role}</dd></div>
+                      <div><dt>Problem</dt><dd>{p.problem}</dd></div>
+                      <div><dt>Built</dt><dd>{p.built}</dd></div>
+                      <div><dt>Result</dt><dd>{p.result}</dd></div>
+                    </dl>
+                    <span className="proj-tags">{p.tags}</span>
+                    {p.cta === 'visit' && p.href ? (
+                      <a className="btn-solid proj-cta" href={p.href} target="_blank" rel="noopener noreferrer">
+                        Visit site
+                      </a>
+                    ) : (
+                      <a className="btn-text proj-cta" href="#contact">
+                        Private system, ask for a demo
+                      </a>
+                    )}
                   </div>
-                  <span className="proj-tags">{p.tags}</span>
-                  <span className="proj-arrow" aria-hidden="true">→</span>
-                </div>
+                </Reveal>
               );
             })}
           </div>
@@ -1192,7 +1227,7 @@ function Stack({ cats }: { cats: StackCat[] }) {
     <section id="stack">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">08 · Stack</span>
+          <span className="section-marker">03 · Stack</span>
           <span className="num">Roadmap · learned in order</span>
         </div>
         <div className="ed-grid12">
@@ -1209,11 +1244,11 @@ function Stack({ cats }: { cats: StackCat[] }) {
           <div className="stack-grid">
             {cats.map((cat, i) => (
               <Reveal key={cat.name} className="stack-cat" delay={i * 80}>
-                <h4>
-                  <span className="road-kicker">{String(i + 1).padStart(2, '0')}</span>
+                <h3>
+                  <span className="road-kicker" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   {cat.name}
-                  <span className="cnt">[{cat.items.length}]</span>
-                </h4>
+                  <span className="cnt" aria-hidden="true">[{cat.items.length}]</span>
+                </h3>
                 <ol className="road">
                   {cat.items.map((it, step) => (
                     <li key={it.n}>
@@ -1228,43 +1263,6 @@ function Stack({ cats }: { cats: StackCat[] }) {
                 </ol>
               </Reveal>
             ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Philosophy() {
-  return (
-    <section id="philosophy">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">09 · Philosophy</span>
-          <span className="num">How I work · Why</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="philo-inner">
-            <p className="philo-quote">
-              Discipline is a chain of <em>small, repeated decisions</em>.
-              The 5 am ride, the log line written for the version of you debugging at 2.
-              The shape is built the same way.
-            </p>
-            <div className="philo-attr">Operating principles</div>
-          </Reveal>
-          <div className="philo-pillars">
-            <Reveal className="pillar">
-              <h5>01 · Long view</h5>
-              <p>Optimise for the version of the system that exists in three years, under a team that isn't me.</p>
-            </Reveal>
-            <Reveal className="pillar" delay={100}>
-              <h5>02 · Shape over feature</h5>
-              <p>Get the primitives right and features come cheaply. Get them wrong and every feature costs twice.</p>
-            </Reveal>
-            <Reveal className="pillar" delay={200}>
-              <h5>03 · Honest tools</h5>
-              <p>The system should tell you what it's actually doing. Audit logs, health checks, dashboards that earn their glance.</p>
-            </Reveal>
           </div>
         </div>
       </div>
@@ -1296,7 +1294,7 @@ function Docs() {
     <section id="docs">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">10 · Docs</span>
+          <span className="section-marker">06 · Docs</span>
           <span className="num">Paper · Download</span>
         </div>
         <div className="ed-grid12">
@@ -1356,7 +1354,7 @@ function Contact() {
     <section id="contact">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">11 · Contact</span>
+          <span className="section-marker">07 · Contact</span>
           <span className="num">{availability.status}</span>
         </div>
         <div className="ed-grid12">
@@ -1478,19 +1476,19 @@ export function Home() {
     return () => ac.abort();
   }, []);
 
+  // gearCoding / gearCycling stay wired to the CMS for the upcoming /uses page.
+  void gearCoding;
+  void gearCycling;
+
   return (
     <div className="editorial">
       <EdNav />
       <Hero ytdDistanceKm={heroKm} content={heroContent} />
-      <About content={aboutContent} />
-      <Journey items={journeyItems} />
-      <Cycling />
-      <Gallery />
-      <Engineering />
-      <Gear coding={gearCoding} cycling={gearCycling} />
       <Projects />
+      <HowIBuild />
       <Stack cats={stackCats} />
-      <Philosophy />
+      <Journey items={journeyItems} about={aboutContent} />
+      <Cycling />
       <Docs />
       <Contact />
       <EdFooter />
