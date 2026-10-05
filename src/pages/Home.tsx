@@ -1162,6 +1162,7 @@ export function Home() {
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
   const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(journeyNodes);
   const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
+  const [showMobileBar, setShowMobileBar] = useState(false);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -1200,6 +1201,24 @@ export function Home() {
     return () => ac.abort();
   }, []);
 
+  useEffect(() => {
+    const hero = document.getElementById('top');
+    const contact = document.getElementById('contact');
+    if (!hero || !contact) return;
+    const sync = () => {
+      const heroGone = hero.getBoundingClientRect().bottom <= 0;
+      const contactVisible = contact.getBoundingClientRect().top < window.innerHeight * 0.85;
+      setShowMobileBar(heroGone && !contactVisible);
+    };
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+    return () => {
+      window.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
+    };
+  }, []);
+
   return (
     <div className="editorial">
       <EdNav />
@@ -1211,7 +1230,7 @@ export function Home() {
       <Cycling />
       <Contact />
       <EdFooter />
-      <div className="mobile-contact-bar">
+      <div className={`mobile-contact-bar${showMobileBar ? ' is-visible' : ''}`}>
         <a className="btn-solid" href={`mailto:${EMAIL}`}>Email me</a>
         <a className="btn-outline" href={CV_HREF} download>Download CV</a>
       </div>

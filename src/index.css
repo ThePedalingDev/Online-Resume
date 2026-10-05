@@ -634,7 +634,7 @@ html {
   }
   .editorial .ed-nav-drawer { display: block; order: 3; }
   .editorial .mobile-contact-bar {
-    display: flex;
+    display: none;
     position: fixed;
     left: 0;
     right: 0;
@@ -645,6 +645,9 @@ html {
     backdrop-filter: blur(8px);
     border-top: 1px solid var(--line);
     gap: 10px;
+  }
+  .editorial .mobile-contact-bar.is-visible {
+    display: flex;
   }
   .editorial .mobile-contact-bar .btn-solid,
   .editorial .mobile-contact-bar .btn-outline {
@@ -1966,7 +1969,7 @@ html {
 .editorial .stack-intro { grid-column: 7 / span 5; align-self: end; color: var(--muted); font-size: 15px; }
 .editorial .stack-grid {
   grid-column: 1 / span 12; margin-top: 60px;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px;
   align-items: start;
 }
 .editorial .stack-cat {
