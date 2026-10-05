@@ -1334,6 +1334,7 @@ html {
   font-family: var(--f-mono);
   font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
 }
+.editorial .m-card .m-stack-tags { margin-top: 6px; }
 .editorial .milestone:nth-child(odd) .m-tags { justify-content: flex-end; }
 .editorial .m-card .m-tags span {
   padding: 3px 8px;

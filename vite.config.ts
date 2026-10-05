@@ -35,7 +35,7 @@ function prerenderHomeShell(): Plugin {
           )
           .replace(
             /<meta name="keywords" content="[^"]*" \/>/,
-            '<meta name="keywords" content="Markus Fourie, Full-Stack Developer, React, Node.js, ASP.NET, Pretoria, Portfolio" />',
+            '<meta name="keywords" content="Markus Fourie, Full-Stack Developer, React, Node.js, ASP.NET Core, Pretoria, Portfolio" />',
           )
           .replace(
             '<div id="root"></div>',

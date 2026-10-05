@@ -23,7 +23,7 @@ export const HOME_SHELL_HTML = `
         <p class="hero-kicker">Full-stack developer · Pretoria, ZA</p>
         <div class="hero-text">
           <p class="hero-lead">I build structured systems for the real world: resource platforms, operational tooling, and charity sites.</p>
-          <p class="hero-sub">React, Node.js, and ASP.NET. BSc Computer &amp; Information Sciences.</p>
+          <p class="hero-sub">React, Node.js, and ASP.NET Core. BSc Computer &amp; Information Sciences.</p>
         </div>
         <div class="hero-actions">
           <a class="btn-solid" href="#projects">View work</a>

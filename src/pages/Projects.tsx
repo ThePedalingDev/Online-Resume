@@ -5,18 +5,27 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { StaggerReveal } from '@/components/animations/StaggerReveal';
 import SplitText from '@/components/animations/SplitText';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import { getProjectTags, type ProjectTagId } from '@/data/projectTags';
 
-const PROJECTS = [
+const PROJECTS: Array<{
+  title: string;
+  period: string;
+  description: string;
+  highlights: string[];
+  tagId: ProjectTagId;
+  link: string;
+  github: string;
+}> = [
   {
     title: 'Katanga Contracting Services - Resource Management System',
     period: '2025 to Present',
-    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET MVC, SQL Server, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
+    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET Core, PostgreSQL, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
     highlights: [
       'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
       'Improved asset tracking efficiency and data accuracy',
       'Integrated modular controllers and seeding logic for roles, sites and transactions'
     ],
-    technologies: ['ASP.NET MVC', 'C#', 'SQL Server', 'Entity Framework Core', 'Azure', 'Tailwind CSS'],
+    tagId: 'katanga-rms',
     link: '#',
     github: '#',
   },
@@ -29,24 +38,24 @@ const PROJECTS = [
       'Supporting animated tabs, filtering and real-time event streams',
       'Enhanced reliability and speed with webhook-driven automation and optimised API routes'
     ],
-    technologies: ['React', 'Node.js', 'Supabase', 'WebSocket', 'Azure', 'Tailwind CSS', 'DaisyUI'],
+    tagId: 'afrisist',
     link: '#',
     github: '#',
   },
   {
     title: 'Eridge Branch of RDA Non-Profit Charity',
     period: '2024',
-    description: 'Developed a full-stack web solution for a UK-based charity using React (Vite), Node.js (Express), and PostgreSQL (Supabase). Delivered CMS functionality for managing volunteers, gallery content, and programmes.',
+    description: 'Developed a web solution for a UK-based charity using React (Vite) and Supabase. Delivered CMS functionality for managing volunteers, gallery content, and programmes.',
     highlights: [
       'Designed accessible, responsive UI components matching the organization\'s branding',
       'Implemented custom admin dashboard and contact form management',
       'Dynamic program/event listings for better content control'
     ],
-    technologies: ['React', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'DaisyUI'],
+    tagId: 'eridge-rda',
     link: 'https://www.eridgerda.org.uk/',
     github: '#',
   },
-] as const;
+];
 
 export function Projects() {
 
@@ -83,7 +92,9 @@ export function Projects() {
       <section className="w-full px-[var(--container-padding)] py-12 md:py-16">
         <div className="max-w-7xl mx-auto">
           <StaggerReveal className="grid grid-cols-1 lg:grid-cols-2 gap-8" stagger={0.15}>
-            {PROJECTS.map((project, index) => (
+            {PROJECTS.map((project, index) => {
+              const technologies = getProjectTags(project.tagId);
+              return (
               <div key={index} className="h-full">
                 <Card className="h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1 group cursor-default bg-card/50 backdrop-blur-sm">
                   <CardHeader className="space-y-3">
@@ -113,7 +124,7 @@ export function Projects() {
                     </div>
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech) => (
+                        {technologies.map((tech) => (
                           <span
                             key={tech}
                             className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:scale-105 transition-transform"
@@ -144,7 +155,8 @@ export function Projects() {
                   </CardContent>
                   </Card>
                 </div>
-            ))}
+            );
+            })}
           </StaggerReveal>
         </div>
       </section>

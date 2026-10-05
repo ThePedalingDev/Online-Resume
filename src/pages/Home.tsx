@@ -32,6 +32,7 @@ import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
 import { availability, availabilityLine } from '@/config/availability';
+import { getProjectTags, joinProjectTags, type ProjectTagId } from '@/data/projectTags';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -166,7 +167,7 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
               {content?.lead || 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.'}
             </p>
             <p className="hero-sub">
-              {content?.sub || 'React, Node.js, and ASP.NET. BSc Computer & Information Sciences.'}
+              {content?.sub || 'React, Node.js, and ASP.NET Core. BSc Computer & Information Sciences.'}
             </p>
           </div>
           <div className="hero-actions">
@@ -223,6 +224,8 @@ type JourneyItem = {
   title: string;
   desc: string;
   tags: string[];
+  /** When set, renders a stack row from the shared project tag set. */
+  project?: ProjectTagId;
 };
 
 type StackCat = { name: string; items: Array<{ n: string; y: string }> };
@@ -235,14 +238,16 @@ const JOURNEY: JourneyItem[] = [
     desc: 'Pretoria campus, now Emeris. C#, Java, and the web stack. Tutored first-year students in the IT department through 2024.',
     tags: ['Emeris', 'C#', 'Java'] },
   { year: '2024', chip: 'First production work', title: 'Eridge RDA, then Afrisist',
-    desc: 'Shipped the Eridge RDA site for a UK charity: React, Node, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
-    tags: ['React', 'Afrisist', 'Trans Baviaans'] },
+    desc: 'Shipped the Eridge RDA site for a UK charity: React, Vite, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
+    tags: ['Eridge RDA', 'Afrisist', 'Trans Baviaans'],
+    project: 'eridge-rda' },
   { year: '2025', chip: 'Final year', title: 'The degree, between the UK and South Africa',
     desc: 'Final year of the BSc at Varsity College, now Emeris. Full time software developer at Rimitso Management Services for Katanga Contracting Services. Moved between the UK and South Africa for networking and experience.',
     tags: ['Rimitso', 'KCS', 'Emeris'] },
   { year: '2026', chip: 'Full time', title: 'Rimitso and KCS',
     desc: 'No longer studying. Full time with Rimitso Management Services and Katanga Contracting Services. Rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
-    tags: ['Rimitso', 'KCS', 'Trailseeker'] },
+    tags: ['Rimitso', 'KCS', 'Trailseeker'],
+    project: 'katanga-rms' },
 ];
 
 type JourneyStill = { src: string; alt: string; pos?: string; fit?: 'cover' | 'contain' };
@@ -440,9 +445,10 @@ function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
   );
 }
 
-function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
+function Milestone({ year, chip, title, desc, tags, project }: JourneyItem) {
   const { ref, inView } = useLenisEnter<HTMLDivElement>(0.82);
   const stills = JOURNEY_STILLS[year];
+  const stack = project ? getProjectTags(project) : null;
   return (
     <div ref={ref} className={`milestone ${inView ? 'is-in' : ''}`}>
       <div className="m-year" style={{ transitionDelay: '0ms' }}>
@@ -457,6 +463,11 @@ function Milestone({ year, chip, title, desc, tags }: JourneyItem) {
         <div className="m-tags">
           {tags.map((t) => <span key={t}>{t}</span>)}
         </div>
+        {stack ? (
+          <div className="m-tags m-stack-tags" aria-label="Stack">
+            {stack.map((t) => <span key={t}>{t}</span>)}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -903,7 +914,7 @@ type ProjectCase = {
   problem: string;
   built: string;
   result: string;
-  tags: string;
+  tags: string[];
   cta: 'visit' | 'private';
 };
 
@@ -918,7 +929,7 @@ const PROJECTS: ProjectCase[] = [
     problem: 'Katanga Contracting Services needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
     built: 'Operations system for Katanga Contracting Services, hosted on Azure.',
     result: 'Live on Azure for Katanga Contracting Services field and back-office workflows.',
-    tags: 'React · ASP.NET Core · EF Core · Postgres · Azure',
+    tags: getProjectTags('katanga-rms'),
     cta: 'visit',
   },
   {
@@ -931,7 +942,7 @@ const PROJECTS: ProjectCase[] = [
     problem: 'Vehicle fleet operators needed a desk to watch incoming alarms, assign them, and stay notified as events arrive.',
     built: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure, with WebSocket updates.',
     result: 'Operators can watch, assign, and get notified as fleet alarms arrive.',
-    tags: 'React · Node · Supabase · WebSocket · Azure',
+    tags: getProjectTags('afrisist'),
     cta: 'private',
   },
   {
@@ -944,7 +955,7 @@ const PROJECTS: ProjectCase[] = [
     problem: 'The Eridge group of Riding for the Disabled needed a public site and a way for volunteers to keep programmes and events current.',
     built: 'Site and CMS with programmes, a photo gallery, volunteer applications, and a protected admin.',
     result: 'Public site and volunteer CMS in use at eridgerda.org.uk.',
-    tags: 'React · Vite · Supabase',
+    tags: getProjectTags('eridge-rda'),
     cta: 'visit',
   },
   {
@@ -957,7 +968,7 @@ const PROJECTS: ProjectCase[] = [
     problem: 'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
     built: 'Verified freelance marketplace for South Africa, with iOS and Android apps still to come.',
     result: 'Web product live at skillance.co.za; mobile launch still to come.',
-    tags: 'React · Fastify · Postgres',
+    tags: getProjectTags('skillance'),
     cta: 'visit',
   },
   {
@@ -967,7 +978,7 @@ const PROJECTS: ProjectCase[] = [
     problem: 'A home server for media and local model experiments.',
     built: 'An HP Victus 15 used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.',
     result: 'Local Plex and Ollama models running on Linux at home.',
-    tags: 'Ollama · Plex · Linux',
+    tags: getProjectTags('home-lab'),
     cta: 'private',
   },
 ];
@@ -1015,7 +1026,7 @@ function Projects() {
                       <div><dt>Built</dt><dd>{p.built}</dd></div>
                       <div><dt>Result</dt><dd>{p.result}</dd></div>
                     </dl>
-                    <span className="proj-tags">{p.tags}</span>
+                    <span className="proj-tags">{joinProjectTags(p.tags)}</span>
                     {p.cta === 'visit' && p.href ? (
                       <a className="btn-solid proj-cta" href={p.href} target="_blank" rel="noopener noreferrer">
                         Visit site
@@ -1041,13 +1052,13 @@ const STACK: StackCat[] = [
     { n: 'HTML, CSS, JavaScript', y: '5 yrs' },
     { n: 'TypeScript', y: '4 yrs' },
     { n: 'React', y: '4 yrs' },
-    { n: 'Tailwind', y: '3 yrs' },
+    { n: 'Tailwind CSS', y: '3 yrs' },
     { n: 'Node.js / Express', y: '4 yrs' },
     { n: 'SQL', y: '4 yrs' },
     { n: 'PostgreSQL', y: '3 yrs' },
     { n: 'C#', y: '4 yrs' },
     { n: 'ASP.NET Core', y: '3 yrs' },
-    { n: 'Entity Framework', y: '3 yrs' },
+    { n: 'EF Core', y: '3 yrs' },
     { n: 'REST / OpenAPI', y: 'in use' },
     { n: 'Next.js', y: '2 yrs' },
     { n: 'Supabase', y: '2 yrs' },
@@ -1082,7 +1093,7 @@ const STACK_MARKS: Partial<Record<string, BrandMarkName>> = {
   Go: 'go',
   React: 'react',
   'Next.js': 'nextdotjs',
-  Tailwind: 'tailwindcss',
+  'Tailwind CSS': 'tailwindcss',
   'Three.js': 'threedotjs',
   GSAP: 'greensock',
   'Node.js / Express': 'nodedotjs',

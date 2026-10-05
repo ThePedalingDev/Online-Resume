@@ -17,5 +17,5 @@ export function availabilityLine(): string {
 }
 
 export function siteMetaDescription(): string {
-  return `Markus Fourie, full-stack developer in Pretoria. ${availabilityLine()}. React, Node.js, and ASP.NET. Building resource platforms, operational tooling, and charity sites.`;
+  return `Markus Fourie, full-stack developer in Pretoria. ${availabilityLine()}. React, Node.js, and ASP.NET Core. Building resource platforms, operational tooling, and charity sites.`;
 }

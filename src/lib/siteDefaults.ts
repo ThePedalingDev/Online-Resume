@@ -1,5 +1,6 @@
 import type { CmsKey } from '@/lib/content';
 import { availability } from '@/config/availability';
+import { type ProjectTagId } from '@/data/projectTags';
 
 export const SECTION_LABELS: Record<CmsKey, string> = {
   hero: 'Hero',
@@ -16,7 +17,7 @@ export const SECTION_LABELS: Record<CmsKey, string> = {
 export const defaultHero = {
   kicker: 'Full-stack developer · Pretoria, ZA',
   lead: 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.',
-  sub: 'React, Node.js, and ASP.NET. BSc Computer & Information Sciences.',
+  sub: 'React, Node.js, and ASP.NET Core. BSc Computer & Information Sciences.',
   work: availability.employer,
   employment: availability.status,
   imageUrl: '',
@@ -36,7 +37,14 @@ export const defaultAbout = {
   ],
 };
 
-export const defaultJourney = [
+export const defaultJourney: Array<{
+  year: string;
+  chip: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  project?: ProjectTagId;
+}> = [
   { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
     desc: 'Started in 2020 on the Potchefstroom campus. Passed 8 semester subjects, then left the degree. The first plan was mechanical engineering. Software was the wider brief.',
     tags: ['NWU', 'Physics', 'Mathematics'] },
@@ -44,14 +52,16 @@ export const defaultJourney = [
     desc: 'Pretoria campus, now Emeris. C#, Java, and the web stack. Tutored first-year students in the IT department through 2024.',
     tags: ['Emeris', 'C#', 'Java'] },
   { year: '2024', chip: 'First production work', title: 'Eridge RDA, then Afrisist',
-    desc: 'Shipped the Eridge RDA site for a UK charity: React, Node, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
-    tags: ['React', 'Afrisist', 'Trans Baviaans'] },
+    desc: 'Shipped the Eridge RDA site for a UK charity: React, Vite, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
+    tags: ['Eridge RDA', 'Afrisist', 'Trans Baviaans'],
+    project: 'eridge-rda' },
   { year: '2025', chip: 'Final year', title: 'The degree, between the UK and South Africa',
     desc: 'Final year of the BSc at Varsity College, now Emeris. Full time software developer at Rimitso Management Services for Katanga Contracting Services. Moved between the UK and South Africa for networking and experience.',
     tags: ['Rimitso', 'KCS', 'Emeris'] },
   { year: '2026', chip: 'Full time', title: 'Rimitso and KCS',
     desc: 'No longer studying. Full time with Rimitso Management Services and Katanga Contracting Services. Rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
-    tags: ['Rimitso', 'KCS', 'Trailseeker'] },
+    tags: ['Rimitso', 'KCS', 'Trailseeker'],
+    project: 'katanga-rms' },
 ];
 
 export const defaultCycling = {
@@ -90,13 +100,13 @@ export const defaultStack = [
     { n: 'HTML, CSS, JavaScript', y: '5 yrs' },
     { n: 'TypeScript', y: '4 yrs' },
     { n: 'React', y: '4 yrs' },
-    { n: 'Tailwind', y: '3 yrs' },
+    { n: 'Tailwind CSS', y: '3 yrs' },
     { n: 'Node.js / Express', y: '4 yrs' },
     { n: 'SQL', y: '4 yrs' },
     { n: 'PostgreSQL', y: '3 yrs' },
     { n: 'C#', y: '4 yrs' },
     { n: 'ASP.NET Core', y: '3 yrs' },
-    { n: 'Entity Framework', y: '3 yrs' },
+    { n: 'EF Core', y: '3 yrs' },
     { n: 'REST / OpenAPI', y: 'in use' },
     { n: 'Next.js', y: '2 yrs' },
     { n: 'Supabase', y: '2 yrs' },
