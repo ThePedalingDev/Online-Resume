@@ -774,7 +774,7 @@ html {
   z-index: 2;
   width: 100%;
   max-width: 30rem;
-  order: 2;
+  order: 1;
 }
 .editorial .hero-photo {
   position: relative;
@@ -783,7 +783,7 @@ html {
   aspect-ratio: 2 / 3;
   max-height: min(42svh, 380px);
   margin: 0 auto 8px;
-  order: 1;
+  order: 2;
   -webkit-mask-image: linear-gradient(to bottom, #000 78%, rgba(0, 0, 0, 0.65) 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 78%, rgba(0, 0, 0, 0.65) 92%, transparent 100%);
 }

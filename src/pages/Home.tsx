@@ -237,9 +237,9 @@ function Hero({ content }: { content?: HeroContent | null }) {
               <span className="hero-status-dot" aria-hidden="true" />
               {availabilityLine()}
             </p>
-            <p className="hero-tagline">{heroCopy.tagline}</p>
           </div>
           <div className="hero-below">
+            <p className="hero-tagline">{heroCopy.tagline}</p>
             <p className="hero-subline">{heroCopy.subline}</p>
             <ul className="hero-ctas">
               {heroCtas.map((cta) => (
