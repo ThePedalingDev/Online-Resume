@@ -17,9 +17,9 @@ const PROJECTS: Array<{
   github: string;
 }> = [
   {
-    title: 'Katanga Contracting Services - Resource Management System',
+    title: 'Resource Management System',
     period: '2025 to Present',
-    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET Core, PostgreSQL, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic.',
+    description: 'Designed and implemented an enterprise-level asset management and operations platform using ASP.NET Core, PostgreSQL, and EF Core, hosted on Azure. Developed multi-role access control, Tailwind-styled admin dashboards, and comprehensive data validation logic. 388 assets and 46 users run on it.',
     highlights: [
       'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
       'Improved asset tracking efficiency and data accuracy',

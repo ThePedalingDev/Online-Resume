@@ -1,5 +1,6 @@
 import type { CmsKey } from '@/lib/content';
 import { availability } from '@/config/availability';
+import { journeyNodes, stackGroups, paperTrail } from '@/content/site';
 import { type ProjectTagId } from '@/data/projectTags';
 
 export const SECTION_LABELS: Record<CmsKey, string> = {
@@ -15,20 +16,21 @@ export const SECTION_LABELS: Record<CmsKey, string> = {
 };
 
 export const defaultHero = {
-  kicker: 'Full-stack developer · Pretoria, ZA',
-  lead: 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.',
-  sub: 'React, Node.js, and ASP.NET Core. BSc Computer & Information Sciences.',
+  kicker: 'Full-stack developer in Pretoria',
+  lead: 'Software that holds up outside the office.',
+  sub: "Right now that's the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on.",
   work: availability.employer,
   employment: availability.status,
   imageUrl: '',
-  imageAlt: 'Markus Fourie',
+  imageAlt: 'Markus Fourie in profile, wearing a cap and a dark polo shirt',
 };
 
 export const defaultAbout = {
-  ledeHtml: 'I build operational software, and I race. Small steps, a long view.',
+  ledeHtml:
+    "I didn't take the straight road into software. I started in physics and maths, switched to a computing degree, and was shipping production work before I graduated.",
   sideHtml: [
-    'Operational platforms for Rimitso Management Services and Katanga Contracting Services. BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025. <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a> Top Performer, 23 April 2025.',
-    '<a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>, a side hustle with <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>, a good friend and colleague. Launch still to come.',
+    'Operations software for Katanga Contracting Services. BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025. <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a> Top Performer, 23 April 2025.',
+    '<a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>, co-built with <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>.',
   ],
   images: [
     { slot: 'one', url: '', label: 'With Kyle Nel', meta: 'BSc · 2025' },
@@ -44,36 +46,26 @@ export const defaultJourney: Array<{
   desc: string;
   tags: string[];
   project?: ProjectTagId;
-}> = [
-  { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
-    desc: 'Started in 2020 on the Potchefstroom campus. Passed 8 semester subjects, then left the degree. The first plan was mechanical engineering. Software was the wider brief.',
-    tags: ['NWU', 'Physics', 'Mathematics'] },
-  { year: '2023', chip: 'Varsity College', title: 'Started the BSc in Computer and Information Sciences',
-    desc: 'Pretoria campus, now Emeris. C#, Java, and the web stack. Tutored first-year students in the IT department through 2024.',
-    tags: ['Emeris', 'C#', 'Java'] },
-  { year: '2024', chip: 'First production work', title: 'Eridge RDA, then Afrisist',
-    desc: 'Shipped the Eridge RDA site for a UK charity: React, Vite, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
-    tags: ['Eridge RDA', 'Afrisist', 'Trans Baviaans'],
-    project: 'eridge-rda' },
-  { year: '2025', chip: 'Final year', title: 'The degree, between the UK and South Africa',
-    desc: 'Final year of the BSc at Varsity College, now Emeris. Full time software developer at Rimitso Management Services for Katanga Contracting Services. Moved between the UK and South Africa for networking and experience.',
-    tags: ['Rimitso', 'KCS', 'Emeris'] },
-  { year: '2026', chip: 'Full time', title: 'Rimitso and KCS',
-    desc: 'No longer studying. Full time with Rimitso Management Services and Katanga Contracting Services. Rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
-    tags: ['Rimitso', 'KCS', 'Trailseeker'],
-    project: 'katanga-rms' },
-];
+}> = journeyNodes.map((n) => ({
+  year: n.year,
+  chip: n.chip,
+  title: n.title,
+  desc: n.desc,
+  tags: [...n.tags],
+  project: n.project,
+}));
 
 export const defaultCycling = {
-  introHtml: 'Cross-country marathon and endurance. In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>. In 2026 I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington on 12 September at Bosman Family Vineyards. The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.',
+  introHtml:
+    'When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>, the 24-hour mountain bike marathon. This year I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
 };
 
 export const defaultGallery = [
-  { cls: 'g-1', n: '12 Sep 2026', l: 'Trailseeker · Wellington', url: '' },
-  { cls: 'g-2', n: 'Studio', l: 'Work from home desk setup', url: '' },
-  { cls: 'g-3', n: 'Bike', l: 'S-Works MTB with new upgrades', url: '' },
-  { cls: 'g-4', n: 'Race', l: 'Always race ready', url: '' },
-  { cls: 'g-5', n: 'Ride', l: 'Long gravel ride', url: '' },
+  { cls: 'g-1', n: '12 Sep 2026', l: 'Trailseeker #6, Wellington', url: '' },
+  { cls: 'g-2', n: 'Studio', l: 'The home desk', url: '' },
+  { cls: 'g-3', n: 'Bike', l: 'My S-Works, freshly upgraded', url: '' },
+  { cls: 'g-4', n: 'Race', l: 'Race morning', url: '' },
+  { cls: 'g-5', n: 'Ride', l: 'A long gravel day', url: '' },
 ];
 
 export const defaultGearCoding = [
@@ -95,50 +87,11 @@ export const defaultGearCycling = [
   { name: 'Garmin Edge 840', spec: 'GPS bike computer', cat: 'Compute', href: 'https://www.garmin.com/en-US/p/798777/' },
 ];
 
-export const defaultStack = [
-  { name: 'Web', items: [
-    { n: 'HTML, CSS, JavaScript', y: '5 yrs' },
-    { n: 'TypeScript', y: '4 yrs' },
-    { n: 'React', y: '4 yrs' },
-    { n: 'Tailwind CSS', y: '3 yrs' },
-    { n: 'Node.js / Express', y: '4 yrs' },
-    { n: 'SQL', y: '4 yrs' },
-    { n: 'PostgreSQL', y: '3 yrs' },
-    { n: 'C#', y: '4 yrs' },
-    { n: 'ASP.NET Core', y: '3 yrs' },
-    { n: 'EF Core', y: '3 yrs' },
-    { n: 'REST / OpenAPI', y: 'in use' },
-    { n: 'Next.js', y: '2 yrs' },
-    { n: 'Supabase', y: '2 yrs' },
-    { n: 'GSAP', y: '2 yrs' },
-    { n: 'Three.js', y: '1 yr' },
-    { n: 'Python', y: '2 yrs' },
-    { n: 'Go', y: 'learning' },
-  ]},
-  { name: 'Mobile', items: [{ n: 'iOS and Android', y: 'in progress' }] },
-  { name: 'Cloud and network', items: [
-    { n: 'Linux', y: 'in use' },
-    { n: 'Docker', y: '2 yrs' },
-    { n: 'Nginx', y: '2 yrs' },
-    { n: 'GitHub Actions', y: '2 yrs' },
-    { n: 'Azure', y: '1 yr' },
-    { n: 'Cloudflare tunnels', y: '1 yr' },
-  ]},
-  { name: 'Security', items: [
-    { n: 'Environment secrets', y: 'in use' },
-    { n: 'Role-based access', y: 'in use' },
-  ]},
-];
+export const defaultStack = stackGroups;
 
 export const defaultDocs = {
-  intro: 'CV from October 2025, the Golden Key record, and the Varsity College results. The college is now Emeris. The degree\'s final year was 2025.',
-  items: [
-    { label: 'CV', href: '/cert-docs/251024%20Markus%20Fourie%20CV.pdf', note: 'October 2025 · Full' },
-    { label: 'Abridged CV', href: '/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf', note: 'October 2025 · One page' },
-    { label: 'Golden Key', href: '/cert-docs/VC_GoldenKey.pdf', note: 'Top Performer · 23 April 2025' },
-    { label: 'Golden Key verify', href: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455', note: 'External record' },
-    { label: 'Academic results', href: '/cert-docs/VarsityCollege_Results.zip', note: 'Varsity College · ZIP' },
-  ],
+  intro: "If you'd rather read it than scroll it, it's all here.",
+  items: paperTrail.map(({ label, href, note }) => ({ label, href, note })),
 };
 
 const DEFAULTS: Record<CmsKey, unknown> = {

@@ -317,6 +317,17 @@ html {
   --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
 
+  --t-display: clamp(44px, 6vw, 88px);
+  --t-h2: clamp(32px, 3.2vw, 44px);
+  --t-quote: clamp(26px, 2.8vw, 36px);
+  --t-stat: clamp(36px, 4vw, 54px);
+  --t-h3: clamp(20px, 2vw, 26px);
+  --t-lead: 18px;
+  --t-body: 16px;
+  --t-small: 14px;
+  --t-label: 12px;
+  --t-wordmark: clamp(92px, 17vw, 300px);
+
   --f-display: 'Source Serif 4', Georgia, serif;
   --f-body:    'Inter', -apple-system, system-ui, sans-serif;
   --f-mono:    'JetBrains Mono', ui-monospace, monospace;
@@ -396,7 +407,7 @@ html {
 }
 .editorial .section-marker {
   font-family: var(--f-mono);
-  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--ink);
   display: flex; align-items: center; gap: 10px;
 }
@@ -405,13 +416,13 @@ html {
 }
 .editorial .num {
   font-family: var(--f-mono);
-  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: var(--t-label); letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--ink-2);
 }
 .editorial .section-title {
   font-family: var(--f-display);
   font-weight: 500;
-  font-size: clamp(32px, 3.2vw, 44px);
+  font-size: var(--t-h2);
   line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--ink);
@@ -1764,7 +1775,6 @@ html {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
-  align-items: stretch;
 }
 .editorial .proj-card {
   border: 1px solid var(--line);
@@ -1776,12 +1786,9 @@ html {
 }
 .editorial .proj-card .proj-shot {
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
+  height: 180px;
   object-fit: cover;
-  object-position: top center;
   border-radius: 0;
-  display: block;
 }
 .editorial .proj-card-body {
   display: flex;
@@ -2038,8 +2045,8 @@ html {
 .editorial .philo-quote {
   font-family: var(--f-display);
   font-weight: 500;
-  font-size: clamp(28px, 3.2vw, 40px);
-  line-height: 1.25;
+  font-size: var(--t-quote);
+  line-height: 1.3;
   letter-spacing: -0.025em;
   color: var(--ink); text-wrap: balance;
   position: relative;
@@ -2094,6 +2101,54 @@ html {
 .editorial .docs-head { grid-column: 1 / span 7; }
 .editorial .docs-intro { grid-column: 8 / span 5; align-self: end; color: var(--muted); font-size: 15px; }
 .editorial .docs-list { grid-column: 1 / span 12; margin-top: 36px; }
+.editorial .paper-trail {
+  grid-column: 1 / span 12;
+  margin-top: 72px;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+.editorial .paper-trail-title { margin-bottom: 12px; }
+.editorial .life-quote {
+  grid-column: 1 / span 12;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.editorial .life-quote blockquote {
+  margin: 0;
+  max-width: 36rem;
+}
+.editorial .life-quote p {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--t-quote);
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0;
+}
+.editorial .life-quote footer {
+  margin-top: 12px;
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.editorial .life-social {
+  margin-top: 16px;
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+.editorial .life-social a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.editorial .life-social a:hover { color: var(--accent); }
+.editorial .contact-intro {
+  grid-column: 1 / span 12;
+  margin-bottom: 28px;
+  max-width: 42rem;
+}
 .editorial .doc-row {
   display: flex;
   justify-content: space-between;
@@ -2137,8 +2192,8 @@ html {
 .editorial .contact-title {
   font-family: var(--f-display);
   font-weight: 500;
-  font-size: clamp(56px, 8vw, 120px);
-  line-height: 0.92;
+  font-size: var(--t-display);
+  line-height: 0.95;
   letter-spacing: -0.045em;
   color: var(--ink); text-wrap: balance;
 }
@@ -2472,12 +2527,12 @@ html {
   overflow: hidden;
   font-family: var(--f-display);
   font-weight: 500;
-  font-size: clamp(92px, 17vw, 300px);
+  font-size: var(--t-wordmark);
   line-height: 0.8;
   letter-spacing: -0.045em;
   text-align: center;
   white-space: nowrap;
-  color: rgba(255, 255, 255, 0.2);
+  color: #7a7a7a;
   user-select: none;
   pointer-events: none;
 }

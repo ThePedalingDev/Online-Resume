@@ -35,7 +35,23 @@ import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
 import { availability, availabilityLine } from '@/config/availability';
-import { getProjectTags, joinProjectTags, type ProjectTagId } from '@/data/projectTags';
+import { getProjectTags, joinProjectTags } from '@/data/projectTags';
+import {
+  approachCopy,
+  contactCopy,
+  galleryCaptions,
+  heroCopy,
+  journeyCopy,
+  journeyNodes,
+  lifeCopy,
+  paperTrail,
+  projectCopy,
+  stackCopy,
+  stackGroups,
+  workCopy,
+  type JourneyNode,
+  type StackCat,
+} from '@/content/site';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -161,12 +177,10 @@ function Hero({ content }: { content?: HeroContent | null }) {
     <section id="top" className="hero" aria-labelledby="hero-name">
       <div className="hero-inner">
         <div className="hero-copy">
-          <h1 id="hero-name" className="hero-name">Markus Fourie</h1>
-          <p className="hero-role">Full-stack developer in Pretoria</p>
-          <p className="hero-tagline">Software that holds up outside the office.</p>
-          <p className="hero-subline">
-            Right now that&apos;s the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity&apos;s website and a freelance marketplace.
-          </p>
+          <h1 id="hero-name" className="hero-name">{heroCopy.name}</h1>
+          <p className="hero-role">{heroCopy.role}</p>
+          <p className="hero-tagline">{heroCopy.tagline}</p>
+          <p className="hero-subline">{heroCopy.subline}</p>
           <ul className="hero-ctas">
             <li>
               <a className="hero-pill primary" href="#work">
@@ -227,37 +241,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
   );
 }
 
-type JourneyItem = {
-  year: string;
-  chip: string;
-  title: string;
-  desc: string;
-  tags: string[];
-  /** When set, renders a stack row from the shared project tag set. */
-  project?: ProjectTagId;
-};
-
-type StackCat = { name: string; items: Array<{ n: string; y: string }> };
-
-const JOURNEY: JourneyItem[] = [
-  { year: '2021', chip: 'Potchefstroom', title: 'Physics and mathematics at North-West University',
-    desc: 'Started in 2020 on the Potchefstroom campus. Passed 8 semester subjects, then left the degree. The first plan was mechanical engineering. Software was the wider brief.',
-    tags: ['NWU', 'Physics', 'Mathematics'] },
-  { year: '2023', chip: 'Varsity College', title: 'Started the BSc in Computer and Information Sciences',
-    desc: 'Pretoria campus, now Emeris. C#, Java, and the web stack. Tutored first-year students in the IT department through 2024.',
-    tags: ['Emeris', 'C#', 'Java'] },
-  { year: '2024', chip: 'First production work', title: 'Eridge RDA, then Afrisist',
-    desc: 'Shipped the Eridge RDA site for a UK charity: React, Vite, and Supabase, with a CMS for volunteers, programmes, and events. Built the Afrisist fleet alarm desk. Rode the Trans Baviaans, the 24-hour mountain bike marathon.',
-    tags: ['Eridge RDA', 'Afrisist', 'Trans Baviaans'],
-    project: 'eridge-rda' },
-  { year: '2025', chip: 'Final year', title: 'The degree, between the UK and South Africa',
-    desc: 'Final year of the BSc at Varsity College, now Emeris. Full time software developer at Rimitso Management Services for Katanga Contracting Services. Moved between the UK and South Africa for networking and experience.',
-    tags: ['Rimitso', 'KCS', 'Emeris'] },
-  { year: '2026', chip: 'Full time', title: 'Rimitso and KCS',
-    desc: 'No longer studying. Full time with Rimitso Management Services and Katanga Contracting Services. Rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
-    tags: ['Rimitso', 'KCS', 'Trailseeker'],
-    project: 'katanga-rms' },
-];
+type JourneyItem = JourneyNode;
 
 type JourneyStill = { src: string; alt: string; pos?: string; fit?: 'cover' | 'contain' };
 
@@ -274,7 +258,6 @@ const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
   ],
   '2026': [
     { src: rmsHome, alt: 'Resource Management System home screen' },
-    { src: trailseekerWellington, alt: 'Markus Fourie at Ford Trailseeker #6 Wellington' },
   ],
 };
 
@@ -488,18 +471,14 @@ function Journey({ items }: { items: JourneyItem[] }) {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">04 · Journey</span>
-          <span className="num">Timeline · Credentials · 2021-2026</span>
+          <span className="num">Timeline · Credentials · 2020-2026</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="journey-title">
-            <h2 className="section-title">
-              A <em>disciplined</em> progression, one milestone at a time.
-            </h2>
+            <h2 className="section-title">{journeyCopy.title}</h2>
           </Reveal>
           <Reveal className="journey-intro" delay={120}>
-            <p className="section-intro">
-              I build operational software, and I race. Each node below marks a decision that compounded: a project, a lesson, a discipline adopted.
-            </p>
+            <p className="section-intro">{journeyCopy.intro}</p>
           </Reveal>
           <div className="timeline">
             <div className="timeline-rail" />
@@ -510,6 +489,25 @@ function Journey({ items }: { items: JourneyItem[] }) {
               return <Milestone key={`${m.year}-${m.chip}`} {...m} tags={tags} />;
             })}
           </div>
+          <Reveal className="paper-trail">
+            <h3 className="section-title paper-trail-title">{journeyCopy.paperTrailTitle}</h3>
+            <p className="section-intro">{journeyCopy.paperTrailIntro}</p>
+            <div className="docs-list">
+              {paperTrail.map((row) => (
+                <div className="doc-row" key={row.href}>
+                  <a
+                    href={row.href}
+                    {...(row.external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : { download: true })}
+                  >
+                    {row.label}
+                  </a>
+                  <span>{row.note}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -616,24 +614,33 @@ function Cycling() {
         </div>
         <div className="ed-grid12">
           <Reveal className="cycling-head">
-            <h2 className="section-title">
-              Off the clock: trained <em>by the hills</em>, tracked by data.
-            </h2>
+            <h2 className="section-title">{lifeCopy.title}</h2>
+          </Reveal>
+          <Reveal className="life-quote" delay={40}>
+            <blockquote>
+              <p>{lifeCopy.quote}</p>
+              <footer>{lifeCopy.quoteAttr}</footer>
+            </blockquote>
           </Reveal>
           <Reveal className="cycling-intro" delay={120}>
             {introHtml ? (
               <p dangerouslySetInnerHTML={{ __html: introHtml }} />
             ) : (
               <p>
-                Cross-country marathon and endurance.
-                In 2024 I rode the <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>.
-                In 2026 I rode the full <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a> series, including #6 Wellington on 12 September at Bosman Family Vineyards.
-                The film is a ride along the Cape Peninsula with Matthew Waldeck. The metrics update after every ride.
+                When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the{' '}
+                <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>, the 24-hour mountain bike marathon. This year I rode the full{' '}
+                <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a>
+                {' '}series, including #6 Wellington at Bosman Family Vineyards on 12 September.
               </p>
             )}
             <p className="uses-link">
-              <a href="/uses">See my setup</a>
-              {' '}for desk and cycling kit.
+              <a href="/uses">{lifeCopy.usesLabel} <span aria-hidden="true">→</span></a>
+            </p>
+            <p className="life-social">
+              {lifeCopy.socialLabel}:{' '}
+              <a href="https://www.strava.com/athletes/7756913" target="_blank" rel="noopener noreferrer">Strava <span aria-hidden="true">↗</span></a>
+              {' · '}
+              <a href="https://www.instagram.com/markuss.fourie/" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span></a>
             </p>
           </Reveal>
           {ytd ? (
@@ -658,9 +665,9 @@ function Cycling() {
                 onPause={() => setPlaying(false)}
               />
               <figcaption>
-                <span>Cape Peninsula</span>
+                <span>Cape Peninsula, with Matthew Waldeck</span>
                 <button type="button" onClick={onFilmControl} aria-pressed={sound}>
-                  {playing ? (sound ? 'Sound on' : 'Sound off') : 'Play'}
+                  {playing ? (sound ? 'Sound on' : 'Sound off') : 'Play the ride'}
                 </button>
               </figcaption>
             </figure>
@@ -668,7 +675,7 @@ function Cycling() {
           <Reveal className="cycling-still" delay={80}>
             <figure className="cycling-shot">
               <img src={capeFriends} alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula" loading="lazy" decoding="async" />
-              <figcaption>With Matthew Waldeck</figcaption>
+              <figcaption>Out with Matthew Waldeck</figcaption>
             </figure>
           </Reveal>
           <div className="cycling-data">
@@ -711,13 +718,17 @@ function Cycling() {
 type GalleryItem = { cls: string; n: string; l: string; url?: string };
 
 function GalleryGrid() {
-  const defaultItems: GalleryItem[] = [
-    { cls: 'g-1', n: '12 Sep 2026', l: 'Trailseeker · Wellington', url: trailseekerWellington },
-    { cls: 'g-2', n: 'Studio', l: 'Work from home desk setup', url: deskSetup },
-    { cls: 'g-3', n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades },
-    { cls: 'g-4', n: 'Race', l: 'Always race ready', url: raceReady },
-    { cls: 'g-5', n: 'Ride', l: 'Long gravel ride', url: longRide },
-  ];
+  const urls: Record<string, string> = {
+    'g-1': trailseekerWellington,
+    'g-2': deskSetup,
+    'g-3': sworksUpgrades,
+    'g-4': raceReady,
+    'g-5': longRide,
+  };
+  const defaultItems: GalleryItem[] = galleryCaptions.map((g) => ({
+    ...g,
+    url: urls[g.cls],
+  }));
   const [items, setItems] = useState<GalleryItem[]>(defaultItems);
 
   useEffect(() => {
@@ -771,13 +782,10 @@ function GalleryGrid() {
     <>
       <div className="gallery-head">
         <Reveal>
-          <h3 className="section-title">Visual <em>field notes</em>.</h3>
+          <h3 className="section-title">{lifeCopy.galleryTitle}</h3>
         </Reveal>
         <Reveal delay={120}>
-          <p className="section-intro">
-            Moments from the studio and the trail. Captured on a phone,
-            colour-corrected lightly, honest about the light.
-          </p>
+          <p className="section-intro">{lifeCopy.galleryIntro}</p>
         </Reveal>
       </div>
       <div className="gallery-grid">
@@ -813,21 +821,14 @@ function HowIBuild() {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">02 · Approach</span>
-          <span className="num">How I build · Craft</span>
+          <span className="num">How I work · Craft</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="eng-head">
-            <h2 className="section-title">
-              Structured tools for <em>real</em> operations.
-            </h2>
+            <h2 className="section-title">{approachCopy.title}</h2>
           </Reveal>
           <Reveal className="eng-intro" delay={120}>
-            <p>
-              Resource management, audit trails, billing reconciliation.
-              The glue code between field operations and back-office systems.
-              Built to survive rough conditions, network dropouts, and the
-              long tail of edge cases real businesses live with.
-            </p>
+            <p>{approachCopy.intro}</p>
           </Reveal>
           <div className="eng-grid">
             <Reveal>
@@ -846,52 +847,34 @@ function HowIBuild() {
                 <TerminalLine><span className="dim">[08:42:01]</span> OP_CHECKOUT · user:214 · asset:crane-07 · ok</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:09]</span> OP_CHECKOUT · user:198 · asset:wheel-12 · ok</TerminalLine>
                 <TerminalLine><span className="dim">[08:42:17]</span> OP_RETURN   · user:214 · asset:crane-07 · 4.2h</TerminalLine>
-                <TerminalLine><span className="dim">[08:42:44]</span> <span className="egg">OP_CHECKOUT · user:markus · asset:legs · zone:4 · hill:accepted</span></TerminalLine>
-                <TerminalLine>&nbsp;</TerminalLine>
-                <TerminalLine><FedoraPrompt /> which weekend</TerminalLine>
-                <TerminalLine><span className="egg">/usr/local/bin/long-ride</span></TerminalLine>
                 <TerminalLine><FedoraPrompt /> <span className="t-cursor" /></TerminalLine>
               </div>
             </Reveal>
             <Reveal delay={120}>
               <div className="eng-copy">
-                <h3>The <em>quiet</em> infrastructure that keeps real businesses running.</h3>
-                <p>
-                  I build the systems that don't get shown in demos: the audit layer,
-                  the reconciliation jobs, the offline-first client that keeps a site
-                  foreman working through a dead signal. Fewer features, more surface reliability.
-                </p>
                 <ul>
-                  <li><span className="idx">01</span><strong>Resource mgmt</strong><span className="d">Checkouts, returns, compliance.</span></li>
-                  <li><span className="idx">02</span><strong>Audit trails</strong><span className="d">Append-only, field-safe, queryable.</span></li>
-                  <li><span className="idx">03</span><strong>Billing recon</strong><span className="d">Matching field ops against invoices.</span></li>
-                  <li><span className="idx">04</span><strong>Ops dashboards</strong><span className="d">React + TS, built for bad screens.</span></li>
-                  <li><span className="idx">05</span><strong>Offline-first</strong><span className="d">Sync queues, conflict resolution.</span></li>
+                  {approachCopy.capabilities.map((cap, i) => (
+                    <li key={cap.name}>
+                      <span className="idx">{String(i + 1).padStart(2, '0')}</span>
+                      <strong>{cap.name}</strong>
+                      <span className="d">{cap.line}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </Reveal>
           </div>
           <Reveal className="philo-inner build-principles">
-            <p className="philo-quote">
-              Discipline is a chain of <em>small, repeated decisions</em>.
-              The 5 am ride, the log line written for the version of you debugging at 2.
-              The shape is built the same way.
-            </p>
-            <div className="philo-attr">Operating principles</div>
+            <p className="philo-quote">{approachCopy.quote}</p>
+            <div className="philo-attr">{approachCopy.principlesLabel}</div>
           </Reveal>
           <div className="philo-pillars">
-            <Reveal className="pillar">
-              <h3>01 · Long view</h3>
-              <p>Optimise for the version of the system that exists in three years, under a team that isn't me.</p>
-            </Reveal>
-            <Reveal className="pillar" delay={100}>
-              <h3>02 · Shape over feature</h3>
-              <p>Get the primitives right and features come cheaply. Get them wrong and every feature costs twice.</p>
-            </Reveal>
-            <Reveal className="pillar" delay={200}>
-              <h3>03 · Honest tools</h3>
-              <p>The system should tell you what it's actually doing. Audit logs, health checks, dashboards that earn their glance.</p>
-            </Reveal>
+            {approachCopy.principles.map((p, i) => (
+              <Reveal key={p.title} className="pillar" delay={i * 100}>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </div>
@@ -914,70 +897,29 @@ type ProjectCase = {
   result: string;
   tags: string[];
   cta: 'visit' | 'private';
+  ctaLabel?: string;
 };
 
-const PROJECTS: ProjectCase[] = [
-  {
-    n: '01',
-    name: 'Katanga RMS',
-    href: 'https://rms.rimitso.com/',
-    mark: kcsMark,
-    shot: rmsHome,
-    shotW: 906,
-    shotH: 566,
-    role: 'Full-stack developer at Rimitso Management Services',
-    problem: 'Katanga Contracting Services needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
-    built: 'Operations system for Katanga Contracting Services, hosted on Azure.',
-    result: 'Live on Azure for Katanga Contracting Services field and back-office workflows.',
-    tags: getProjectTags('katanga-rms'),
-    cta: 'visit',
-  },
-  {
-    n: '02',
-    name: 'Afrisist',
-    mark: afrisistMark,
-    markFit: 'word',
-    shot: afrisistFleet,
-    shotW: 1200,
-    shotH: 675,
-    role: 'Full-stack developer',
-    problem: 'Vehicle fleet operators needed a desk to watch incoming alarms, assign them, and stay notified as events arrive.',
-    built: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure, with WebSocket updates.',
-    result: 'Operators can watch, assign, and get notified as fleet alarms arrive.',
-    tags: getProjectTags('afrisist'),
-    cta: 'private',
-  },
-  {
-    n: '03',
-    name: 'Eridge RDA',
-    href: 'https://www.eridgerda.org.uk/',
-    mark: rdaMark,
-    shot: eridgeRda,
-    shotW: 1200,
-    shotH: 878,
-    role: 'Full-stack developer',
-    problem: 'The Eridge group of Riding for the Disabled needed a public site and a way for volunteers to keep programmes and events current.',
-    built: 'Site and CMS with programmes, a photo gallery, volunteer applications, and a protected admin.',
-    result: 'Public site and volunteer CMS in use at eridgerda.org.uk.',
-    tags: getProjectTags('eridge-rda'),
-    cta: 'visit',
-  },
-  {
-    n: '04',
-    name: 'Skillance',
-    href: 'https://skillance.co.za/',
-    mark: skillanceMark,
-    shot: skillanceHome,
-    shotW: 1200,
-    shotH: 626,
-    role: 'Co-builder with Kyle Nel',
-    problem: 'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
-    built: 'Verified freelance marketplace for South Africa, with iOS and Android apps still to come.',
-    result: 'Web product live at skillance.co.za; mobile launch still to come.',
-    tags: getProjectTags('skillance'),
-    cta: 'visit',
-  },
-];
+const PROJECT_MEDIA: Record<string, Partial<ProjectCase>> = {
+  'katanga-rms': { mark: kcsMark, shot: rmsHome, shotW: 906, shotH: 566 },
+  afrisist: { mark: afrisistMark, markFit: 'word', shot: afrisistFleet, shotW: 1200, shotH: 675 },
+  'eridge-rda': { mark: rdaMark, shot: eridgeRda, shotW: 1200, shotH: 878 },
+  skillance: { mark: skillanceMark, shot: skillanceHome, shotW: 1200, shotH: 626 },
+};
+
+const PROJECTS: ProjectCase[] = projectCopy.map((p) => ({
+  n: p.n,
+  name: p.name,
+  href: p.href,
+  role: p.role,
+  problem: p.problem,
+  built: p.built,
+  result: p.result,
+  tags: getProjectTags(p.id),
+  cta: p.cta,
+  ctaLabel: p.ctaLabel,
+  ...PROJECT_MEDIA[p.id],
+}));
 
 function Projects() {
   return (
@@ -985,17 +927,15 @@ function Projects() {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">01 · Work</span>
-          <span className="num">Selected work · {PROJECTS.length}</span>
+          <span className="num">Shipped · {PROJECTS.length}</span>
         </div>
         <div className="ed-grid12">
           <div className="proj-head">
             <Reveal>
-              <h2 className="section-title">Selected work</h2>
+              <h2 className="section-title">{workCopy.title}</h2>
             </Reveal>
             <Reveal delay={120}>
-              <p className="section-intro">
-                Platforms and tools shipped for operations, fleets, charities, and marketplaces.
-              </p>
+              <p className="section-intro">{workCopy.intro}</p>
             </Reveal>
           </div>
           <div className="proj-cards">
@@ -1037,7 +977,7 @@ function Projects() {
                       </a>
                     ) : (
                       <a className="btn-text proj-cta" href="#contact">
-                        Private system, ask for a demo
+                        {p.ctaLabel || 'Private system, ask for a demo'}
                       </a>
                     )}
                   </div>
@@ -1051,42 +991,7 @@ function Projects() {
   );
 }
 
-const STACK: StackCat[] = [
-  { name: 'Web', items: [
-    { n: 'HTML, CSS, JavaScript', y: '5 yrs' },
-    { n: 'TypeScript', y: '4 yrs' },
-    { n: 'React', y: '4 yrs' },
-    { n: 'Tailwind CSS', y: '3 yrs' },
-    { n: 'Node.js / Express', y: '4 yrs' },
-    { n: 'SQL', y: '4 yrs' },
-    { n: 'PostgreSQL', y: '3 yrs' },
-    { n: 'C#', y: '4 yrs' },
-    { n: 'ASP.NET Core', y: '3 yrs' },
-    { n: 'EF Core', y: '3 yrs' },
-    { n: 'REST / OpenAPI', y: 'in use' },
-    { n: 'Next.js', y: '2 yrs' },
-    { n: 'Supabase', y: '2 yrs' },
-    { n: 'GSAP', y: '2 yrs' },
-    { n: 'Three.js', y: '1 yr' },
-    { n: 'Python', y: '2 yrs' },
-    { n: 'Go', y: 'learning' },
-  ]},
-  { name: 'Mobile', items: [
-    { n: 'iOS and Android', y: 'in progress' },
-  ]},
-  { name: 'Cloud and network', items: [
-    { n: 'Linux', y: 'in use' },
-    { n: 'Docker', y: '2 yrs' },
-    { n: 'Nginx', y: '2 yrs' },
-    { n: 'GitHub Actions', y: '2 yrs' },
-    { n: 'Azure', y: '1 yr' },
-    { n: 'Cloudflare tunnels', y: '1 yr' },
-  ]},
-  { name: 'Security', items: [
-    { n: 'Environment secrets', y: 'in use' },
-    { n: 'Role-based access', y: 'in use' },
-  ]},
-];
+const STACK: StackCat[] = stackGroups;
 
 const STACK_MARKS: Partial<Record<string, BrandMarkName>> = {
   TypeScript: 'typescript',
@@ -1119,18 +1024,14 @@ function Stack({ cats }: { cats: StackCat[] }) {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">03 · Stack</span>
-          <span className="num">Roadmap · learned in order</span>
+          <span className="num">Tools · learned in order</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="stack-head">
-            <h2 className="section-title">
-              The road, <em>in order</em>.
-            </h2>
+            <h2 className="section-title">{stackCopy.title}</h2>
           </Reveal>
           <Reveal className="stack-intro" delay={120}>
-            <p>
-              Web first, the way it is actually learned: the page, then the typed language, then the server and the database. Cloud and network come after something is worth hosting. Security is the lock on that door. Mobile is the next build.
-            </p>
+            <p>{stackCopy.intro}</p>
           </Reveal>
           <div className="stack-grid">
             {cats.map((cat, i) => (
@@ -1159,9 +1060,7 @@ function Stack({ cats }: { cats: StackCat[] }) {
             <GithubActivity />
           </Reveal>
           <Reveal className="stack-home-lab" delay={180}>
-            <p className="section-intro">
-              At home: an HP Victus 15 runs as my home server, with Plex and local models (Gemma, Qwen) on Ollama. It&apos;s where I try things before they go near a client.
-            </p>
+            <p className="section-intro">{stackCopy.atHome}</p>
           </Reveal>
         </div>
       </div>
@@ -1169,58 +1068,9 @@ function Stack({ cats }: { cats: StackCat[] }) {
   );
 }
 
-function Docs() {
-  const [intro, setIntro] = useState<string | null>(null);
-  const [items, setItems] = useState<Array<{ label: string; href: string; note: string }> | null>(null);
-  useEffect(() => {
-    const ac = new AbortController();
-    fetchContent<{ intro?: string; items?: Array<{ label: string; href: string; note: string }> }>('docs', ac.signal)
-      .then((r) => {
-        if (r.value?.intro) setIntro(r.value.intro);
-        if (Array.isArray(r.value?.items) && r.value.items.length) setItems(r.value.items);
-      })
-      .catch(() => {});
-    return () => ac.abort();
-  }, []);
-  const rows = items ?? [
-    { label: 'CV', href: '/cert-docs/251024%20Markus%20Fourie%20CV.pdf', note: 'October 2025 · Full' },
-    { label: 'Abridged CV', href: '/cert-docs/251024%20Markus%20Fourie%20Abridged%20Resume.pdf', note: 'October 2025 · One page' },
-    { label: 'Golden Key', href: '/cert-docs/VC_GoldenKey.pdf', note: 'Top Performer · 23 April 2025' },
-    { label: 'Golden Key verify', href: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455', note: 'External record' },
-    { label: 'Academic results', href: '/cert-docs/VarsityCollege_Results.zip', note: 'Varsity College · ZIP' },
-  ];
-  return (
-    <section id="docs">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">06 · Docs</span>
-          <span className="num">Paper · Download</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="docs-head">
-            <h2 className="section-title">The record, on paper.</h2>
-          </Reveal>
-          <Reveal className="docs-intro" delay={120}>
-            <p>
-              {intro || 'CV from October 2025, the Golden Key record, and the Varsity College results. The college is now Emeris. The degree\'s final year was 2025.'}
-            </p>
-          </Reveal>
-          <div className="docs-list">
-            {rows.map((row) => (
-              <div className="doc-row" key={row.href}>
-                <a href={row.href} {...(row.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : { download: true })}>{row.label}</a>
-                <span>{row.note}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function Contact() {
-  const email = 'markusfourie@icloud.com';
+  const email = contactCopy.email;
   const [copied, setCopied] = useState(false);
 
   const copyEmail = () => {
@@ -1258,15 +1108,16 @@ function Contact() {
         </div>
         <div className="ed-grid12">
           <Reveal className="contact-head">
-            <h2 className="contact-title">
-              Let's <em>work</em> <br/>together.
-            </h2>
+            <h2 className="contact-title">{contactCopy.title}</h2>
+          </Reveal>
+          <Reveal className="contact-intro" delay={60}>
+            <p className="section-intro">{contactCopy.intro}</p>
           </Reveal>
           <Reveal className="contact-primary">
             <div className="contact-mail">
               <a className="email" href={`mailto:${email}`}>{email}</a>
-              <button type="button" className="copy-mail" onClick={copyEmail}>
-                {copied ? 'Copied' : 'Copy'}
+              <button type="button" className="copy-mail" onClick={copyEmail} aria-live="polite">
+                {copied ? 'Copied' : 'Copy email'}
               </button>
             </div>
             <div className="availability">
@@ -1275,10 +1126,9 @@ function Contact() {
             </div>
           </Reveal>
           <Reveal className="contact-side" delay={120}>
-            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="linkedin" />LinkedIn</span><span className="lbl">Profile</span></a>
-            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="github" />GitHub</span><span className="lbl">ThePedalingDev</span></a>
-            <a href="https://www.strava.com/athletes/7756913" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="strava" />Strava</span><span className="lbl">Rides · Nº 97</span></a>
-            <a href="https://www.instagram.com/markuss.fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="instagram" />Instagram</span><span className="lbl">@markuss.fourie</span></a>
+            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="linkedin" />LinkedIn</span><span className="lbl">Work history</span></a>
+            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer"><span className="contact-name"><BrandMark name="github" />GitHub</span><span className="lbl">Code</span></a>
+            <a href={CV_HREF} download><span className="contact-name">CV</span><span className="lbl">Download (PDF)</span></a>
           </Reveal>
         </div>
       </div>
@@ -1293,16 +1143,13 @@ function EdFooter() {
         <div className="ed-footer-inner">
           <div className="footer-mark">MF<em>.</em></div>
           <div className="footer-meta">
-            <p>Markus Fourie</p>
-            <p>Full-stack developer</p>
-            <p>Pretoria · ZA</p>
+            <p>Markus Fourie · Full-stack developer · Pretoria</p>
             <p style={{ marginTop: 12 }}>© {new Date().getFullYear()}</p>
           </div>
           <div className="footer-right">
-            <a href="#top">↑ Top</a>
-            <a href="#work">Work</a>
+            <a href="#top">Back to top ↑</a>
             <a href="#contact">Contact</a>
-            <a href="mailto:markusfourie@icloud.com">markusfourie@icloud.com</a>
+            <a href={CV_HREF} download>CV</a>
           </div>
         </div>
       </div>
@@ -1313,7 +1160,7 @@ function EdFooter() {
 
 export function Home() {
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
-  const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(JOURNEY);
+  const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(journeyNodes);
   const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
 
   useEffect(() => {
@@ -1335,8 +1182,10 @@ export function Home() {
 
         if (Array.isArray(journey.value) && journey.value.length) {
           const stale = journey.value.some((item) =>
-            (item.year === '2021' && /computer/i.test(item.title))
-            || (item.year === '2026' && /graduat/i.test(`${item.title} ${item.desc}`)),
+            (item.year === '2021' && /physics|nwu|computer/i.test(`${item.title} ${item.desc}`))
+            || (item.year === '2020' && /computer/i.test(item.title))
+            || (item.year === '2026' && /graduat|trailseeker/i.test(`${item.title} ${item.desc}`))
+            || /Katanga RMS|Rimitso RMS/i.test(`${item.title} ${item.desc}`),
           );
           if (!stale) setJourneyItems(journey.value);
         }
@@ -1360,11 +1209,10 @@ export function Home() {
       <Stack cats={stackCats} />
       <Journey items={journeyItems} />
       <Cycling />
-      <Docs />
       <Contact />
       <EdFooter />
       <div className="mobile-contact-bar">
-        <a className="btn-solid" href="#contact">Get in touch</a>
+        <a className="btn-solid" href={`mailto:${EMAIL}`}>Email me</a>
         <a className="btn-outline" href={CV_HREF} download>Download CV</a>
       </div>
     </div>
