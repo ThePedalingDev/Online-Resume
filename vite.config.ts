@@ -1,11 +1,35 @@
 import path from "path"
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { HOME_SHELL_HTML } from './src/ssg/homeShellHtml'
+
+/**
+ * Embed real homepage content into the built index.html so the first HTML
+ * response includes an H1 and landmark copy (fixes empty SPA shell / axe
+ * page-has-heading-one). React replaces #root on boot.
+ *
+ * Chosen over vite-react-ssg (RR6-only; breaks on react-router-dom v7) and
+ * Next.js static export (full framework rewrite for a Vite SPA).
+ */
+function prerenderHomeShell(): Plugin {
+  return {
+    name: 'prerender-home-shell',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        return html.replace(
+          '<div id="root"></div>',
+          `<div id="root">${HOME_SHELL_HTML}</div>`,
+        )
+      },
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), prerenderHomeShell()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -37,5 +61,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'gsap', '@gsap/react', 'three']
-  }
+  },
 })
