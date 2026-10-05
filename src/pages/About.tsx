@@ -20,7 +20,7 @@ export function About() {
     },
     {
       degree: 'BSc. Physics and Mathematics (Incomplete)',
-      status: '2020 - 2021',
+      status: '2020',
       school: 'North-West University - Potchefstroom',
       details: 'Passed 8 semester subjects. Changed career path to specialize in Computer Science.',
       icon: Award,
@@ -135,7 +135,7 @@ export function About() {
                 Full-stack software- and applications developer, specialising in systems design, development, multi-language programming and systems maintenance, who will complete final year of BSc. Computer and Information Science Degree, expected to be received Cum Laude in December 2025.
               </p>
               <p>
-                A proficient Software Developer, experienced in developing scalable, web-based, enterprise solutions, including the "Resource Management System" of Rimitso Mining Services (Pty) Ltd (being developed under Technical Services and Management Consulting Agreement for African Mining Solutions Ltd and its major subsidiary, Katanga Contracting Services in DRC) and the Afrisist Fleet Management Alarm Dashboard - both of which systems being developed whilst completing Final year of BSc. Degree.
+                A proficient Software Developer, experienced in developing scalable, web-based, enterprise solutions, including the Resource Management System for Katanga Contracting Services (KCS) and the Afrisist Fleet Management Alarm Dashboard — both built while completing the final year of a BSc degree.
               </p>
               <p>
                 Always ready to take responsibility and initiative, to create high-quality and performance-driven systems and solutions, applying appropriate attention to critical details and pro-active problem-solving skills.

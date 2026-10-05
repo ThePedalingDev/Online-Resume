@@ -31,7 +31,7 @@ export const heroCopy = {
   role: 'Full-stack developer in Pretoria',
   tagline: 'Software that holds up outside the office.',
   subline:
-    "Right now that's the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.",
+    "Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.",
 };
 
 export const workCopy = {
@@ -58,11 +58,12 @@ export const projectCopy: Array<{
     id: 'katanga-rms',
     n: '01',
     name: 'Resource Management System',
-    role: 'Full-stack developer at Rimitso Management Services',
+    role: 'Full-stack developer',
     problem:
-      'Katanga Contracting Services needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
-    built: 'The Resource Management System for Katanga Contracting Services, hosted on Azure.',
-    result: '388 assets and 46 users run on it.',
+      'Katanga Contracting Services (KCS) needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
+    built: 'The Resource Management System for Katanga Contracting Services (KCS), hosted on Azure.',
+    // Usage numbers still pending confirmation — keep result qualitative for now.
+    result: 'In production for site teams, assets, and shift approvals.',
     href: 'https://rms.rimitso.com/',
     cta: 'visit',
   },
@@ -94,10 +95,10 @@ export const projectCopy: Array<{
     id: 'skillance',
     n: '04',
     name: 'Skillance',
-    role: 'Co-built with Kyle Nel',
+    role: 'Co-built with Kyle',
     problem:
       'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
-    built: 'Verified freelance marketplace for South Africa, with iOS and Android apps still to come.',
+    built: 'Verified freelance marketplace for South Africa, co-built with Kyle, with iOS and Android apps still to come.',
     result: 'Web product live at skillance.co.za; mobile launch still to come.',
     href: 'https://skillance.co.za/',
     cta: 'visit',
@@ -245,15 +246,15 @@ export const journeyNodes: JourneyNode[] = [
     year: '2025',
     chip: 'Final year',
     title: 'Degree and a first full-time role',
-    desc: 'I finished the BSc while working full time as a developer at Rimitso, building the Resource Management System for Katanga Contracting Services. I was named a Varsity College Top Achiever and a Golden Key Top Performer, and split the year between South Africa and the UK.',
-    tags: ['Rimitso', 'KCS', 'Emeris'],
+    desc: 'I finished the BSc while working full time as a developer at Katanga Contracting Services (KCS), building the Resource Management System. I was named a Varsity College Top Achiever and a Golden Key Top Performer, and split the year between South Africa and the UK.',
+    tags: ['KCS', 'Emeris'],
   },
   {
     year: '2026',
     chip: 'Now',
     title: 'All in on operations software',
-    desc: "Studies done, I'm full time at Rimitso, working on the Resource Management System Katanga Contracting Services runs.",
-    tags: ['Rimitso', 'KCS'],
+    desc: "Studies done, I'm full time at Katanga Contracting Services (KCS), working on the Resource Management System.",
+    tags: ['KCS'],
     project: 'katanga-rms',
   },
 ];

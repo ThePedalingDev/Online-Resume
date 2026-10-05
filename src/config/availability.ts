@@ -8,9 +8,9 @@
 export const availability = {
   /** Hire-facing availability (hero status + contact). */
   status: 'Open to new work and new experiences',
-  /** Employer shown in status/meta. */
-  employer: 'Katanga Contracting Services',
-  /** Client relationship shorthand when needed. */
+  /** Employer shown in status/meta. Prefer this full form over "Rimitso · KCS". */
+  employer: 'Katanga Contracting Services (KCS)',
+  /** Short client / employer label when space is tight. */
   client: 'KCS',
   location: 'Pretoria',
   timezone: 'UTC+2',
@@ -21,5 +21,5 @@ export function availabilityLine(): string {
 }
 
 export function siteMetaDescription(): string {
-  return `I'm Markus, a full-stack developer in Pretoria. I build operations software for Katanga Contracting Services, plus sites and tools for fleets, a UK charity and a freelance marketplace.`;
+  return `I'm Markus, a full-stack developer in Pretoria. I build operations software for Katanga Contracting Services (KCS), plus sites and tools for fleets, a UK charity and a freelance marketplace.`;
 }

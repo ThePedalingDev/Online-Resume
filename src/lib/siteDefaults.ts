@@ -18,7 +18,7 @@ export const SECTION_LABELS: Record<CmsKey, string> = {
 export const defaultHero = {
   kicker: 'Full-stack developer in Pretoria',
   lead: 'Software that holds up outside the office.',
-  sub: "Right now that's the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on.",
+  sub: "Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on.",
   work: availability.employer,
   employment: availability.status,
   imageUrl: '',
@@ -29,8 +29,8 @@ export const defaultAbout = {
   ledeHtml:
     "I didn't take the straight road into software. I started in physics and maths, switched to a computing degree, and was shipping production work before I graduated.",
   sideHtml: [
-    'Operations software for Katanga Contracting Services. BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025. <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a> Top Performer, 23 April 2025.',
-    '<a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>, co-built with <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle Nel</a>.',
+    'Operations software for Katanga Contracting Services (KCS). BSc Computer and Information Sciences, Varsity College (now Emeris), final year 2025. Top Achiever, 2025. <a href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">Golden Key</a> Top Performer, 23 April 2025.',
+    '<a href="https://skillance.co.za/" target="_blank" rel="noopener noreferrer">Skillance</a>, co-built with <a href="https://www.linkedin.com/in/kyle-nel-026742193/" target="_blank" rel="noopener noreferrer">Kyle</a>.',
   ],
   images: [
     { slot: 'one', url: '', label: 'With Kyle Nel', meta: 'BSc · 2025' },

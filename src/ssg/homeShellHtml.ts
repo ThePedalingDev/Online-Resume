@@ -21,11 +21,11 @@ export const HOME_SHELL_HTML = `
         <div class="hero-intro">
           <h1 id="hero-name" class="hero-name">Markus Fourie</h1>
           <p class="hero-role">Full-stack developer in Pretoria</p>
-          <p class="hero-status"><span class="hero-status-dot" aria-hidden="true"></span>Katanga Contracting Services · Open to new work and new experiences</p>
+          <p class="hero-status"><span class="hero-status-dot" aria-hidden="true"></span>Katanga Contracting Services (KCS) · Open to new work and new experiences</p>
           <p class="hero-tagline">Software that holds up outside the office.</p>
         </div>
         <div class="hero-below">
-          <p class="hero-subline">Right now that's the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
+          <p class="hero-subline">Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
           <ul class="hero-ctas">
             <li><a class="hero-pill primary" href="#work">See what I've built <span aria-hidden="true">→</span></a></li>
             <li><a class="hero-pill" href="mailto:markusfourie@icloud.com">Start a conversation <span aria-hidden="true">→</span></a></li>
