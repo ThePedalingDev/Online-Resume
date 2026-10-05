@@ -1927,9 +1927,9 @@ html {
     background: var(--neutral-50);
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .editorial .hobby-card {
-    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
     gap: 32px 40px;
     align-items: start;
   }
