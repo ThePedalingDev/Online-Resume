@@ -38,7 +38,7 @@ export const workCopy = {
   nav: 'Work',
   title: "Things I've shipped",
   intro:
-    "Four projects, four very different users: a contractor's site teams, fleet operators, a charity's volunteers and South African freelancers. Here's what each one needed and what I built.",
+    "Software for very different people: a contractor's site teams, fleet operators, a UK charity's volunteers and South African freelancers. Plus the home server where I try things first.",
 };
 
 /** Card body text only — layout stays on the existing Role/Problem/Built/Result cards. */

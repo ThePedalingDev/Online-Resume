@@ -10,14 +10,8 @@ import graduationSolo from '@/assets/images/graduation.webp';
 import topAchieverPhoto from '@/assets/images/top-achiever.webp';
 import goldenKeyBadge from '@/assets/images/golden-key.webp';
 import bigBen from '@/assets/images/big-ben.webp';
-import skillanceMark from '@/assets/images/skillance-mark.png';
-import kcsMark from '@/assets/projects/kcs.webp';
-import afrisistMark from '@/assets/projects/afrisist.webp';
-import afrisistFleet from '@/assets/projects/afrisist-fleet.webp';
-import rmsHome from '@/assets/projects/rms-home.webp';
-import skillanceHome from '@/assets/projects/skillance-home.webp';
-import rdaMark from '@/assets/projects/rda-logo.svg';
 import eridgeRda from '@/assets/projects/eridge-rda.webp';
+import rmsHome from '@/assets/projects/rms-home.webp';
 import capePeninsula from '@/assets/video/cape-peninsula.mp4';
 import capePeninsulaPoster from '@/assets/video/cape-peninsula.jpg';
 import capeFriends from '@/assets/images/cape-friends.webp';
@@ -35,7 +29,7 @@ import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
 import { availability, availabilityLine } from '@/config/availability';
-import { getProjectTags, joinProjectTags } from '@/data/projectTags';
+import { getProjectTags } from '@/data/projectTags';
 import {
   approachCopy,
   contactCopy,
@@ -45,13 +39,12 @@ import {
   journeyNodes,
   lifeCopy,
   paperTrail,
-  projectCopy,
   stackCopy,
   stackGroups,
-  workCopy,
   type JourneyNode,
   type StackCat,
 } from '@/content/site';
+import { workProjects, workSectionCopy, type WorkImage, type WorkProject } from '@/content/work';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -921,109 +914,212 @@ function HowIBuild() {
   );
 }
 
-type ProjectCase = {
-  n: string;
-  name: string;
-  href?: string;
-  mark?: string;
-  markFit?: 'word';
-  shot?: string;
-  shotW?: number;
-  shotH?: number;
-  role: string;
-  problem: string;
-  built: string;
-  result: string;
-  tags: string[];
-  cta: 'visit' | 'private';
-  ctaLabel?: string;
-};
+function WorkShot({ image, eager = false, className = '' }: { image: WorkImage; eager?: boolean; className?: string }) {
+  return (
+    <picture>
+      <source type="image/avif" srcSet={image.srcsetAvif} sizes={image.sizes} />
+      <source type="image/webp" srcSet={image.srcsetWebp} sizes={image.sizes} />
+      <img
+        className={className}
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </picture>
+  );
+}
 
-const PROJECT_MEDIA: Record<string, Partial<ProjectCase>> = {
-  'katanga-rms': { mark: kcsMark, shot: rmsHome, shotW: 906, shotH: 566 },
-  afrisist: { mark: afrisistMark, markFit: 'word', shot: afrisistFleet, shotW: 1200, shotH: 675 },
-  'eridge-rda': { mark: rdaMark, shot: eridgeRda, shotW: 1200, shotH: 878 },
-  skillance: { mark: skillanceMark, shot: skillanceHome, shotW: 1200, shotH: 626 },
-};
+function LabTerminal() {
+  return (
+    <div className="work-lab" aria-hidden="true">
+      <div className="work-lab-dots">
+        <span /><span /><span />
+      </div>
+      <div className="work-lab-body">
+        <p className="work-lab-muted"># HP Victus 15, home server</p>
+        <p><span className="work-lab-prompt">home-lab</span>:~$ systemctl is-active plex</p>
+        <p className="work-lab-ok">active</p>
+        <p><span className="work-lab-prompt">home-lab</span>:~$ ollama list</p>
+        <p>gemma</p>
+        <p>qwen</p>
+        <p>
+          <span className="work-lab-prompt">home-lab</span>:~$ <span className="work-lab-cursor" />
+        </p>
+      </div>
+    </div>
+  );
+}
 
-const PROJECTS: ProjectCase[] = projectCopy.map((p) => ({
-  n: p.n,
-  name: p.name,
-  href: p.href,
-  role: p.role,
-  problem: p.problem,
-  built: p.built,
-  result: p.result,
-  tags: getProjectTags(p.id),
-  cta: p.cta,
-  ctaLabel: p.ctaLabel,
-  ...PROJECT_MEDIA[p.id],
-}));
+function TagList({ tags }: { tags: string[] }) {
+  return (
+    <ul className="work-tags" role="list">
+      <li className="sr-only">Stack:</li>
+      {tags.map((tag) => (
+        <li key={tag}>{tag}</li>
+      ))}
+    </ul>
+  );
+}
+
+function TileCta({ project }: { project: WorkProject }) {
+  const { cta, name } = project;
+  const external = Boolean(cta.external);
+  const hostLabel = (() => {
+    if (!external) return '';
+    try {
+      return new URL(cta.href).hostname.replace(/^www\./, '');
+    } catch {
+      return '';
+    }
+  })();
+  const arrow = external ? (
+    <svg aria-hidden="true" viewBox="0 0 16 16" className="work-arrow work-arrow-ext">
+      <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ) : (
+    <svg aria-hidden="true" viewBox="0 0 16 16" className="work-arrow">
+      <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+  return (
+    <a
+      className="work-tile-cta"
+      href={cta.href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {cta.label}
+      <span className="sr-only">
+        {external && hostLabel ? ` ${hostLabel} (opens in a new tab)` : `: ${name}`}
+      </span>
+      {arrow}
+    </a>
+  );
+}
+
+function FeaturedCard({ project }: { project: WorkProject }) {
+  const host = workSectionCopy.frameHost;
+  return (
+    <article className="work-featured" aria-labelledby="work-featured-title">
+      <div className="work-featured-media">
+        <div className="work-browser">
+          <div className="work-browser-bar" aria-hidden="true">
+            <span /><span /><span />
+            <span className="work-browser-url">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2M4 7h8v6H4z" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg>
+              {host}
+            </span>
+            <span className="work-browser-spacer" />
+          </div>
+          <div className="work-frame">
+            {project.image ? <WorkShot image={project.image} eager className="work-shot" /> : null}
+          </div>
+        </div>
+      </div>
+      <div className="work-featured-copy">
+        <div>
+          <p className="work-eyebrow">{project.featuredEyebrow}</p>
+          <h3 id="work-featured-title" className="work-featured-title">{project.name}</h3>
+          {project.client ? <p className="work-client">For {project.client}</p> : null}
+        </div>
+        <p className="work-case">{project.caseStudy || project.outcome}</p>
+        {project.stats?.length ? (
+          <div>
+            <p id="work-stats" className="work-stats-label">{workSectionCopy.statsLabel}</p>
+            <ul className="work-stats" role="list" aria-labelledby="work-stats">
+              {project.stats.map(([value, label]) => (
+                <li key={label} className="work-stat">
+                  <span className="work-stat-val">{value}</span>
+                  <span className="work-stat-lbl">{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        <div className="work-featured-meta">
+          <p className="work-role">{project.role}</p>
+          <TagList tags={project.stack} />
+        </div>
+        <div className="work-featured-ctas">
+          <a
+            className="work-btn-primary"
+            href={project.cta.href}
+            {...(project.cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {project.cta.label}
+            <span className="sr-only"> {host} (opens in a new tab)</span>
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function TileCard({ project }: { project: WorkProject }) {
+  const metaRight = project.private
+    ? 'Private'
+    : project.year || '';
+  return (
+    <article className="work-tile">
+      <div className="work-tile-media">
+        {project.labTerminal ? (
+          <div className="work-frame work-frame-lab"><LabTerminal /></div>
+        ) : project.image ? (
+          <div className="work-frame">
+            <WorkShot image={project.image} className="work-shot" />
+          </div>
+        ) : null}
+      </div>
+      <div className="work-tile-body">
+        <div className="work-tile-meta">
+          <span>{project.kind}</span>
+          {metaRight ? <span className="work-tile-year">{metaRight}</span> : null}
+        </div>
+        <h3 className="work-tile-title">{project.name}</h3>
+        <p className="work-tile-outcome">{project.outcome}</p>
+        <p className="work-role">{project.role}</p>
+        <TagList tags={project.stack} />
+        <div className="work-tile-cta-wrap">
+          <TileCta project={project} />
+        </div>
+      </div>
+    </article>
+  );
+}
 
 function Projects() {
+  const [featured, ...rest] = workProjects;
   return (
-    <section id="work">
+    <section id="work" aria-labelledby="work-title">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">01 · Work</span>
-          <span className="num">Shipped · {PROJECTS.length}</span>
+          <span className="section-marker">{workSectionCopy.marker}</span>
+          <span className="num">{workSectionCopy.countLabel}</span>
         </div>
-        <div className="ed-grid12">
-          <div className="proj-head">
-            <Reveal>
-              <h2 className="section-title">{workCopy.title}</h2>
+        <div className="work-head">
+          <Reveal>
+            <h2 id="work-title" className="section-title">{workSectionCopy.title}</h2>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="section-intro">{workSectionCopy.intro}</p>
+          </Reveal>
+        </div>
+        {featured ? (
+          <Reveal className="work-featured-wrap" delay={80}>
+            <FeaturedCard project={featured} />
+          </Reveal>
+        ) : null}
+        <div className="work-grid">
+          {rest.map((project, i) => (
+            <Reveal key={project.id} delay={120 + i * 40}>
+              <TileCard project={project} />
             </Reveal>
-            <Reveal delay={120}>
-              <p className="section-intro">{workCopy.intro}</p>
-            </Reveal>
-          </div>
-          <div className="proj-cards">
-            {PROJECTS.map((p, i) => {
-              const word = p.markFit === 'word';
-              return (
-                <Reveal key={p.name} className="proj-card" delay={i * 60}>
-                  {p.shot ? (
-                    <img
-                      className="proj-shot"
-                      src={p.shot}
-                      alt=""
-                      width={p.shotW}
-                      height={p.shotH}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : null}
-                  <div className="proj-card-body">
-                    <div className="proj-card-top">
-                      <span className="proj-n">{p.n}</span>
-                      <span className="proj-name">
-                        {p.mark ? (
-                          <img className={`proj-mark${word ? ' is-word' : ''}`} src={p.mark} alt="" loading="lazy" decoding="async" />
-                        ) : null}
-                        {p.name}
-                      </span>
-                    </div>
-                    <dl className="proj-case">
-                      <div><dt>Role</dt><dd>{p.role}</dd></div>
-                      <div><dt>Problem</dt><dd>{p.problem}</dd></div>
-                      <div><dt>Built</dt><dd>{p.built}</dd></div>
-                      <div><dt>Result</dt><dd>{p.result}</dd></div>
-                    </dl>
-                    <span className="proj-tags">{joinProjectTags(p.tags)}</span>
-                    {p.cta === 'visit' && p.href ? (
-                      <a className="btn-solid proj-cta" href={p.href} target="_blank" rel="noopener noreferrer">
-                        Visit site
-                      </a>
-                    ) : (
-                      <a className="btn-text proj-cta" href="#contact">
-                        {p.ctaLabel || 'Private system, ask for a demo'}
-                      </a>
-                    )}
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
+          ))}
         </div>
       </div>
     </section>
