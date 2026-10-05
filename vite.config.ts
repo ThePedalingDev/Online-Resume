@@ -3,6 +3,7 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { HOME_SHELL_HTML } from './src/ssg/homeShellHtml'
+import { siteMetaDescription } from './src/config/availability'
 
 /**
  * Embed real homepage content into the built index.html so the first HTML
@@ -18,10 +19,28 @@ function prerenderHomeShell(): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler(html) {
-        return html.replace(
-          '<div id="root"></div>',
-          `<div id="root">${HOME_SHELL_HTML}</div>`,
-        )
+        const description = siteMetaDescription()
+        return html
+          .replace(
+            /<meta name="description" content="[^"]*" \/>/,
+            `<meta name="description" content="${description}" />`,
+          )
+          .replace(
+            /<meta property="og:description" content="[^"]*" \/>/,
+            `<meta property="og:description" content="${description}" />`,
+          )
+          .replace(
+            /<meta property="twitter:description" content="[^"]*" \/>/,
+            `<meta property="twitter:description" content="${description}" />`,
+          )
+          .replace(
+            /<meta name="keywords" content="[^"]*" \/>/,
+            '<meta name="keywords" content="Markus Fourie, Full-Stack Developer, React, Node.js, ASP.NET, Pretoria, Portfolio" />',
+          )
+          .replace(
+            '<div id="root"></div>',
+            `<div id="root">${HOME_SHELL_HTML}</div>`,
+          )
       },
     },
   }

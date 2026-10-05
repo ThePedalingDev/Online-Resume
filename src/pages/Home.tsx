@@ -44,6 +44,7 @@ import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from
 import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
+import { availability, availabilityLine } from '@/config/availability';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -185,8 +186,8 @@ function Hero({ ytdDistanceKm, content }: { ytdDistanceKm: string | null; conten
             <a className="btn-text" href="#contact">Get in touch</a>
           </div>
           <div className="hero-stats">
-            <div className="hero-stat"><span>Work</span><span className="v">{content?.work || 'Rimitso · KCS'}</span></div>
-            <div className="hero-stat"><span>Employment</span><span className="v">{content?.employment || 'Full time'}</span></div>
+            <div className="hero-stat"><span>Work</span><span className="v">{availability.employer}</span></div>
+            <div className="hero-stat"><span>Employment</span><span className="v">{availability.status}</span></div>
             <div className="hero-stat"><span>Km / {year}</span><span className="v">{ytdDistanceKm ?? '-'} km</span></div>
           </div>
         </Reveal>
@@ -1356,7 +1357,7 @@ function Contact() {
       <div className="ed-shell">
         <div className="eyebrow-row">
           <span className="section-marker">11 · Contact</span>
-          <span className="num">Available · Q2 2026</span>
+          <span className="num">{availability.status}</span>
         </div>
         <div className="ed-grid12">
           <Reveal className="contact-head">
@@ -1373,7 +1374,7 @@ function Contact() {
             </div>
             <div className="availability">
               <span className="status-dot" />
-              Available for new engagements from May 2026
+              {availabilityLine()}
             </div>
           </Reveal>
           <Reveal className="contact-side" delay={120}>

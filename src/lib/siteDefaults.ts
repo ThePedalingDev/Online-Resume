@@ -1,4 +1,5 @@
 import type { CmsKey } from '@/lib/content';
+import { availability } from '@/config/availability';
 
 export const SECTION_LABELS: Record<CmsKey, string> = {
   hero: 'Hero',
@@ -16,8 +17,8 @@ export const defaultHero = {
   kicker: 'Full-stack developer · Pretoria, ZA',
   lead: 'I build structured systems for the real world: resource platforms, operational tooling, and charity sites.',
   sub: 'React, Node.js, and ASP.NET. BSc Computer & Information Sciences.',
-  work: 'Rimitso · KCS',
-  employment: 'Full time',
+  work: availability.employer,
+  employment: availability.status,
   imageUrl: '',
   imageAlt: 'Markus Fourie',
 };
