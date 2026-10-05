@@ -755,6 +755,7 @@ html {
   aspect-ratio: 2 / 3;
   max-height: min(56svh, 520px);
   margin: 0 auto;
+  order: -1;
   -webkit-mask-image:
     linear-gradient(to bottom, #000 58%, rgba(0, 0, 0, 0.6) 76%, transparent 98%),
     linear-gradient(to left, transparent 0%, #000 14%);
@@ -937,6 +938,7 @@ html {
     max-height: none;
     aspect-ratio: auto;
     margin: 0;
+    order: 0;
     -webkit-mask-image:
       linear-gradient(to bottom, #000 62%, transparent 98%),
       linear-gradient(to left, transparent 0%, #000 14%);
