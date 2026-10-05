@@ -6,16 +6,20 @@
  * description all read from here.
  */
 export const availability = {
-  /** Short status shown in the hero Employment row. */
-  status: 'Full time',
-  /** Employer / workplace label paired with status in contact and meta. */
-  employer: 'Rimitso · KCS',
+  /** Hire-facing availability (hero status + contact). */
+  status: 'Open to new work and new experiences',
+  /** Employer shown in status/meta. */
+  employer: 'Katanga Contracting Services',
+  /** Client relationship shorthand when needed. */
+  client: 'KCS',
+  location: 'Pretoria',
+  timezone: 'UTC+2',
 } as const;
 
 export function availabilityLine(): string {
-  return `${availability.status} · ${availability.employer}`;
+  return `${availability.employer} · ${availability.status}`;
 }
 
 export function siteMetaDescription(): string {
-  return `Markus Fourie, full-stack developer in Pretoria. ${availabilityLine()}. React, Node.js, and ASP.NET Core. Building resource platforms, operational tooling, and charity sites.`;
+  return `I'm Markus, a full-stack developer in Pretoria. I build operations software for Katanga Contracting Services, plus sites and tools for fleets, a UK charity and a freelance marketplace.`;
 }

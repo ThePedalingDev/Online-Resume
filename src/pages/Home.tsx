@@ -83,12 +83,11 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; 
 
 const NAV_LINKS = [
   ['#work', 'Work', '01'],
-  ['#build', 'Build', '02'],
+  ['#approach', 'Approach', '02'],
   ['#stack', 'Stack', '03'],
   ['#journey', 'Journey', '04'],
   ['#life', 'Life', '05'],
-  ['#docs', 'Docs', '06'],
-  ['#contact', 'Contact', '07'],
+  ['#contact', 'Contact', '06'],
 ] as const;
 
 function EdNav() {
@@ -160,77 +159,73 @@ function Hero({ content }: { content?: HeroContent | null }) {
   const heroAlt = content?.imageAlt || HERO_ALT;
   return (
     <section id="top" className="hero" aria-labelledby="hero-name">
-      <picture className="hero-photo">
-        {cmsHero ? (
-          <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
-        ) : (
-          <>
-            <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
-            <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
-            <img
-              src={HERO_FALLBACK}
-              srcSet={HERO_WEBP_SRCSET}
-              sizes={HERO_SIZES}
-              alt={heroAlt}
-              fetchPriority="high"
-              decoding="async"
-              width={1024}
-              height={1536}
-            />
-          </>
-        )}
-      </picture>
-      <div className="hero-copy">
-        <h1 id="hero-name" className="hero-name">Markus Fourie</h1>
-        <p className="hero-role">Full-stack developer in Pretoria</p>
-        <p className="hero-tagline">Software that holds up outside the office.</p>
-        <p className="hero-subline">
-          Right now that&apos;s the operations system Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity&apos;s website and a freelance marketplace.
-        </p>
-        <ul className="hero-ctas">
-          <li>
-            <a className="hero-pill primary" href="#work">
-              See what I&apos;ve built <span aria-hidden="true">→</span>
+      <div className="hero-inner">
+        <div className="hero-copy">
+          <h1 id="hero-name" className="hero-name">Markus Fourie</h1>
+          <p className="hero-role">Full-stack developer in Pretoria</p>
+          <p className="hero-tagline">Software that holds up outside the office.</p>
+          <p className="hero-subline">
+            Right now that&apos;s the Resource Management System Katanga Contracting Services runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity&apos;s website and a freelance marketplace.
+          </p>
+          <ul className="hero-ctas">
+            <li>
+              <a className="hero-pill primary" href="#work">
+                See what I&apos;ve built <span aria-hidden="true">→</span>
+              </a>
+            </li>
+            <li>
+              <a className="hero-pill" href={`mailto:${EMAIL}`}>
+                Start a conversation <span aria-hidden="true">→</span>
+              </a>
+            </li>
+            <li>
+              <a className="hero-pill" href={CV_HREF} download>
+                Download my CV (PDF) <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ul>
+          <nav className="hero-icons" aria-label="Quick links">
+            <a href={`mailto:${EMAIL}`} aria-label="Email Markus">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
             </a>
-          </li>
-          <li>
-            <a className="hero-pill" href={`mailto:${EMAIL}`}>
-              Start a conversation <span aria-hidden="true">→</span>
+            <span aria-hidden="true">·</span>
+            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="Markus on LinkedIn (opens in a new tab)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.71 0-1.97 1.33-1.97 2.7V21h-4z" /></svg>
             </a>
-          </li>
-          <li>
-            <a className="hero-pill" href={CV_HREF} download>
-              Download my CV (PDF) <span aria-hidden="true">→</span>
+            <span aria-hidden="true">·</span>
+            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="Markus on GitHub (opens in a new tab)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
             </a>
-          </li>
-        </ul>
-        <nav className="hero-icons" aria-label="Quick links">
-          <a href={`mailto:${EMAIL}`} aria-label="Email Markus">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
-          </a>
-          <span aria-hidden="true">·</span>
-          <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="Markus on LinkedIn (opens in a new tab)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.71 0-1.97 1.33-1.97 2.7V21h-4z" /></svg>
-          </a>
-          <span aria-hidden="true">·</span>
-          <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="Markus on GitHub (opens in a new tab)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
-          </a>
-        </nav>
-        <p className="hero-status">
-          <span className="hero-status-dot" aria-hidden="true" />
-          Now at Rimitso · Pretoria, UTC+2
-        </p>
+          </nav>
+          <p className="hero-status">
+            <span className="hero-status-dot" aria-hidden="true" />
+            {availabilityLine()}
+          </p>
+        </div>
+        <picture className="hero-photo">
+          {cmsHero ? (
+            <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
+          ) : (
+            <>
+              <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
+              <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
+              <img
+                src={HERO_FALLBACK}
+                srcSet={HERO_WEBP_SRCSET}
+                sizes={HERO_SIZES}
+                alt={heroAlt}
+                fetchPriority="high"
+                decoding="async"
+                width={1024}
+                height={1536}
+              />
+            </>
+          )}
+        </picture>
       </div>
     </section>
   );
 }
-
-type AboutContent = {
-  ledeHtml?: string;
-  sideHtml?: string[];
-  images?: Array<{ slot: 'one' | 'two' | 'three'; url: string; label: string; meta: string }>;
-};
 
 type JourneyItem = {
   year: string;
@@ -278,7 +273,7 @@ const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
     { src: bigBen, alt: 'Elizabeth Tower in London, from a trip to England', fit: 'contain' },
   ],
   '2026': [
-    { src: rmsHome, alt: 'Katanga RMS home screen' },
+    { src: rmsHome, alt: 'Resource Management System home screen' },
     { src: trailseekerWellington, alt: 'Markus Fourie at Ford Trailseeker #6 Wellington' },
   ],
 };
@@ -487,8 +482,7 @@ function Milestone({ year, chip, title, desc, tags, project }: JourneyItem) {
   );
 }
 
-function Journey({ items, about }: { items: JourneyItem[]; about?: AboutContent | null }) {
-  const img = (slot: 'one' | 'two' | 'three') => about?.images?.find((i) => i.slot === slot) || null;
+function Journey({ items }: { items: JourneyItem[] }) {
   return (
     <section id="journey">
       <div className="ed-shell">
@@ -503,13 +497,9 @@ function Journey({ items, about }: { items: JourneyItem[]; about?: AboutContent 
             </h2>
           </Reveal>
           <Reveal className="journey-intro" delay={120}>
-            {about?.ledeHtml ? (
-              <p className="section-intro" dangerouslySetInnerHTML={{ __html: about.ledeHtml }} />
-            ) : (
-              <p className="section-intro">
-                I build operational software, and I race. Each node below marks a decision that compounded: a project, a lesson, a discipline adopted.
-              </p>
-            )}
+            <p className="section-intro">
+              I build operational software, and I race. Each node below marks a decision that compounded: a project, a lesson, a discipline adopted.
+            </p>
           </Reveal>
           <div className="timeline">
             <div className="timeline-rail" />
@@ -519,23 +509,6 @@ function Journey({ items, about }: { items: JourneyItem[]; about?: AboutContent 
                 : m.tags;
               return <Milestone key={`${m.year}-${m.chip}`} {...m} tags={tags} />;
             })}
-          </div>
-          <div className="about-visual journey-creds">
-            <Reveal className="about-img two ph">
-              <img src={img('two')?.url || topAchieverPhoto} alt={img('two')?.label || 'Varsity College Top Achiever award, 2025'} loading="lazy" decoding="async" />
-              <span>{img('two')?.meta || 'Varsity College'}</span>
-              <span className="ph-label">{img('two')?.label || 'Top Achiever · 2025'}</span>
-            </Reveal>
-            <Reveal className="about-img three ph" delay={140}>
-              <a className="cred-link" href="https://golden-key-international-honou.verified.cv/en/verify/20892159851455" target="_blank" rel="noopener noreferrer">
-                <img src={img('three')?.url || goldenKeyBadge} alt={img('three')?.label || 'Golden Key International Honour Society, Top Performer, issued 23 April 2025'} loading="lazy" decoding="async" />
-              </a>
-              <span>{img('three')?.meta || '23 Apr 2025'}</span>
-              <span className="ph-label">{img('three')?.label || 'Golden Key · Top Performer'}</span>
-            </Reveal>
-            <Reveal className="about-graph" delay={220}>
-              <GithubActivity />
-            </Reveal>
           </div>
         </div>
       </div>
@@ -836,10 +809,10 @@ function FedoraPrompt() {
 
 function HowIBuild() {
   return (
-    <section id="build">
+    <section id="approach">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">02 · Build</span>
+          <span className="section-marker">02 · Approach</span>
           <span className="num">How I build · Craft</span>
         </div>
         <div className="ed-grid12">
@@ -933,6 +906,8 @@ type ProjectCase = {
   mark?: string;
   markFit?: 'word';
   shot?: string;
+  shotW?: number;
+  shotH?: number;
   role: string;
   problem: string;
   built: string;
@@ -948,6 +923,8 @@ const PROJECTS: ProjectCase[] = [
     href: 'https://rms.rimitso.com/',
     mark: kcsMark,
     shot: rmsHome,
+    shotW: 906,
+    shotH: 566,
     role: 'Full-stack developer at Rimitso Management Services',
     problem: 'Katanga Contracting Services needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
     built: 'Operations system for Katanga Contracting Services, hosted on Azure.',
@@ -961,6 +938,8 @@ const PROJECTS: ProjectCase[] = [
     mark: afrisistMark,
     markFit: 'word',
     shot: afrisistFleet,
+    shotW: 1200,
+    shotH: 675,
     role: 'Full-stack developer',
     problem: 'Vehicle fleet operators needed a desk to watch incoming alarms, assign them, and stay notified as events arrive.',
     built: 'Alarm monitoring dashboard for vehicle fleets, hosted on Azure, with WebSocket updates.',
@@ -974,6 +953,8 @@ const PROJECTS: ProjectCase[] = [
     href: 'https://www.eridgerda.org.uk/',
     mark: rdaMark,
     shot: eridgeRda,
+    shotW: 1200,
+    shotH: 878,
     role: 'Full-stack developer',
     problem: 'The Eridge group of Riding for the Disabled needed a public site and a way for volunteers to keep programmes and events current.',
     built: 'Site and CMS with programmes, a photo gallery, volunteer applications, and a protected admin.',
@@ -987,22 +968,14 @@ const PROJECTS: ProjectCase[] = [
     href: 'https://skillance.co.za/',
     mark: skillanceMark,
     shot: skillanceHome,
+    shotW: 1200,
+    shotH: 626,
     role: 'Co-builder with Kyle Nel',
     problem: 'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
     built: 'Verified freelance marketplace for South Africa, with iOS and Android apps still to come.',
     result: 'Web product live at skillance.co.za; mobile launch still to come.',
     tags: getProjectTags('skillance'),
     cta: 'visit',
-  },
-  {
-    n: '05',
-    name: 'Home lab + tooling',
-    role: 'Personal systems',
-    problem: 'A home server for media and local model experiments.',
-    built: 'An HP Victus 15 used as the home server. It hosts Plex, and local models on Ollama, including Gemma and Qwen.',
-    result: 'Local Plex and Ollama models running on Linux at home.',
-    tags: getProjectTags('home-lab'),
-    cta: 'private',
   },
 ];
 
@@ -1031,7 +1004,15 @@ function Projects() {
               return (
                 <Reveal key={p.name} className="proj-card" delay={i * 60}>
                   {p.shot ? (
-                    <img className="proj-shot" src={p.shot} alt="" loading="lazy" decoding="async" />
+                    <img
+                      className="proj-shot"
+                      src={p.shot}
+                      alt=""
+                      width={p.shotW}
+                      height={p.shotH}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   ) : null}
                   <div className="proj-card-body">
                     <div className="proj-card-top">
@@ -1174,6 +1155,14 @@ function Stack({ cats }: { cats: StackCat[] }) {
               </Reveal>
             ))}
           </div>
+          <Reveal className="stack-activity" delay={120}>
+            <GithubActivity />
+          </Reveal>
+          <Reveal className="stack-home-lab" delay={180}>
+            <p className="section-intro">
+              At home: an HP Victus 15 runs as my home server, with Plex and local models (Gemma, Qwen) on Ollama. It&apos;s where I try things before they go near a client.
+            </p>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -1264,7 +1253,7 @@ function Contact() {
     <section id="contact">
       <div className="ed-shell">
         <div className="eyebrow-row">
-          <span className="section-marker">07 · Contact</span>
+          <span className="section-marker">06 · Contact</span>
           <span className="num">{availability.status}</span>
         </div>
         <div className="ed-grid12">
@@ -1311,7 +1300,7 @@ function EdFooter() {
           </div>
           <div className="footer-right">
             <a href="#top">↑ Top</a>
-            <a href="#docs">Docs</a>
+            <a href="#work">Work</a>
             <a href="#contact">Contact</a>
             <a href="mailto:markusfourie@icloud.com">markusfourie@icloud.com</a>
           </div>
@@ -1324,7 +1313,6 @@ function EdFooter() {
 
 export function Home() {
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
-  const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(JOURNEY);
   const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
 
@@ -1340,13 +1328,11 @@ export function Home() {
     const ac = new AbortController();
     (async () => {
       try {
-        const [about, journey, stack] = await Promise.all([
-          fetchContent<AboutContent>('about', ac.signal),
+        const [journey, stack] = await Promise.all([
           fetchContent<JourneyItem[]>('journey', ac.signal),
           fetchContent<StackCat[]>('stack', ac.signal),
         ]);
 
-        if (about.value) setAboutContent(about.value);
         if (Array.isArray(journey.value) && journey.value.length) {
           const stale = journey.value.some((item) =>
             (item.year === '2021' && /computer/i.test(item.title))
@@ -1372,7 +1358,7 @@ export function Home() {
       <Projects />
       <HowIBuild />
       <Stack cats={stackCats} />
-      <Journey items={journeyItems} about={aboutContent} />
+      <Journey items={journeyItems} />
       <Cycling />
       <Docs />
       <Contact />
