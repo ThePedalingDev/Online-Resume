@@ -2240,31 +2240,6 @@ html {
   gap: 16px;
   padding-top: 8px;
 }
-.editorial .work-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 48px;
-  min-height: 44px;
-  padding: 0 24px;
-  border-radius: 8px;
-  background: #1d4ed8;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background-color 0.2s var(--ease-out);
-}
-.editorial .work-btn-primary:hover { background: #1e40af; }
-.editorial .work-btn-primary:active { background: #1e3a8a; }
-.editorial .work-btn-primary:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1d4ed8;
-}
-.editorial .work-btn-primary svg {
-  width: 16px;
-  height: 16px;
-}
 .editorial .work-grid {
   margin-top: 24px;
   display: grid;
@@ -2349,13 +2324,20 @@ html {
   color: #1d4ed8;
   text-decoration: none;
 }
-.editorial .work-tile-cta::after {
+.editorial .work-tile .work-tile-cta::after {
   content: '';
   position: absolute;
   inset: 0;
 }
 .editorial .work-tile-cta:hover { color: #1e40af; }
-.editorial .work-tile-cta:focus-visible {
+.editorial .work-tile-cta:hover .work-arrow { transform: translateX(4px); }
+.editorial .work-tile-cta:hover .work-arrow-ext { transform: translate(2px, -2px); }
+.editorial .work-featured .work-tile-cta:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1d4ed8;
+}
+.editorial .work-tile .work-tile-cta:focus-visible {
   outline: none;
 }
 .editorial .work-arrow {

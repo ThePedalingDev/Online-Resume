@@ -1042,7 +1042,6 @@ function TileCta({ project }: { project: WorkProject }) {
 
 function FeaturedCard({ project }: { project: WorkProject }) {
   const host = project.private ? 'Demo on request' : workSectionCopy.frameHost;
-  const external = Boolean(project.cta.external);
   return (
     <article className="work-featured" aria-labelledby="work-featured-title">
       <div className="work-featured-media">
@@ -1085,25 +1084,7 @@ function FeaturedCard({ project }: { project: WorkProject }) {
           <TagList tags={project.stack} />
         </div>
         <div className="work-featured-ctas">
-          <a
-            className="work-btn-primary"
-            href={project.cta.href}
-            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-          >
-            {project.cta.label}
-            <span className="sr-only">
-              {external ? ` ${workSectionCopy.frameHost} (opens in a new tab)` : `: ${project.name}`}
-            </span>
-            {external ? (
-              <svg aria-hidden="true" viewBox="0 0 16 16">
-                <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            ) : (
-              <svg aria-hidden="true" viewBox="0 0 16 16">
-                <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </a>
+          <TileCta project={project} />
         </div>
       </div>
     </article>
