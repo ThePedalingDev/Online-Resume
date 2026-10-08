@@ -19,7 +19,7 @@ const PROJECTS: Array<{
   {
     title: 'Resource Management System',
     period: '2025 to Present',
-    description: 'I design and build the Resource Management System (RMS) for Katanga Contracting Services (KCS). It is live in production at rms.rimitso.com, with 388 assets and 46 users. Stack: React, ASP.NET Core, EF Core, PostgreSQL, SignalR, Azure.',
+    description: 'I design and build the Resource Management System (RMS) for Katanga Contracting Services (KCS). It is live in production, with 388 assets and 46 users. A demo is by request. Stack: React, ASP.NET Core, EF Core, PostgreSQL, SignalR, Azure.',
     highlights: [
       'Collaborated directly with stakeholders to translate complex business workflows into automated digital processes',
       'Improved asset tracking efficiency and data accuracy',

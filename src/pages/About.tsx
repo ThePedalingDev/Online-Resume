@@ -135,7 +135,7 @@ export function About() {
                 I am a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, from 2025 to the present. I completed a BSc in Computer and Information Science, Cum Laude, in December 2025 at Varsity College (now Emeris) in Pretoria. I was a Varsity College Top Achiever in 2025 and a Golden Key member.
               </p>
               <p>
-                RMS is live in production at rms.rimitso.com, with 388 assets and 46 users. I handed the Afrisist fleet alarm desk over in October 2025 after a limited-duration engagement that year.
+                RMS is live in production, with 388 assets and 46 users. A demo is by request. I handed the Afrisist fleet alarm desk over in October 2025 after a limited-duration engagement that year.
               </p>
               <p>
                 Always ready to take responsibility and initiative, to create high-quality and performance-driven systems and solutions, applying appropriate attention to critical details and pro-active problem-solving skills.

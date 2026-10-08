@@ -65,9 +65,9 @@ export const projectCopy: Array<{
     problem:
       'Katanga Contracting Services (KCS) needed sites, assets, teams, and shift transactions such as hours and meter readings reviewed through approval before they reach reports.',
     built: 'RMS for Katanga Contracting Services (KCS), hosted on Azure.',
-    result: '388 assets and 46 users run on it.',
-    href: 'https://rms.rimitso.com/',
-    cta: 'visit',
+    result: '388 assets and 46 users run on it. A demo is by request.',
+    cta: 'private',
+    ctaLabel: 'Ask me for a walkthrough',
   },
   {
     id: 'afrisist',

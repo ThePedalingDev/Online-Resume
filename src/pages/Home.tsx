@@ -1041,7 +1041,8 @@ function TileCta({ project }: { project: WorkProject }) {
 }
 
 function FeaturedCard({ project }: { project: WorkProject }) {
-  const host = workSectionCopy.frameHost;
+  const host = project.private ? 'Demo on request' : workSectionCopy.frameHost;
+  const external = Boolean(project.cta.external);
   return (
     <article className="work-featured" aria-labelledby="work-featured-title">
       <div className="work-featured-media">
@@ -1087,13 +1088,21 @@ function FeaturedCard({ project }: { project: WorkProject }) {
           <a
             className="work-btn-primary"
             href={project.cta.href}
-            {...(project.cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {project.cta.label}
-            <span className="sr-only"> {host} (opens in a new tab)</span>
-            <svg aria-hidden="true" viewBox="0 0 16 16">
-              <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <span className="sr-only">
+              {external ? ` ${workSectionCopy.frameHost} (opens in a new tab)` : `: ${project.name}`}
+            </span>
+            {external ? (
+              <svg aria-hidden="true" viewBox="0 0 16 16">
+                <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" viewBox="0 0 16 16">
+                <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
           </a>
         </div>
       </div>

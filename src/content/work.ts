@@ -74,10 +74,11 @@ export const workProjects: WorkProject[] = [
       ['388', 'assets'],
       ['46', 'users'],
     ],
+    private: true,
     cta: {
-      label: 'Visit site',
-      href: 'https://rms.rimitso.com/',
-      external: true,
+      label: 'Ask me for a walkthrough',
+      href: `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Walkthrough: Resource Management System')}`,
+      mailto: true,
     },
   },
   {
