@@ -34,7 +34,7 @@ export const heroCopy = {
   role: 'Full-stack developer in Pretoria',
   tagline: 'Software that holds up outside the office.',
   subline:
-    "Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.",
+    'Building the Resource Management System for Katanga site teams. Earlier work: fleet alarms, a UK charity site, and a freelance marketplace.',
 };
 
 export const workCopy = {

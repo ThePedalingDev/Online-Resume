@@ -5,7 +5,7 @@ const heroCtasHtml = heroCtas
   .map((cta) => {
     const cls = `hero-pill${cta.primary ? ' primary' : ''}`;
     const download = cta.download ? ' download' : '';
-    return `<li><a class="${cls}" href="${cta.href}"${download}>${cta.label} <span aria-hidden="true">→</span></a></li>`;
+    return `<li><a class="${cls}" href="${cta.href}"${download}>${cta.label}</a></li>`;
   })
   .join('');
 
@@ -45,11 +45,10 @@ export const HOME_SHELL_HTML = `
         <div class="hero-intro">
           <h1 id="hero-name" class="hero-name">Markus Fourie</h1>
           <p class="hero-role">Full-stack developer in Pretoria</p>
-          <p class="hero-status"><span class="hero-status-dot" aria-hidden="true"></span>Katanga Contracting Services (KCS) / Rimitso · open to new work and new experiences</p>
+          <p class="hero-tagline">Software that holds up outside the office.</p>
         </div>
         <div class="hero-below">
-          <p class="hero-tagline">Software that holds up outside the office.</p>
-          <p class="hero-subline">Right now that's the Resource Management System Katanga Contracting Services (KCS) runs its sites, assets and shifts on. Before it: a fleet alarm desk, a UK charity's website and a freelance marketplace.</p>
+          <p class="hero-subline">Building the Resource Management System for Katanga site teams. Earlier work: fleet alarms, a UK charity site, and a freelance marketplace.</p>
           <ul class="hero-ctas">${heroCtasHtml}</ul>
         </div>
       </div>

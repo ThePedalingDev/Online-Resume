@@ -1,0 +1,23 @@
+/* OpenDesign-compatible tokens — design-systems/markus-cv/tokens.css */
+
+.editorial {
+  --bg: #ffffff;
+  --surface: #f9fafb;
+  --tint: #f3f4f6;
+  --ink: #111827;
+  --ink-2: #374151;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --line-soft: #e5e7eb;
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --accent-pressed: #1e3a8a;
+  --accent-soft: rgba(29, 78, 216, 0.08);
+  --accent-line: rgba(29, 78, 216, 0.35);
+  --accent-focus: rgba(29, 78, 216, 0.4);
+  --quiet: #5b6270;
+  --hero-bg: #ffffff;
+  --nav-bg-hero: var(--hero-bg);
+  --nav-bg-scrolled: color-mix(in oklab, var(--bg) 88%, transparent);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

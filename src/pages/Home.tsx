@@ -31,6 +31,7 @@ import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from
 import { fetchContent } from '@/lib/content';
 import { apiUrl } from '@/lib/api';
 import { GithubActivity } from '@/components/GithubActivity';
+import { CountUp, CountUpText } from '@/components/motion/CountUp';
 import { HobbyCard } from '@/components/HobbyCard';
 import { availability, availabilityLine } from '@/config/availability';
 import { getProjectTags } from '@/data/projectTags';
@@ -108,6 +109,7 @@ const NAV_LINKS = [
 function EdNav() {
   const drawer = useRef<HTMLDetailsElement>(null);
   const [brandVisible, setBrandVisible] = useState(false);
+  const [navScrolled, setNavScrolled] = useState(false);
 
   useEffect(() => {
     const el = drawer.current;
@@ -129,30 +131,28 @@ function EdNav() {
 
   useEffect(() => {
     const heading = document.getElementById('hero-name');
+    const hero = document.getElementById('top');
     if (!heading) {
       setBrandVisible(true);
+      setNavScrolled(true);
       return;
     }
-    if (prefersReducedMotion()) {
-      // Still hide while the H1 is on screen; skip only the fade animation via CSS.
-      const sync = () => {
-        const rect = heading.getBoundingClientRect();
-        setBrandVisible(rect.bottom <= 0);
-      };
-      window.addEventListener('scroll', sync, { passive: true });
-      window.addEventListener('resize', sync);
-      sync();
-      return () => {
-        window.removeEventListener('scroll', sync);
-        window.removeEventListener('resize', sync);
-      };
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => setBrandVisible(!(entry?.isIntersecting ?? true)),
-      { threshold: 0, rootMargin: '0px' },
-    );
-    io.observe(heading);
-    return () => io.disconnect();
+    const sync = () => {
+      const rect = heading.getBoundingClientRect();
+      setBrandVisible(rect.bottom <= 56);
+      const heroRect = hero?.getBoundingClientRect();
+      // Solid nav while hero is still the dominant surface (OpenDesign hero immersion).
+      setNavScrolled(heroRect ? heroRect.bottom <= 72 : window.scrollY > 8);
+    };
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('lenis-frame', sync);
+    window.addEventListener('resize', sync);
+    sync();
+    return () => {
+      window.removeEventListener('scroll', sync);
+      window.removeEventListener('lenis-frame', sync);
+      window.removeEventListener('resize', sync);
+    };
   }, []);
 
   const closeDrawer = () => {
@@ -160,7 +160,7 @@ function EdNav() {
   };
 
   return (
-    <nav className="ed-nav">
+    <nav className={`ed-nav${navScrolled ? ' is-scrolled' : ''}`}>
       <div className="ed-nav-inner">
         <a
           href="#top"
@@ -233,13 +233,9 @@ function Hero({ content }: { content?: HeroContent | null }) {
           <div className="hero-intro">
             <h1 id="hero-name" className="hero-name">{heroCopy.name}</h1>
             <p className="hero-role">{heroCopy.role}</p>
-            <p className="hero-status">
-              <span className="hero-status-dot" aria-hidden="true" />
-              {availabilityLine()}
-            </p>
+            <p className="hero-tagline">{heroCopy.tagline}</p>
           </div>
           <div className="hero-below">
-            <p className="hero-tagline">{heroCopy.tagline}</p>
             <p className="hero-subline">{heroCopy.subline}</p>
             <ul className="hero-ctas">
               {heroCtas.map((cta) => (
@@ -249,7 +245,7 @@ function Hero({ content }: { content?: HeroContent | null }) {
                     href={cta.href}
                     {...(cta.download ? { download: true } : {})}
                   >
-                    {cta.label} <span aria-hidden="true">→</span>
+                    {cta.label}
                   </a>
                 </li>
               ))}
@@ -269,7 +265,9 @@ function Hero({ content }: { content?: HeroContent | null }) {
             </nav>
           </div>
         </div>
-        <picture className="hero-photo">{photo}</picture>
+        <div className="hero-photo-reveal">
+          <picture className="hero-photo">{photo}</picture>
+        </div>
       </div>
     </section>
   );
@@ -719,7 +717,8 @@ function Cycling() {
           {ytd ? (
             <Reveal className="life-lead-stat">
               <p>
-                {new Intl.NumberFormat('en-ZA').format(Math.round(ytd.distanceKm))} km so far in {new Date().getFullYear()}, across {new Intl.NumberFormat('en-ZA').format(ytd.rideCount)} rides.
+                <CountUp value={Math.round(ytd.distanceKm)} durationMs={1100} /> km so far in {new Date().getFullYear()}, across{' '}
+                <CountUp value={ytd.rideCount} durationMs={1000} /> rides.
               </p>
             </Reveal>
           ) : null}
@@ -756,7 +755,10 @@ function Cycling() {
               <Reveal key={s.label} delay={i * 80}>
                 <div className="stat-block">
                   <span className="s-label">{s.label}</span>
-                  <span className="s-val">{s.val}<span className="unit">{s.unit}</span></span>
+                  <span className="s-val">
+                    <CountUpText text={s.val} />
+                    <span className="unit">{s.unit}</span>
+                  </span>
                   <span className="s-sub">{s.sub}</span>
                 </div>
               </Reveal>
@@ -1072,7 +1074,7 @@ function FeaturedCard({ project }: { project: WorkProject }) {
             <ul className="work-stats" role="list" aria-labelledby="work-stats">
               {project.stats.map(([value, label]) => (
                 <li key={label} className="work-stat">
-                  <span className="work-stat-val">{value}</span>
+                  <span className="work-stat-val"><CountUpText text={value} /></span>
                   <span className="work-stat-lbl">{label}</span>
                 </li>
               ))}

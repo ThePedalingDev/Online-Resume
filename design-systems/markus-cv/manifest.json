@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "od-design-system-project/v1",
+  "id": "markus-cv",
+  "name": "Markus CV · Editorial",
+  "category": "Portfolio & Personal",
+  "description": "Personal CV site: white hero immersion, serif display, Inter body, blue engineering accent. Extends OpenDesign clean surfaces.",
+  "source": {
+    "type": "project",
+    "origin": "Derived from nexu-io/open-design design-systems/clean with site-specific tokens"
+  },
+  "files": {
+    "design": "DESIGN.md",
+    "tokens": "tokens.css"
+  },
+  "usage": "USAGE.md"
+}
