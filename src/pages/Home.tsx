@@ -1,16 +1,27 @@
 import { Link } from 'react-router-dom';
 import '@/styles/portfolio-redesign.css';
 import capeFriends from '@/assets/images/cape-friends.webp';
-import deskSetup from '@/assets/images/desk-setup.webp';
 import graduation from '@/assets/images/graduation.webp';
-import longRide from '@/assets/images/long-ride.webp';
-import raceReady from '@/assets/images/race-ready.webp';
-import sworksUpgrades from '@/assets/images/sworks-upgrades.webp';
-import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
+import { CountUpText } from '@/components/motion/CountUp';
 import { CONTACT_EMAIL, contactMailto } from '@/config/contact';
 import { availability } from '@/config/availability';
-import { approachCopy, paperTrail, stackCopy, stackGroups, workCopy } from '@/content/site';
-import { workProjects } from '@/content/work';
+import {
+  approachCopy,
+  heroCopy,
+  heroCtas,
+  journeyCopy,
+  journeyNodes,
+  lifeCopy,
+  paperTrail,
+  stackCopy,
+  stackGroups,
+  workCopy,
+} from '@/content/site';
+import { workProjects, type WorkProject } from '@/content/work';
+import type { CSSProperties } from 'react';
+import { FramedImage } from '@/pages/home/FramedImage';
+import { lifeGallery } from '@/pages/home/gallery';
+import { WorkShot } from '@/pages/home/WorkShot';
 import {
   useCopyEmail,
   useHeroLogLines,
@@ -19,58 +30,16 @@ import {
   useReveal,
 } from '@/pages/home/usePortfolioPage';
 
-const HERO_IMG = '/images/hero/hero-720.webp';
+const HERO_AVIF_SRCSET = '/images/hero/hero-480.avif 480w, /images/hero/hero-720.avif 720w, /images/hero/hero-1024.avif 1024w';
+const HERO_WEBP_SRCSET = '/images/hero/hero-480.webp 480w, /images/hero/hero-720.webp 720w, /images/hero/hero-1024.webp 1024w';
+const HERO_SIZES = '(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)';
+const HERO_FALLBACK = '/images/hero/hero-720.webp';
+const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt';
+
 const GITHUB = 'https://github.com/ThePedalingDev';
 const LINKEDIN = 'https://www.linkedin.com/in/markus-fourie/';
 const STRAVA = 'https://www.strava.com/athletes/7756913';
 const INSTAGRAM = 'https://www.instagram.com/markuss.fourie/';
-
-const JOURNEY = [
-  {
-    year: '2020',
-    where: 'Potchefstroom',
-    title: 'Physics and maths at NWU',
-    body:
-      'I went to North-West University planning on mechanical engineering. I passed eight semester subjects, then left, because software was the bigger brief.',
-  },
-  {
-    year: '2023',
-    where: 'Pretoria',
-    title: 'Switching to computing',
-    body:
-      'I started a BSc in Computer and Information Science at Varsity College (now Emeris) in Pretoria, learning C#, Java and the web stack. I was a student tutor there from 2023 to 2025.',
-  },
-  {
-    year: '2024',
-    where: 'First production work',
-    title: 'Real users, real stakes',
-    body:
-      'I shipped the Eridge RDA site and CMS for a UK charity, so volunteers could keep programmes and events current.',
-  },
-  {
-    year: '2025',
-    where: 'Degree and first role',
-    title: 'Cum Laude, and a first full-time role',
-    body:
-      'I completed my BSc in December 2025, Cum Laude, at Varsity College (now Emeris). I was a Varsity College Top Achiever in 2025 and a Golden Key member. I started as a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, and handed over the Afrisist fleet alarm desk in October 2025.',
-  },
-  {
-    year: '2026',
-    where: 'Now',
-    title: 'All in on operations software',
-    body:
-      "I'm a full-stack software developer at KCS / Rimitso, and RMS is live in production. I'm open to new work and new experiences.",
-  },
-] as const;
-
-const GALLERY = [
-  { src: trailseekerWellington, w: 1200, h: 799, alt: 'Trailseeker #6, Wellington', cap: 'Trailseeker #6, Wellington · 12 Sep 2026' },
-  { src: capeFriends, w: 960, h: 1280, alt: 'Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula', cap: 'Cape Peninsula, with Matthew Waldeck' },
-  { src: deskSetup, w: 768, h: 1024, alt: 'The home desk', cap: 'The home desk' },
-  { src: sworksUpgrades, w: 1000, h: 1333, alt: "Markus's S-Works mountain bike, freshly upgraded", cap: 'My S-Works, freshly upgraded' },
-  { src: raceReady, w: 768, h: 1024, alt: 'Race morning', cap: 'Race morning' },
-  { src: longRide, w: 620, h: 1024, alt: 'A long gravel day', cap: 'A long gravel day' },
-] as const;
 
 function EnvelopeIcon() {
   return (
@@ -81,58 +50,96 @@ function EnvelopeIcon() {
   );
 }
 
+function stackLabel(project: WorkProject) {
+  return project.stack.join(' · ');
+}
+
+function tileKind(project: WorkProject) {
+  const bits = [project.kind, project.private ? 'Private' : '', project.year].filter(Boolean);
+  return bits.join(' · ');
+}
+
 function WorkTile({
   className,
-  image,
-  imageAlt,
-  kind,
-  title,
-  body,
-  stack,
-  href,
-  linkLabel,
-  external,
-  stats,
+  project,
+  shotPosition,
+  uiFrame,
 }: {
   className: string;
-  image?: string;
-  imageAlt?: string;
-  kind: string;
-  title: string;
-  body: string;
-  stack: string;
-  href: string;
-  linkLabel: string;
-  external?: boolean;
-  stats?: string;
+  project: WorkProject;
+  shotPosition?: string;
+  uiFrame?: boolean;
 }) {
+  const external = Boolean(project.cta.external);
+  const host = project.private ? 'Demo on request' : 'rms.rimitso.com';
+
   return (
     <article className={`tile ${className} reveal`}>
-      {image ? (
-        <div className="media">
-          <img src={image} width={1600} height={1000} loading="lazy" decoding="async" alt={imageAlt ?? ''} />
+      {project.image ? (
+        <div
+          className={`media${uiFrame ? ' is-ui' : ''}`}
+          style={shotPosition ? ({ ['--shot-pos' as string]: shotPosition } as CSSProperties) : undefined}
+        >
+          {uiFrame ? (
+            <div className="work-browser">
+              <div className="work-browser-bar" aria-hidden="true">
+                <span className="work-browser-dot" />
+                <span className="work-browser-dot" />
+                <span className="work-browser-dot" />
+                <span className="work-browser-url">{host}</span>
+              </div>
+              <div className="work-browser-frame">
+                <WorkShot image={project.image} eager={className.includes('t-rms')} objectPosition="left top" />
+              </div>
+            </div>
+          ) : (
+            <WorkShot image={project.image} objectPosition={shotPosition} />
+          )}
         </div>
       ) : null}
       <div className="body">
-        <p className="kind">{kind}</p>
-        <h3 className="h3">{title}</h3>
-        <p>{body}</p>
-        {stats ? <p className="rms-stats">{stats}</p> : null}
-        <p className="stack">{stack}</p>
+        <p className="kind">
+          {project.id === 'katanga-rms'
+            ? `Featured · For ${project.client ?? 'Katanga'} · ${project.year ?? 'Since 2025'}`
+            : tileKind(project)}
+        </p>
+        <h3 className="h3">{project.name}</h3>
+        <p>{project.caseStudy ?? project.outcome}</p>
+        {project.stats?.length ? (
+          <div className="rms-stats-row" aria-label="Running on RMS today">
+            {project.stats.map(([value, label]) => (
+              <div key={label}>
+                <strong><CountUpText text={value} /></strong>
+                {label}
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <p className="stack">{stackLabel(project)}</p>
         <p className="go">
           {external ? (
-            <a className="tlink" href={href} target="_blank" rel="noopener noreferrer">
-              {linkLabel}
+            <a className="tlink" href={project.cta.href} target="_blank" rel="noopener noreferrer">
+              {project.cta.label}
             </a>
-          ) : href.startsWith('mailto:') ? (
-            <a className="tlink" href={href}>{linkLabel}</a>
           ) : (
-            <a className="tlink" href={href}>{linkLabel}</a>
+            <a className="tlink" href={project.cta.href}>{project.cta.label}</a>
           )}
         </p>
       </div>
     </article>
   );
+}
+
+function mergeStackGroups() {
+  const groups = [...stackGroups];
+  const sec = groups.find((g) => g.name === 'Security');
+  const learn = groups.find((g) => g.name === 'Learning now');
+  if (sec && learn) {
+    return groups
+      .filter((g) => g.name !== 'Security' && g.name !== 'Learning now')
+      .concat({ name: 'Security, and learning now', items: [...sec.items, ...learn.items] });
+  }
+  return groups;
 }
 
 export function Home() {
@@ -143,27 +150,10 @@ export function Home() {
   const { label: copyLabel, copy } = useCopyEmail();
 
   const rms = workProjects.find((p) => p.id === 'katanga-rms')!;
-  const afrisist = workProjects.find((p) => p.id === 'afrisist')!;
-  const eridge = workProjects.find((p) => p.id === 'eridge-rda')!;
-  const skillance = workProjects.find((p) => p.id === 'skillance')!;
+  const gridProjects = workProjects.filter((p) => p.id !== 'home-lab');
   const lab = workProjects.find((p) => p.id === 'home-lab')!;
-
-  const rmsStats = rms.stats ? `${rms.stats[0][0]} assets and ${rms.stats[1][0]} users on RMS today.` : '';
-
-  const mergedStackGroups = (() => {
-    const groups = [...stackGroups];
-    const sec = groups.find((g) => g.name === 'Security');
-    const learn = groups.find((g) => g.name === 'Learning now');
-    if (sec && learn) {
-      return groups
-        .filter((g) => g.name !== 'Security' && g.name !== 'Learning now')
-        .concat({
-          name: 'Security, and learning now',
-          items: [...sec.items, ...learn.items],
-        });
-    }
-    return groups;
-  })();
+  const primaryCta = heroCtas.find((c) => c.primary) ?? heroCtas[0];
+  const secondaryCtas = heroCtas.filter((c) => !c.primary).slice(0, 2);
 
   return (
     <div className="portfolio-redesign" id="top">
@@ -197,16 +187,29 @@ export function Home() {
         <section className="hero" aria-labelledby="h1">
           <div className="wrap">
             <div>
-              <h1 id="h1">Software that holds up outside the office.</h1>
-              <p className="sub">
-                Full-stack developer in Pretoria, building the Resource Management System for Katanga site teams.
-              </p>
+              <p className="hero-eyebrow">{heroCopy.name}</p>
+              <p className="hero-role">{heroCopy.role}</p>
+              <h1 id="h1">{heroCopy.tagline}</h1>
+              <p className="hero-subline">{heroCopy.subline}</p>
               <div className="ctas">
-                <a className="btn btn-primary" href={contactMailto}>
-                  <EnvelopeIcon />
-                  Email me
+                <a
+                  className="btn btn-primary"
+                  href={primaryCta.href}
+                  {...(primaryCta.download ? { download: true } : {})}
+                >
+                  {primaryCta.href.startsWith('mailto:') ? <EnvelopeIcon /> : null}
+                  {primaryCta.label}
                 </a>
-                <a className="btn btn-ghost" href="#work">See my work</a>
+                {secondaryCtas.map((cta) => (
+                  <a
+                    key={cta.href}
+                    className="btn btn-ghost"
+                    href={cta.href}
+                    {...(cta.download ? { download: true } : {})}
+                  >
+                    {cta.label}
+                  </a>
+                ))}
               </div>
               <div className="meta">
                 <a className="tlink" href="/cert-docs/markus-fourie-resume.pdf">Resume (PDF)</a>
@@ -217,14 +220,20 @@ export function Home() {
             <div className="visual">
               <div className="block" aria-hidden="true" />
               <div className="photo">
-                <img
-                  src={HERO_IMG}
-                  width={720}
-                  height={1080}
-                  alt="Markus Fourie in profile, wearing a cap and a dark polo shirt"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                <picture>
+                  <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
+                  <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
+                  <img
+                    src={HERO_FALLBACK}
+                    srcSet={HERO_WEBP_SRCSET}
+                    sizes={HERO_SIZES}
+                    width={720}
+                    height={1080}
+                    alt={HERO_ALT}
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
               </div>
               <div className="panel" aria-label="Example deploy log from the Resource Management System">
                 <div className="ttl">
@@ -247,59 +256,36 @@ export function Home() {
               <p className="muted">{workCopy.intro}</p>
             </div>
             <div className="bento">
-              <WorkTile
-                className="t-rms"
-                image="/images/work/rms-1600.webp"
-                imageAlt="Resource Management System landing page with sign-in, API and system health links"
-                kind="Featured · For Katanga Contracting Services · Since 2025"
-                title="Resource Management System"
-                body={rms.outcome}
-                stats={rmsStats}
-                stack="React · ASP.NET Core · EF Core · PostgreSQL · SignalR · Azure"
-                href={rms.cta.href}
-                linkLabel={rms.cta.label}
-              />
-              <WorkTile
-                className="t-a"
-                image="/images/work/afrisist-1600.webp"
-                imageAlt="A truck on a mountain pass at sunrise, from the Afrisist brand imagery"
-                kind="Fleet alarm desk · Private · 2025"
-                title="Afrisist"
-                body={afrisist.outcome}
-                stack="React · Node.js · Supabase · WebSocket · Azure"
-                href={afrisist.cta.href}
-                linkLabel={afrisist.cta.label}
-              />
-              <WorkTile
-                className="t-b"
-                image="/images/work/eridge-1600.webp"
-                imageAlt="Eridge RDA home page: More than a ride, with volunteers in yellow beside a pony"
-                kind="UK charity site and CMS · 2024"
-                title="Eridge RDA"
-                body={eridge.outcome}
-                stack="React · Vite · Tailwind CSS · Supabase · Vercel"
-                href={eridge.cta.href}
-                linkLabel="Visit eridgerda.org.uk"
-                external
-              />
-              <WorkTile
-                className="t-c"
-                image="/images/work/skillance-1600.webp"
-                imageAlt="Skillance home page: The community designed for trust"
-                kind="Freelance marketplace · Co-built with Kyle Nel · Ongoing"
-                title="Skillance"
-                body={skillance.outcome}
-                stack="React · Fastify · PostgreSQL"
-                href={skillance.cta.href}
-                linkLabel="Visit skillance.co.za"
-                external
-              />
+              <WorkTile className="t-rms" project={rms} uiFrame />
+              {gridProjects
+                .filter((p) => p.id !== 'katanga-rms')
+                .map((project) => (
+                  <WorkTile
+                    key={project.id}
+                    className={
+                      project.id === 'afrisist'
+                        ? 't-a'
+                        : project.id === 'eridge-rda'
+                          ? 't-b'
+                          : 't-c'
+                    }
+                    project={project}
+                    shotPosition={project.id === 'afrisist' ? 'center 35%' : 'top center'}
+                    uiFrame={project.id !== 'afrisist'}
+                  />
+                ))}
               <article className="tile t-lab reveal">
                 <div className="body">
                   <div>
                     <p className="kind">Personal infrastructure · Ongoing</p>
                     <h3 className="h3" style={{ margin: '8px 0 12px' }}>Home lab</h3>
                     <p>{lab.outcome}</p>
+                    <div className="lab-terminal" aria-hidden="true">
+                      <p>home-lab:~$ systemctl is-active plex</p>
+                      <p className="ok">active</p>
+                      <p>home-lab:~$ ollama list</p>
+                      <p>gemma · qwen</p>
+                    </div>
                   </div>
                   <div>
                     <p className="stack">Linux · Plex · Ollama (Gemma, Qwen)</p>
@@ -317,9 +303,7 @@ export function Home() {
           <div className="wrap grid">
             <div className="side reveal">
               <h2 className="h2" id="appr-h">{approachCopy.title}</h2>
-              <p className="muted" style={{ marginTop: 24 }}>
-                Most of what I build never makes it into a demo. It&apos;s the approval step before a report, the audit log that shows who changed what, and the dashboard someone reads on a bad screen in a site office.
-              </p>
+              <p className="muted" style={{ marginTop: 24 }}>{approachCopy.intro}</p>
             </div>
             <div>
               <ol className="rows">
@@ -330,13 +314,11 @@ export function Home() {
                   </li>
                 ))}
               </ol>
-              <p className="quote reveal">
-                Good systems are a chain of small, repeated decisions. The log line written for whoever is debugging at 2 am.
-              </p>
+              <p className="quote reveal">{approachCopy.quote}</p>
               <div className="princ">
                 {approachCopy.principles.map((p) => (
                   <div key={p.title} className="reveal">
-                    <h3>{p.title.replace(/^\d+\s*·\s*/, '')}</h3>
+                    <h3>{p.title}</h3>
                     <p>{p.body}</p>
                   </div>
                 ))}
@@ -379,7 +361,7 @@ export function Home() {
               </div>
             </div>
             <div className="groups">
-              {mergedStackGroups.map((group) => (
+              {mergeStackGroups().map((group) => (
                 <div key={group.name} className="group reveal">
                   <h3>{group.name}</h3>
                   <ul>
@@ -400,19 +382,17 @@ export function Home() {
           <div className="wrap grid">
             <div>
               <div className="reveal">
-                <h2 className="h2" id="jr-h">How I got here</h2>
-                <p className="lead" style={{ marginTop: 24 }}>
-                  I didn&apos;t take the straight road into software. I started in physics and maths, switched to a computing degree, and was shipping production work before I graduated.
-                </p>
+                <h2 className="h2" id="jr-h">{journeyCopy.title}</h2>
+                <p className="lead" style={{ marginTop: 24 }}>{journeyCopy.intro}</p>
               </div>
               <ol className="tl">
-                {JOURNEY.map((j) => (
-                  <li key={j.year} className="reveal">
+                {journeyNodes.map((j) => (
+                  <li key={`${j.year}-${j.chip}`} className="reveal">
                     <span className="yr">{j.year}</span>
                     <div>
-                      <p className="where">{j.where}</p>
+                      <p className="where">{j.chip}</p>
                       <h3>{j.title}</h3>
-                      <p>{j.body}</p>
+                      <p>{j.desc}</p>
                     </div>
                   </li>
                 ))}
@@ -421,19 +401,19 @@ export function Home() {
             <aside>
               <figure className="reveal">
                 <div className="fr">
-                  <img
+                  <FramedImage
                     src={graduation}
                     width={459}
                     height={1024}
-                    loading="lazy"
-                    decoding="async"
                     alt="Markus Fourie in his graduation gown"
+                    fit="contain"
+                    objectPosition="center bottom"
                   />
                 </div>
                 <figcaption>Graduation, Varsity College (now Emeris)</figcaption>
               </figure>
               <div className="reveal">
-                <h3 style={{ fontSize: '1.25rem', marginBottom: 12 }}>The paper trail</h3>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: 12 }}>{journeyCopy.paperTrailTitle}</h3>
                 <ul className="paper">
                   {paperTrail.map((item) => (
                     <li key={item.label}>
@@ -454,38 +434,60 @@ export function Home() {
         <section className="sec life" id="life" aria-labelledby="life-h">
           <div className="wrap">
             <div className="head reveal">
-              <h2 className="h2" id="life-h">Off the clock, on the bike</h2>
-              <p>
+              <h2 className="h2" id="life-h">{lifeCopy.title}</h2>
+              <blockquote className="life-quote">
+                <p>{lifeCopy.quote}</p>
+                <footer>{lifeCopy.quoteAttr}</footer>
+              </blockquote>
+              <p style={{ marginTop: 24 }}>
                 When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the{' '}
                 <a className="tlink" href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">
                   Trans Baviaans
                 </a>
-                , the 24-hour mountain bike marathon. This year I rode the full Ford Trailseeker series, including #6 Wellington on 12 September.
+                , the 24-hour mountain bike marathon. This year I rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.
               </p>
             </div>
+            <div className="life-gallery-head reveal">
+              <h3>{lifeCopy.galleryTitle}</h3>
+              <p className="muted small">{lifeCopy.galleryIntro}</p>
+            </div>
             <div className="gal">
-              {GALLERY.map((g) => (
-                <figure key={g.cap} className="reveal">
+              {lifeGallery.map((g) => (
+                <figure key={g.caption} className="reveal">
                   <div className="fr">
-                    <img src={g.src} width={g.w} height={g.h} loading="lazy" decoding="async" alt={g.alt} />
+                    <FramedImage
+                      src={g.src}
+                      width={g.width}
+                      height={g.height}
+                      alt={g.alt}
+                      fit={g.fit ?? 'cover'}
+                      objectPosition={g.objectPosition}
+                    />
                   </div>
-                  <figcaption>{g.cap}</figcaption>
+                  <figcaption>{g.caption}</figcaption>
                 </figure>
               ))}
             </div>
             <div className="links">
               <a className="tlink" href={STRAVA} target="_blank" rel="noopener noreferrer">
-                Follow the riding on Strava
+                {lifeCopy.socialLabel} on Strava
               </a>
               <a className="tlink" href={INSTAGRAM} target="_blank" rel="noopener noreferrer">Instagram</a>
-              <Link className="tlink" to="/uses">See my desk and bike setup</Link>
+              <Link className="tlink" to="/uses">{lifeCopy.usesLabel}</Link>
             </div>
           </div>
         </section>
 
         <section className="closer" id="contact" aria-labelledby="ct-h">
           <div className="bg" aria-hidden="true">
-            <img src={capeFriends} width={960} height={1280} loading="lazy" decoding="async" alt="" />
+            <FramedImage
+              src={capeFriends}
+              width={960}
+              height={1280}
+              alt=""
+              objectPosition="center 40%"
+              className="closer-bg"
+            />
           </div>
           <div className="wrap">
             <h2 id="ct-h">Let&apos;s talk.</h2>

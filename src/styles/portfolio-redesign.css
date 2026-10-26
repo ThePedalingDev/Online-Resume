@@ -330,11 +330,33 @@
   }
 }
 
+.portfolio-redesign .hero-eyebrow {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.portfolio-redesign .hero-role {
+  font-size: 1.125rem;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+
 .portfolio-redesign .hero h1 {
-  font-size: clamp(3rem, 6.4vw, 5.75rem);
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
-  max-width: 11ch;
+  max-width: 12ch;
+}
+
+.portfolio-redesign .hero-subline {
+  margin-top: 20px;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  max-width: 46ch;
+  color: var(--ink-2);
 }
 
 .portfolio-redesign .hero .sub {
@@ -398,7 +420,30 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: center 88%;
+}
+
+.portfolio-redesign .framed-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.portfolio-redesign .framed-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.portfolio-redesign .framed-media.is-cover img {
+  object-fit: cover;
+}
+
+.portfolio-redesign .framed-media.is-contain img {
+  object-fit: contain;
+  padding: 8px;
 }
 
 .portfolio-redesign .panel {
@@ -495,12 +540,73 @@
   background: var(--paper-2);
 }
 
+.portfolio-redesign .tile .media picture,
 .portfolio-redesign .tile .media img {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+.portfolio-redesign .tile .media img {
   object-fit: cover;
-  object-position: top center;
+  object-position: var(--shot-pos, top center);
   transition: transform 0.5s var(--ease);
+}
+
+.portfolio-redesign .tile .media.is-ui {
+  background: #0f1110;
+}
+
+.portfolio-redesign .tile .media.is-ui img {
+  object-fit: contain;
+  object-position: center top;
+  padding: 0;
+}
+
+.portfolio-redesign .work-browser {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--paper-2);
+}
+
+.portfolio-redesign .work-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.portfolio-redesign .work-browser-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+  flex-shrink: 0;
+}
+
+.portfolio-redesign .work-browser-url {
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.portfolio-redesign .work-browser-frame {
+  flex: 1;
+  min-height: 0;
+}
+
+.portfolio-redesign .work-browser-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left top;
 }
 
 .portfolio-redesign .tile:hover .media img {
@@ -943,10 +1049,68 @@
   background: var(--paper-2);
 }
 
-.portfolio-redesign .gal img {
-  width: 100%;
+.portfolio-redesign .gal .fr .framed-media {
   height: 100%;
-  object-fit: cover;
+}
+
+.portfolio-redesign .life-quote {
+  margin-top: 8px;
+  padding: 28px 0 0;
+  border-top: 1px solid var(--line);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 36ch;
+  color: var(--ink);
+}
+
+.portfolio-redesign .life-quote footer {
+  margin-top: 12px;
+  font-family: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.portfolio-redesign .life-gallery-head {
+  margin: 56px 0 28px;
+}
+
+.portfolio-redesign .life-gallery-head h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  margin-bottom: 8px;
+}
+
+.portfolio-redesign .lab-terminal {
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(239, 238, 233, 0.12);
+  font: 400 12px/1.65 var(--mono);
+  color: var(--on-night-2);
+}
+
+.portfolio-redesign .lab-terminal .ok {
+  color: #9fd8a5;
+}
+
+.portfolio-redesign .rms-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.portfolio-redesign .rms-stats-row strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
 }
 
 .portfolio-redesign .gal figcaption {
@@ -984,6 +1148,11 @@
 .portfolio-redesign .closer .bg {
   position: absolute;
   inset: 0;
+}
+
+.portfolio-redesign .closer .bg .framed-media {
+  width: 100%;
+  height: 100%;
 }
 
 .portfolio-redesign .closer .bg img {
@@ -1086,10 +1255,13 @@
 
 @media (max-width: 699px) {
   .portfolio-redesign .gal figure {
-    max-width: 310px;
+    max-width: 100%;
+    width: 100%;
+    margin-inline: auto;
   }
   .portfolio-redesign .jr figure .fr {
-    max-width: 230px;
+    max-width: min(100%, 280px);
+    margin-inline: auto;
   }
 }
 
