@@ -1,64 +1,13 @@
-import { heroCtas } from '../content/heroCtas';
-import { lunoReferral } from '../content/lunoReferral';
-
-const heroCtasHtml = heroCtas
-  .map((cta) => {
-    const cls = `hero-pill${cta.primary ? ' primary' : ''}`;
-    const download = cta.download ? ' download' : '';
-    return `<li><a class="${cls}" href="${cta.href}"${download}>${cta.label}</a></li>`;
-  })
-  .join('');
-
-const referralJsonLd = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Offer',
-  name: 'Luno referral',
-  url: lunoReferral.url,
-  description: `Referral code ${lunoReferral.code}. If you sign up and qualify, we both get R50 in Bitcoin.`,
-  identifier: {
-    '@type': 'PropertyValue',
-    name: 'Referral code',
-    value: lunoReferral.code,
-  },
-}).replace(/</g, '\\u003c');
-
 /** Static HTML embedded into index.html at build time so crawlers and no-JS clients see real content. */
 export const HOME_SHELL_HTML = `
-<main class="editorial" data-prerender="home">
-  <nav class="ed-nav" aria-label="Primary">
-    <div class="ed-nav-inner">
-      <a href="#top" class="ed-nav-brand">Markus Fourie</a>
-      <div class="ed-nav-links">
-        <a href="#work">Work</a>
-        <a href="#approach">Approach</a>
-        <a href="#stack">Stack</a>
-        <a href="#journey">Journey</a>
-        <a href="#life">Life</a>
-        <a href="#contact">Contact</a>
+<main id="main" class="portfolio-redesign" data-prerender="home">
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <div>
+        <h1 id="h1">Software that holds up outside the office.</h1>
+        <p class="sub">Full-stack developer in Pretoria, building the Resource Management System for Katanga site teams.</p>
       </div>
-      <a class="ed-nav-cta" href="#contact">Get in touch</a>
-    </div>
-  </nav>
-  <section id="top" class="hero" aria-labelledby="hero-name">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <div class="hero-intro">
-          <h1 id="hero-name" class="hero-name">Markus Fourie</h1>
-          <p class="hero-role">Full-stack developer in Pretoria</p>
-          <p class="hero-tagline">Software that holds up outside the office.</p>
-        </div>
-        <div class="hero-below">
-          <p class="hero-subline">Building the Resource Management System for Katanga site teams. Earlier work: fleet alarms, a UK charity site, and a freelance marketplace.</p>
-          <ul class="hero-ctas">${heroCtasHtml}</ul>
-        </div>
-      </div>
-      <picture class="hero-photo">
-        <source type="image/avif" srcset="/images/hero/hero-480.avif 480w, /images/hero/hero-720.avif 720w, /images/hero/hero-1024.avif 1024w" sizes="(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)" />
-        <source type="image/webp" srcset="/images/hero/hero-480.webp 480w, /images/hero/hero-720.webp 720w, /images/hero/hero-1024.webp 1024w" sizes="(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)" />
-        <img src="/images/hero/hero-720.webp" width="1024" height="1536" alt="Markus Fourie in profile, wearing a cap and a dark polo shirt" fetchpriority="high" decoding="async" />
-      </picture>
     </div>
   </section>
-  <script type="application/ld+json">${referralJsonLd}</script>
 </main>
 `;

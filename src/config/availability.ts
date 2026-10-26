@@ -21,5 +21,5 @@ export function availabilityLine(): string {
 }
 
 export function siteMetaDescription(): string {
-  return `I'm Markus, a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso in Pretoria. I build operations software, including RMS, plus sites and tools for fleets, a UK charity and a freelance marketplace.`;
+  return 'Markus Fourie is a full-stack developer in Pretoria building operations software: the Resource Management System for Katanga site teams, fleet alarms, a UK charity site and a freelance marketplace.';
 }

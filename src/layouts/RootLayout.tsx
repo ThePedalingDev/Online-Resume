@@ -14,9 +14,9 @@ export function RootLayout() {
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       {!editorial && !isAdmin && <Navbar />}
-      <main className="flex-1">
+      <div className="flex-1">
         <Outlet />
-      </main>
+      </div>
       {!editorial && !isAdmin && <Footer />}
     </div>
   );

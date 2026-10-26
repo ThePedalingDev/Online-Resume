@@ -298,7 +298,7 @@ export const paperTrail: Array<{ label: string; href: string; note: string; exte
   {
     label: 'Verify on Golden Key',
     href: 'https://golden-key-international-honou.verified.cv/en/verify/20892159851455',
-    note: 'External record',
+    note: 'External',
     external: true,
   },
   { label: 'Academic results (ZIP)', href: '/cert-docs/VarsityCollege_Results.zip', note: 'Varsity College · ZIP' },

@@ -1,1407 +1,545 @@
-import { useLenis } from 'lenis/react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
-import deskSetup from '@/assets/images/desk-setup.webp';
-import raceReady from '@/assets/images/race-ready.webp';
-import longRide from '@/assets/images/long-ride.webp';
-import sworksUpgrades from '@/assets/images/sworks-upgrades.webp';
-import graduationPhoto from '@/assets/images/graduation-kyle.webp';
-import graduationSolo from '@/assets/images/graduation.webp';
-import topAchieverPhoto from '@/assets/images/top-achiever.webp';
-import goldenKeyBadge from '@/assets/images/golden-key.webp';
-import bigBen from '@/assets/images/big-ben.webp';
-import eridgeRda from '@/assets/projects/eridge-rda.webp';
-import rmsHome from '@/assets/projects/rms-home.webp';
-import capePeninsula from '@/assets/video/cape-peninsula.mp4';
-import capePeninsulaPoster from '@/assets/video/cape-peninsula.jpg';
+import { Link } from 'react-router-dom';
+import '@/styles/portfolio-redesign.css';
 import capeFriends from '@/assets/images/cape-friends.webp';
-
-const HERO_AVIF_SRCSET = '/images/hero/hero-480.avif 480w, /images/hero/hero-720.avif 720w, /images/hero/hero-1024.avif 1024w';
-const HERO_WEBP_SRCSET = '/images/hero/hero-480.webp 480w, /images/hero/hero-720.webp 720w, /images/hero/hero-1024.webp 1024w';
-const HERO_SIZES = '(max-width: 1023px) min(100vw, 420px), min(42vw, 560px)';
-const HERO_FALLBACK = '/images/hero/hero-720.webp';
-const HERO_ALT = 'Markus Fourie in profile, wearing a cap and a dark polo shirt';
-const CV_HREF = '/cert-docs/markus-fourie-resume.pdf';
-import { CONTACT_EMAIL } from '@/config/contact';
-import { BrandMark, type BrandMarkName } from '@/components/BrandMark';
-import { BrandLink, GitHubMark, InstagramMark, LinkedInMark, StravaMark } from '@/components/BrandMarks';
-import { isAnchorNav } from '@/lib/anchorNav';
-import { ScrollTrigger } from '@/lib/gsap';
-import { fetchStravaSummary, type StravaStatBlock, type StravaUnavailable } from '@/lib/strava';
-import { fetchContent } from '@/lib/content';
-import { apiUrl } from '@/lib/api';
-import { GithubActivity } from '@/components/GithubActivity';
-import { CountUp, CountUpText } from '@/components/motion/CountUp';
-import { HobbyCard } from '@/components/HobbyCard';
-import { availability, availabilityLine } from '@/config/availability';
-import { getProjectTags } from '@/data/projectTags';
+import deskSetup from '@/assets/images/desk-setup.webp';
+import graduation from '@/assets/images/graduation.webp';
+import longRide from '@/assets/images/long-ride.webp';
+import raceReady from '@/assets/images/race-ready.webp';
+import sworksUpgrades from '@/assets/images/sworks-upgrades.webp';
+import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
+import { CONTACT_EMAIL, contactMailto } from '@/config/contact';
+import { availability } from '@/config/availability';
+import { approachCopy, paperTrail, stackCopy, stackGroups, workCopy } from '@/content/site';
+import { workProjects } from '@/content/work';
 import {
-  approachCopy,
-  contactCopy,
-  galleryCaptions,
-  heroCopy,
-  heroCtas,
-  journeyCopy,
-  journeyNodes,
-  lifeCopy,
-  lunoReferral,
-  paperTrail,
-  stackCopy,
-  stackGroups,
-  type JourneyNode,
-  type StackCat,
-} from '@/content/site';
-import { workProjects, workSectionCopy, type WorkImage, type WorkProject } from '@/content/work';
+  useCopyEmail,
+  useHeroLogLines,
+  useNavSectionActive,
+  usePortfolioDocument,
+  useReveal,
+} from '@/pages/home/usePortfolioPage';
 
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+const HERO_IMG = '/images/hero/hero-720.webp';
+const GITHUB = 'https://github.com/ThePedalingDev';
+const LINKEDIN = 'https://www.linkedin.com/in/markus-fourie/';
+const STRAVA = 'https://www.strava.com/athletes/7756913';
+const INSTAGRAM = 'https://www.instagram.com/markuss.fourie/';
 
-function useLenisEnter<T extends HTMLElement>(line = 0.88) {
-  const ref = useRef<T | null>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (prefersReducedMotion()) {
-      setInView(true);
-      return;
-    }
-    const check = () => {
-      if (el.getBoundingClientRect().top >= window.innerHeight * line) return;
-      setInView(true);
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('lenis-frame', check);
-    };
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('lenis-frame', check);
-    check();
-    return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('lenis-frame', check);
-    };
-  }, [line]);
-  return { ref, inView };
-}
-
-function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
-  const { ref, inView } = useLenisEnter<HTMLDivElement>(0.88);
-  return (
-    <div
-      ref={ref}
-      className={`reveal ${inView ? 'is-in' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-}
-
-const NAV_LINKS = [
-  ['#work', 'Work', '01'],
-  ['#approach', 'Approach', '02'],
-  ['#stack', 'Stack', '03'],
-  ['#journey', 'Journey', '04'],
-  ['#life', 'Life', '05'],
-  ['#contact', 'Contact', '06'],
+const JOURNEY = [
+  {
+    year: '2020',
+    where: 'Potchefstroom',
+    title: 'Physics and maths at NWU',
+    body:
+      'I went to North-West University planning on mechanical engineering. I passed eight semester subjects, then left, because software was the bigger brief.',
+  },
+  {
+    year: '2023',
+    where: 'Pretoria',
+    title: 'Switching to computing',
+    body:
+      'I started a BSc in Computer and Information Science at Varsity College (now Emeris) in Pretoria, learning C#, Java and the web stack. I was a student tutor there from 2023 to 2025.',
+  },
+  {
+    year: '2024',
+    where: 'First production work',
+    title: 'Real users, real stakes',
+    body:
+      'I shipped the Eridge RDA site and CMS for a UK charity, so volunteers could keep programmes and events current.',
+  },
+  {
+    year: '2025',
+    where: 'Degree and first role',
+    title: 'Cum Laude, and a first full-time role',
+    body:
+      'I completed my BSc in December 2025, Cum Laude, at Varsity College (now Emeris). I was a Varsity College Top Achiever in 2025 and a Golden Key member. I started as a full-stack software developer at Katanga Contracting Services (KCS) / Rimitso, and handed over the Afrisist fleet alarm desk in October 2025.',
+  },
+  {
+    year: '2026',
+    where: 'Now',
+    title: 'All in on operations software',
+    body:
+      "I'm a full-stack software developer at KCS / Rimitso, and RMS is live in production. I'm open to new work and new experiences.",
+  },
 ] as const;
 
-function EdNav() {
-  const drawer = useRef<HTMLDetailsElement>(null);
-  const [brandVisible, setBrandVisible] = useState(false);
-  const [navScrolled, setNavScrolled] = useState(false);
+const GALLERY = [
+  { src: trailseekerWellington, w: 1200, h: 799, alt: 'Trailseeker #6, Wellington', cap: 'Trailseeker #6, Wellington · 12 Sep 2026' },
+  { src: capeFriends, w: 960, h: 1280, alt: 'Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula', cap: 'Cape Peninsula, with Matthew Waldeck' },
+  { src: deskSetup, w: 768, h: 1024, alt: 'The home desk', cap: 'The home desk' },
+  { src: sworksUpgrades, w: 1000, h: 1333, alt: "Markus's S-Works mountain bike, freshly upgraded", cap: 'My S-Works, freshly upgraded' },
+  { src: raceReady, w: 768, h: 1024, alt: 'Race morning', cap: 'Race morning' },
+  { src: longRide, w: 620, h: 1024, alt: 'A long gravel day', cap: 'A long gravel day' },
+] as const;
 
-  useEffect(() => {
-    const el = drawer.current;
-    if (!el) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') el.open = false;
-    };
-    const onPointer = (event: PointerEvent) => {
-      if (!el.open || !(event.target instanceof Node) || el.contains(event.target)) return;
-      el.open = false;
-    };
-    window.addEventListener('keydown', onKey);
-    document.addEventListener('pointerdown', onPointer);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onPointer);
-    };
-  }, []);
-
-  useEffect(() => {
-    const heading = document.getElementById('hero-name');
-    const hero = document.getElementById('top');
-    if (!heading) {
-      setBrandVisible(true);
-      setNavScrolled(true);
-      return;
-    }
-    const sync = () => {
-      const rect = heading.getBoundingClientRect();
-      setBrandVisible(rect.bottom <= 56);
-      const heroRect = hero?.getBoundingClientRect();
-      // Solid nav while hero is still the dominant surface (OpenDesign hero immersion).
-      setNavScrolled(heroRect ? heroRect.bottom <= 72 : window.scrollY > 8);
-    };
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('lenis-frame', sync);
-    window.addEventListener('resize', sync);
-    sync();
-    return () => {
-      window.removeEventListener('scroll', sync);
-      window.removeEventListener('lenis-frame', sync);
-      window.removeEventListener('resize', sync);
-    };
-  }, []);
-
-  const closeDrawer = () => {
-    if (drawer.current) drawer.current.open = false;
-  };
-
+function EnvelopeIcon() {
   return (
-    <nav className={`ed-nav${navScrolled ? ' is-scrolled' : ''}`}>
-      <div className="ed-nav-inner">
-        <a
-          href="#top"
-          className={`ed-nav-brand${brandVisible ? ' is-visible' : ''}`}
-          tabIndex={brandVisible ? 0 : -1}
-          aria-hidden={brandVisible ? undefined : true}
-        >
-          Markus Fourie
-        </a>
-        <div className="ed-nav-links">
-          {NAV_LINKS.map(([href, label]) => (
-            <a key={href} href={href}>{label}</a>
-          ))}
-        </div>
-        <a className="ed-nav-cta" href="#contact">Get in touch</a>
-        <details className="ed-nav-drawer" ref={drawer}>
-          <summary>
-            <span className="ed-nav-burger" aria-hidden="true"><i /><i /><i /></span>
-            <span className="ed-nav-summary-label">Menu</span>
-          </summary>
-          <div className="ed-nav-drawer-links">
-            {NAV_LINKS.map(([href, label, num]) => (
-              <a key={href} href={href} onClick={closeDrawer}>
-                <span>{num}</span>
-                {label}
-              </a>
-            ))}
-          </div>
-        </details>
-      </div>
-    </nav>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
   );
 }
 
-type HeroContent = {
-  imageUrl?: string;
+function WorkTile({
+  className,
+  image,
+  imageAlt,
+  kind,
+  title,
+  body,
+  stack,
+  href,
+  linkLabel,
+  external,
+  stats,
+}: {
+  className: string;
+  image?: string;
   imageAlt?: string;
-  kicker?: string;
-  lead?: string;
-  sub?: string;
-  work?: string;
-  employment?: string;
-};
-
-function Hero({ content }: { content?: HeroContent | null }) {
-  const cmsHero = content?.imageUrl?.trim() || '';
-  const heroAlt = content?.imageAlt || HERO_ALT;
-  const photo = cmsHero ? (
-    <img src={cmsHero} alt={heroAlt} fetchPriority="high" decoding="async" width={1024} height={1536} />
-  ) : (
-    <>
-      <source type="image/avif" srcSet={HERO_AVIF_SRCSET} sizes={HERO_SIZES} />
-      <source type="image/webp" srcSet={HERO_WEBP_SRCSET} sizes={HERO_SIZES} />
-      <img
-        src={HERO_FALLBACK}
-        srcSet={HERO_WEBP_SRCSET}
-        sizes={HERO_SIZES}
-        alt={heroAlt}
-        fetchPriority="high"
-        decoding="async"
-        width={1024}
-        height={1536}
-      />
-    </>
-  );
+  kind: string;
+  title: string;
+  body: string;
+  stack: string;
+  href: string;
+  linkLabel: string;
+  external?: boolean;
+  stats?: string;
+}) {
   return (
-    <section id="top" className="hero" aria-labelledby="hero-name">
-      <div className="hero-inner">
-        <div className="hero-copy">
-          <div className="hero-intro">
-            <h1 id="hero-name" className="hero-name">{heroCopy.name}</h1>
-            <p className="hero-role">{heroCopy.role}</p>
-            <p className="hero-tagline">{heroCopy.tagline}</p>
-          </div>
-          <div className="hero-below">
-            <p className="hero-subline">{heroCopy.subline}</p>
-            <ul className="hero-ctas">
-              {heroCtas.map((cta) => (
-                <li key={cta.href}>
-                  <a
-                    className={`hero-pill${cta.primary ? ' primary' : ''}`}
-                    href={cta.href}
-                    {...(cta.download ? { download: true } : {})}
-                  >
-                    {cta.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <nav className="hero-icons" aria-label="Quick links">
-              <a href={`mailto:${CONTACT_EMAIL}`} aria-label="Email Markus">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
-              </a>
-              <span aria-hidden="true">·</span>
-              <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="Markus on LinkedIn (opens in a new tab)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.71 0-1.97 1.33-1.97 2.7V21h-4z" /></svg>
-              </a>
-              <span aria-hidden="true">·</span>
-              <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="Markus on GitHub (opens in a new tab)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
-              </a>
-            </nav>
-          </div>
+    <article className={`tile ${className} reveal`}>
+      {image ? (
+        <div className="media">
+          <img src={image} width={1600} height={1000} loading="lazy" decoding="async" alt={imageAlt ?? ''} />
         </div>
-        <div className="hero-photo-reveal">
-          <picture className="hero-photo">{photo}</picture>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-type JourneyItem = JourneyNode;
-
-type JourneyStill = { src: string; alt: string; pos?: string; fit?: 'cover' | 'contain' };
-
-const JOURNEY_STILLS: Record<string, JourneyStill[]> = {
-  '2024': [
-    { src: eridgeRda, alt: 'Eridge RDA site' },
-  ],
-  '2025': [
-    { src: graduationPhoto, alt: 'Markus Fourie at graduation with Kyle Nel', pos: 'center 40%' },
-    { src: graduationSolo, alt: 'Markus Fourie in his graduation gown', fit: 'contain' },
-    { src: topAchieverPhoto, alt: 'Varsity College Top Achiever award, 2025', pos: 'center 55%' },
-    { src: goldenKeyBadge, alt: 'Golden Key Top Performer certificate, 23 April 2025', fit: 'contain' },
-    { src: bigBen, alt: 'Elizabeth Tower in London, from a trip to England', fit: 'contain' },
-  ],
-  '2026': [
-    { src: rmsHome, alt: 'Resource Management System home screen' },
-  ],
-};
-
-const WHEEL_PER_IMAGE = 90;
-const MAX_IMAGES_PER_SEC = 4;
-const STACK_PARK = 0.2;
-
-function paintStack(frames: HTMLImageElement[], progress: number) {
-  const end = frames.length - 1;
-  const shown = Math.min(end, Math.max(0, progress));
-  frames.forEach((img, i) => {
-    const dist = Math.abs(shown - i);
-    const opacity = dist >= 1 ? 0 : dist <= 0.22 ? 1 : (1 - dist) / 0.78;
-    img.style.opacity = opacity.toFixed(3);
-    img.toggleAttribute('aria-hidden', opacity < 0.55);
-  });
-}
-
-function YearStack({ year, stills }: { year: string; stills: JourneyStill[] }) {
-  const root = useRef<HTMLDivElement>(null);
-  const lenis = useLenis();
-
-  useEffect(() => {
-    const el = root.current;
-    if (!el || stills.length < 2) return;
-    const frames = [...el.querySelectorAll<HTMLImageElement>('img')];
-    const onImg = () => ScrollTrigger.refresh();
-    frames.forEach((img) => {
-      if (!img.complete) img.addEventListener('load', onImg);
-    });
-    if (prefersReducedMotion()) {
-      frames.forEach((img, i) => {
-        img.style.opacity = i === 0 ? '1' : '0';
-        img.toggleAttribute('aria-hidden', i !== 0);
-      });
-      return () => frames.forEach((img) => img.removeEventListener('load', onImg));
-    }
-    const end = frames.length - 1;
-    const fine = window.matchMedia('(pointer: fine)').matches;
-    let progress = 0;
-    let active = false;
-    let armed = true;
-    let lastTick = 0;
-    let raf = 0;
-
-    const release = () => {
-      if (!active) return;
-      active = false;
-      armed = false;
-      progress = Math.min(end, Math.max(0, progress));
-      paintStack(frames, progress);
-      lenis?.start();
-    };
-
-    const engage = () => {
-      if (!lenis || active || isAnchorNav()) return;
-      active = true;
-      lastTick = 0;
-      const rect = el.getBoundingClientRect();
-      const view = window.innerHeight || 1;
-      lenis.scrollTo(lenis.animatedScroll + (rect.top - view * STACK_PARK), { immediate: true, force: true });
-      lenis.stop();
-    };
-
-    const onVirtual = (data: { deltaY: number; event: Event }) => {
-      if (!active || data.event.type.includes('touch')) return;
-      const now = performance.now();
-      const dt = lastTick ? (now - lastTick) / 1000 : 0.05;
-      lastTick = now;
-      const budget = Math.max(dt, 0.016) * MAX_IMAGES_PER_SEC;
-      const step = Math.sign(data.deltaY) * Math.min(Math.abs(data.deltaY) / WHEEL_PER_IMAGE, budget);
-      progress += step;
-      if (progress > end + 0.08 || progress < -0.08) {
-        progress = progress > end ? end : 0;
-        paintStack(frames, progress);
-        release();
-        return;
-      }
-      paintStack(frames, progress);
-    };
-
-    const onKey = (event: KeyboardEvent) => {
-      if (!active) return;
-      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, button, a')) return;
-      const down = event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ';
-      const up = event.key === 'ArrowUp' || event.key === 'PageUp';
-      if (!down && !up) return;
-      event.preventDefault();
-      progress += down ? 0.34 : -0.34;
-      if (progress > end + 0.2 || progress < -0.2) {
-        progress = progress > end ? end : 0;
-        paintStack(frames, progress);
-        release();
-        return;
-      }
-      paintStack(frames, progress);
-    };
-
-    const onClick = (event: MouseEvent) => {
-      if (!active) return;
-      const anchor = event.composedPath().find((node): node is HTMLAnchorElement => node instanceof HTMLAnchorElement);
-      if (anchor?.hash) release();
-    };
-
-    const syncLinked = () => {
-      const rect = el.getBoundingClientRect();
-      const view = window.innerHeight || 1;
-      const travel = Math.max(view * 1.6, end * view * 0.95);
-      const raw = (view * 0.62 - rect.top) / travel;
-      progress = Math.min(end, Math.max(0, raw * end));
-      paintStack(frames, progress);
-    };
-
-    const sync = () => {
-      raf = 0;
-      if (!fine) {
-        syncLinked();
-        return;
-      }
-      if (active || !lenis) return;
-      const rect = el.getBoundingClientRect();
-      const view = window.innerHeight || 1;
-      const inBand = rect.top < view * 0.55 && rect.bottom > view * 0.4;
-      if (!inBand) armed = true;
-      if (!armed) return;
-      const dir = lenis.direction;
-      const parked = rect.top <= view * STACK_PARK && rect.bottom > view * 0.45;
-      if (dir > 0 && progress < end - 0.02 && parked) engage();
-      else if (dir < 0 && progress > 0.02 && rect.bottom > view * 0.45 && rect.top < view * 0.55) engage();
-    };
-
-    const onScroll = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(sync);
-    };
-
-    paintStack(frames, 0);
-    lenis?.on('virtual-scroll', onVirtual);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('lenis-frame', onScroll);
-    window.addEventListener('resize', onScroll);
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('click', onClick, true);
-    return () => {
-      frames.forEach((img) => img.removeEventListener('load', onImg));
-      if (active) lenis?.start();
-      lenis?.off('virtual-scroll', onVirtual);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('lenis-frame', onScroll);
-      window.removeEventListener('resize', onScroll);
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('click', onClick, true);
-      if (raf) window.cancelAnimationFrame(raf);
-    };
-  }, [lenis, stills.length, year]);
-
-  if (stills.length === 1) {
-    const still = stills[0];
-    return (
-      <img
-        className={`m-photo${still.fit === 'contain' ? ' is-contain' : ''}`}
-        src={still.src}
-        alt={still.alt}
-        loading="lazy"
-        decoding="async"
-        style={still.pos ? { objectPosition: still.pos } : undefined}
-      />
-    );
-  }
-
-  return (
-    <div className="m-stack" ref={root} aria-label={`${year} photos`}>
-      {stills.map((still, i) => (
-        <img
-          key={still.src}
-          className={still.fit === 'contain' ? 'is-contain' : undefined}
-          src={still.src}
-          alt={still.alt}
-          loading="lazy"
-          decoding="async"
-          aria-hidden={i === 0 ? undefined : true}
-          style={{
-            opacity: i === 0 ? 1 : 0,
-            ...(still.pos ? { objectPosition: still.pos } : {}),
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function Milestone({ year, chip, title, desc, tags, project }: JourneyItem) {
-  const { ref, inView } = useLenisEnter<HTMLDivElement>(0.82);
-  const stills = JOURNEY_STILLS[year];
-  const stack = project ? getProjectTags(project) : null;
-  return (
-    <div ref={ref} className={`milestone ${inView ? 'is-in' : ''}`}>
-      <div className="m-year" style={{ transitionDelay: '0ms' }}>
-        {year}
-        <span className="m-chip">{chip}</span>
-        {stills?.length ? <YearStack year={year} stills={stills} /> : null}
-      </div>
-      <div className="m-anchor" style={{ transitionDelay: '120ms' }}><span className="m-node" /></div>
-      <div className="m-card" style={{ transitionDelay: '220ms' }}>
-        <h3 className="m-title">{title}</h3>
-        <p className="m-desc">{desc}</p>
-        <div className="m-tags">
-          {tags.map((t) => <span key={t}>{t}</span>)}
-        </div>
-        {stack ? (
-          <div className="m-tags m-stack-tags" aria-label="Stack">
-            {stack.map((t) => <span key={t}>{t}</span>)}
-          </div>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function Journey({ items }: { items: JourneyItem[] }) {
-  return (
-    <section id="journey">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">04 · Journey</span>
-          <span className="num">Timeline · Credentials · 2020-2026</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="journey-title">
-            <h2 className="section-title">{journeyCopy.title}</h2>
-          </Reveal>
-          <Reveal className="journey-intro" delay={120}>
-            <p className="section-intro">{journeyCopy.intro}</p>
-          </Reveal>
-          <div className="timeline">
-            <div className="timeline-rail" />
-            {items.map((m) => {
-              const tags = m.year === '2025'
-                ? Array.from(new Set([...m.tags, 'Top Achiever', 'Golden Key']))
-                : m.tags;
-              return <Milestone key={`${m.year}-${m.chip}`} {...m} tags={tags} />;
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function OnTheSide() {
-  return (
-    <section id="on-the-side" aria-labelledby="hobby-card-title">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">{lunoReferral.eyebrow}</span>
-        </div>
-        <div className="hobby-wrap">
-          <HobbyCard variant="referral" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PaperTrail() {
-  return (
-    <section id="paper-trail" aria-labelledby="paper-trail-title">
-      <div className="ed-shell">
-        <div className="paper-trail">
-          <h2 id="paper-trail-title" className="section-title paper-trail-title">{journeyCopy.paperTrailTitle}</h2>
-          <p className="section-intro">{journeyCopy.paperTrailIntro}</p>
-          <div className="docs-list">
-            {paperTrail.map((row) => (
-              <div className="doc-row" key={row.href}>
-                <a
-                  href={row.href}
-                  {...(row.external
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : { download: true })}
-                >
-                  {row.label}
-                </a>
-                <span>{row.note}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Cycling() {
-  const filmRef = useRef<HTMLVideoElement>(null);
-  const [sound, setSound] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [stats, setStats] = useState<StravaStatBlock[] | null>(null);
-  const [meta, setMeta] = useState<{ updatedAt: string } | null>(null);
-  const [ytd, setYtd] = useState<{ distanceKm: number; rideCount: number } | null>(null);
-  const [error, setError] = useState<{ message: string; authUrl?: string } | null>(null);
-  const [introHtml, setIntroHtml] = useState<string | null>(null);
-
-  useEffect(() => {
-    const ac = new AbortController();
-    setError(null);
-    fetchStravaSummary(ac.signal)
-      .then((data) => {
-        setStats(data.blocks);
-        setMeta({ updatedAt: data.updatedAt });
-        if (data.ytd) setYtd({ distanceKm: data.ytd.distanceKm, rideCount: data.ytd.rideCount });
-      })
-      .catch((e: unknown) => {
-        // React dev (and quick route changes) can abort in-flight requests.
-        // Treat AbortError as a non-error so we don't flash warnings.
-        if (e instanceof DOMException && e.name === 'AbortError') return;
-        const err = e as (Error & { detail?: StravaUnavailable });
-        const detail = err.detail;
-        setError({
-          message: detail?.code === 'STRAVA_UNAVAILABLE'
-            ? 'Strava needs a fresh connection'
-            : (err?.message || 'Strava data unavailable'),
-          authUrl: detail?.setup?.authUrl,
-        });
-        setStats(null);
-        setMeta(null);
-      });
-    fetchContent<{ introHtml?: string }>('cycling', ac.signal)
-      .then((r) => {
-        if (r.value?.introHtml) setIntroHtml(r.value.introHtml);
-      })
-      .catch(() => {});
-    return () => ac.abort();
-  }, []);
-
-  useEffect(() => {
-    const el = filmRef.current;
-    if (!el) return;
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let inView = false;
-    const sync = () => {
-      if (mq.matches || document.hidden || !inView) {
-        el.pause();
-        return;
-      }
-      el.play().catch(() => {});
-    };
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        inView = entry?.isIntersecting ?? false;
-        sync();
-      },
-      { rootMargin: '120px 0px', threshold: 0.2 },
-    );
-    io.observe(el);
-    document.addEventListener('visibilitychange', sync);
-    mq.addEventListener('change', sync);
-    return () => {
-      io.disconnect();
-      document.removeEventListener('visibilitychange', sync);
-      mq.removeEventListener('change', sync);
-      el.pause();
-    };
-  }, []);
-
-  const onFilmControl = () => {
-    const el = filmRef.current;
-    if (!el) return;
-    if (el.paused) {
-      el.play().catch(() => {});
-      return;
-    }
-    const next = !sound;
-    el.muted = !next;
-    setSound(next);
-  };
-
-  const fallbackStats: StravaStatBlock[] = [
-    { label: `Kilometres · ${new Date().getFullYear()}`, val: '-', unit: 'km', sub: 'Connecting to Strava' },
-    { label: 'Elevation', val: '-', unit: 'm', sub: ' ' },
-    { label: 'Time in saddle', val: '-', unit: 'h', sub: ' ' },
-    { label: 'Last ride', val: '-', unit: 'km', sub: ' ' },
-  ];
-  const blocks = stats ?? fallbackStats;
-  return (
-    <section id="life" className="off-clock">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">05 · Life</span>
-          <span className="num">Off the clock · Strava</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="cycling-head">
-            <h2 className="section-title">{lifeCopy.title}</h2>
-          </Reveal>
-          <Reveal className="life-quote" delay={40}>
-            <blockquote>
-              <p>{lifeCopy.quote}</p>
-              <footer>{lifeCopy.quoteAttr}</footer>
-            </blockquote>
-          </Reveal>
-          <Reveal className="cycling-intro" delay={120}>
-            {introHtml ? (
-              <p dangerouslySetInnerHTML={{ __html: introHtml }} />
-            ) : (
-              <p>
-                When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the{' '}
-                <a href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">Trans Baviaans</a>, the 24-hour mountain bike marathon. This year I rode the full{' '}
-                <a href="https://trailseeker.co.za/mtb/events/6-wellington-2026/" target="_blank" rel="noopener noreferrer">Ford Trailseeker</a>
-                {' '}series, including #6 Wellington at Bosman Family Vineyards on 12 September.
-              </p>
-            )}
-            <p className="uses-link">
-              <a href="/uses">{lifeCopy.usesLabel} <span aria-hidden="true">→</span></a>
-            </p>
-            <div className="life-social">
-              <span className="life-social-label">{lifeCopy.socialLabel}</span>
-              <BrandLink href="https://www.strava.com/athletes/7756913" label="Strava">
-                <StravaMark />
-              </BrandLink>
-              <BrandLink href="https://www.instagram.com/markuss.fourie/" label="Instagram">
-                <InstagramMark />
-              </BrandLink>
-            </div>
-          </Reveal>
-          {ytd ? (
-            <Reveal className="life-lead-stat">
-              <p>
-                <CountUp value={Math.round(ytd.distanceKm)} durationMs={1100} /> km so far in {new Date().getFullYear()}, across{' '}
-                <CountUp value={ytd.rideCount} durationMs={1000} /> rides.
-              </p>
-            </Reveal>
-          ) : null}
-          <Reveal className="cycling-visual">
-            <figure className="cycling-film">
-              <video
-                ref={filmRef}
-                src={capePeninsula}
-                poster={capePeninsulaPoster}
-                muted
-                loop
-                playsInline
-                preload="none"
-                aria-label="Markus Fourie cycling the Cape Peninsula"
-                onPlay={() => setPlaying(true)}
-                onPause={() => setPlaying(false)}
-              />
-              <figcaption>
-                <span>Cape Peninsula, with Matthew Waldeck</span>
-                <button type="button" onClick={onFilmControl} aria-pressed={sound}>
-                  {playing ? (sound ? 'Sound on' : 'Sound off') : 'Play the ride'}
-                </button>
-              </figcaption>
-            </figure>
-          </Reveal>
-          <Reveal className="cycling-still" delay={80}>
-            <figure className="cycling-shot">
-              <img src={capeFriends} alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula" loading="lazy" decoding="async" />
-              <figcaption>Out with Matthew Waldeck</figcaption>
-            </figure>
-          </Reveal>
-          <div className="cycling-data">
-            {blocks.map((s, i) => (
-              <Reveal key={s.label} delay={i * 80}>
-                <div className="stat-block">
-                  <span className="s-label">{s.label}</span>
-                  <span className="s-val">
-                    <CountUpText text={s.val} />
-                    <span className="unit">{s.unit}</span>
-                  </span>
-                  <span className="s-sub">{s.sub}</span>
-                </div>
-              </Reveal>
-            ))}
-            <Reveal delay={blocks.length * 80}>
-              <div className="stat-block" style={{ borderBottom: '0', paddingBottom: 0 }}>
-                {error ? (
-                  <span className="s-sub">
-                    {error.message}
-                    {error.authUrl ? (
-                      <>
-                        {' '}·{' '}
-                        <a href={error.authUrl.startsWith('http') ? error.authUrl : apiUrl(error.authUrl)} target="_blank" rel="noopener noreferrer">Connect Strava</a>
-                      </>
-                    ) : null}
-                  </span>
-                ) : (
-                  <span className="s-sub">
-                    {meta?.updatedAt ? `Updated · ${new Date(meta.updatedAt).toLocaleString('en-ZA', { hour: '2-digit', minute: '2-digit' })}` : ' '}
-                  </span>
-                )}
-              </div>
-            </Reveal>
-          </div>
-          <GalleryGrid />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-type GalleryItem = { cls: string; n: string; l: string; url?: string };
-
-function GalleryGrid() {
-  const urls: Record<string, string> = {
-    'g-1': trailseekerWellington,
-    'g-2': deskSetup,
-    'g-3': sworksUpgrades,
-    'g-4': raceReady,
-    'g-5': longRide,
-  };
-  const defaultItems: GalleryItem[] = galleryCaptions.map((g) => ({
-    ...g,
-    url: urls[g.cls],
-  }));
-  const [items, setItems] = useState<GalleryItem[]>(defaultItems);
-
-  useEffect(() => {
-    const ac = new AbortController();
-    const isEmptyTile = (item: GalleryItem) =>
-      /^IMG\s*\/\s*(15|16)$/i.test(item.n)
-      || /jotting|field book|sunset|descent/i.test(item.l)
-      || (!item.url && (item.cls === 'g-6' || item.cls === 'g-7'));
-
-    fetchContent<GalleryItem[]>('gallery', ac.signal)
-      .then((r) => {
-        if (!Array.isArray(r.value) || !r.value.length) return;
-        const mapped = r.value
-          .filter((item) => !isEmptyTile(item))
-          .map((item) => {
-            if (item.url) return item;
-            if (item.cls === 'g-1') return { ...item, url: trailseekerWellington };
-            if (item.cls === 'g-2') {
-              const placeholder = !item.l || item.n === 'IMG / 11' || /6:42/i.test(item.l);
-              return placeholder
-                ? { ...item, n: 'Studio', l: 'Work from home desk setup', url: deskSetup }
-                : { ...item, url: deskSetup };
-            }
-            if (item.cls === 'g-3') {
-              const placeholder = !item.l || item.n === 'IMG / 12' || /chain, worn/i.test(item.l);
-              return placeholder
-                ? { ...item, n: 'Bike', l: 'S-Works MTB with new upgrades', url: sworksUpgrades }
-                : { ...item, url: sworksUpgrades };
-            }
-            if (item.cls === 'g-4') {
-              const placeholder = !item.l || item.n === 'IMG / 13' || /nº 97/i.test(item.l);
-              return placeholder
-                ? { ...item, n: 'Race', l: 'Always race ready', url: raceReady }
-                : { ...item, url: raceReady };
-            }
-            if (item.cls === 'g-5') {
-              const placeholder = !item.l || item.n === 'IMG / 14' || /rock garden/i.test(item.l);
-              return placeholder
-                ? { ...item, n: 'Ride', l: 'Long gravel ride', url: longRide }
-                : { ...item, url: longRide };
-            }
-            return item;
-          })
-          .filter((item) => Boolean(item.url));
-        if (mapped.length) setItems(mapped);
-      })
-      .catch(() => {});
-    return () => ac.abort();
-  }, []);
-  return (
-    <>
-      <div className="gallery-head">
-        <Reveal>
-          <h3 className="section-title">{lifeCopy.galleryTitle}</h3>
-        </Reveal>
-        <Reveal delay={120}>
-          <p className="section-intro">{lifeCopy.galleryIntro}</p>
-        </Reveal>
-      </div>
-      <div className="gallery-grid">
-        {items.map((g, i) => (
-          <Reveal key={g.cls} className={`g-item ${g.cls} ph`} delay={i * 60}>
-            {g.url ? <img src={g.url} alt={g.l} loading="lazy" decoding="async" /> : null}
-            <span>{g.n}</span>
-            <span className="ph-label">{g.l}</span>
-          </Reveal>
-        ))}
-      </div>
-    </>
-  );
-}
-
-function TerminalLine({ children }: { children: ReactNode }) {
-  return <span className="t-line">{children}</span>;
-}
-
-function FedoraPrompt() {
-  return (
-    <>
-      <span className="pr-user">[markus@fedora</span>
-      <span className="pr-path"> ~</span>
-      <span className="pr-user">]$</span>
-    </>
-  );
-}
-
-function HowIBuild() {
-  return (
-    <section id="approach">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">02 · Approach</span>
-          <span className="num">How I work · Craft</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="eng-head">
-            <h2 className="section-title">{approachCopy.title}</h2>
-          </Reveal>
-          <Reveal className="eng-intro" delay={120}>
-            <p>{approachCopy.intro}</p>
-          </Reveal>
-          <div className="eng-grid">
-            <Reveal>
-              <div className="eng-terminal">
-                <div className="t-bar">
-                  <span className="t-title">Terminal</span>
-                  <span className="t-label">markus@fedora: ~</span>
-                </div>
-                <TerminalLine><FedoraPrompt /> ./deploy rms --env prod</TerminalLine>
-                <TerminalLine><span className="dim">→ building 3 artefacts…</span></TerminalLine>
-                <TerminalLine><span className="dim">→ running migrations (017_audit_trail)</span></TerminalLine>
-                <TerminalLine><span className="dim">→ health check: api, worker, gateway</span></TerminalLine>
-                <TerminalLine><span className="ok">✓ deploy complete · 14.2s · 0 errors</span></TerminalLine>
-                <TerminalLine>&nbsp;</TerminalLine>
-                <TerminalLine><FedoraPrompt /> tail -f /var/log/rms/audit.log</TerminalLine>
-                <TerminalLine><span className="dim">[08:42:01]</span> OP_CHECKOUT · user:214 · asset:crane-07 · ok</TerminalLine>
-                <TerminalLine><span className="dim">[08:42:09]</span> OP_CHECKOUT · user:198 · asset:wheel-12 · ok</TerminalLine>
-                <TerminalLine><span className="dim">[08:42:17]</span> OP_RETURN   · user:214 · asset:crane-07 · 4.2h</TerminalLine>
-                <TerminalLine><FedoraPrompt /> <span className="t-cursor" /></TerminalLine>
-              </div>
-            </Reveal>
-            <Reveal delay={120}>
-              <div className="eng-copy">
-                <ul>
-                  {approachCopy.capabilities.map((cap, i) => (
-                    <li key={cap.name}>
-                      <span className="idx">{String(i + 1).padStart(2, '0')}</span>
-                      <strong>{cap.name}</strong>
-                      <span className="d">{cap.line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          </div>
-          <Reveal className="philo-inner build-principles">
-            <p className="philo-quote">{approachCopy.quote}</p>
-            <div className="philo-attr">{approachCopy.principlesLabel}</div>
-          </Reveal>
-          <div className="philo-pillars">
-            {approachCopy.principles.map((p, i) => (
-              <Reveal key={p.title} className="pillar" delay={i * 100}>
-                <h3>{p.title}</h3>
-                <p>{p.body}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WorkShot({ image, eager = false, className = '' }: { image: WorkImage; eager?: boolean; className?: string }) {
-  return (
-    <picture>
-      <source type="image/avif" srcSet={image.srcsetAvif} sizes={image.sizes} />
-      <source type="image/webp" srcSet={image.srcsetWebp} sizes={image.sizes} />
-      <img
-        className={className}
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-      />
-    </picture>
-  );
-}
-
-function LabTerminal() {
-  return (
-    <div className="work-lab" aria-hidden="true">
-      <div className="work-lab-dots">
-        <span /><span /><span />
-      </div>
-      <div className="work-lab-body">
-        <p className="work-lab-muted"># HP Victus 15, home server</p>
-        <p><span className="work-lab-prompt">home-lab</span>:~$ systemctl is-active plex</p>
-        <p className="work-lab-ok">active</p>
-        <p><span className="work-lab-prompt">home-lab</span>:~$ ollama list</p>
-        <p>gemma</p>
-        <p>qwen</p>
-        <p>
-          <span className="work-lab-prompt">home-lab</span>:~$ <span className="work-lab-cursor" />
+      ) : null}
+      <div className="body">
+        <p className="kind">{kind}</p>
+        <h3 className="h3">{title}</h3>
+        <p>{body}</p>
+        {stats ? <p className="rms-stats">{stats}</p> : null}
+        <p className="stack">{stack}</p>
+        <p className="go">
+          {external ? (
+            <a className="tlink" href={href} target="_blank" rel="noopener noreferrer">
+              {linkLabel}
+            </a>
+          ) : href.startsWith('mailto:') ? (
+            <a className="tlink" href={href}>{linkLabel}</a>
+          ) : (
+            <a className="tlink" href={href}>{linkLabel}</a>
+          )}
         </p>
       </div>
-    </div>
-  );
-}
-
-function TagList({ tags }: { tags: string[] }) {
-  return (
-    <ul className="work-tags" role="list">
-      <li className="sr-only">Stack:</li>
-      {tags.map((tag) => (
-        <li key={tag}>{tag}</li>
-      ))}
-    </ul>
-  );
-}
-
-function TileCta({ project }: { project: WorkProject }) {
-  const { cta, name } = project;
-  const external = Boolean(cta.external);
-  const hostLabel = (() => {
-    if (!external) return '';
-    try {
-      return new URL(cta.href).hostname.replace(/^www\./, '');
-    } catch {
-      return '';
-    }
-  })();
-  const arrow = external ? (
-    <svg aria-hidden="true" viewBox="0 0 16 16" className="work-arrow work-arrow-ext">
-      <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ) : (
-    <svg aria-hidden="true" viewBox="0 0 16 16" className="work-arrow">
-      <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-  return (
-    <a
-      className="work-tile-cta"
-      href={cta.href}
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-    >
-      {cta.label}
-      <span className="sr-only">
-        {external && hostLabel ? ` ${hostLabel} (opens in a new tab)` : `: ${name}`}
-      </span>
-      {arrow}
-    </a>
-  );
-}
-
-function FeaturedCard({ project }: { project: WorkProject }) {
-  const host = project.private ? 'Demo on request' : workSectionCopy.frameHost;
-  return (
-    <article className="work-featured" aria-labelledby="work-featured-title">
-      <div className="work-featured-media">
-        <div className="work-browser">
-          <div className="work-browser-bar" aria-hidden="true">
-            <span /><span /><span />
-            <span className="work-browser-url">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2M4 7h8v6H4z" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg>
-              {host}
-            </span>
-            <span className="work-browser-spacer" />
-          </div>
-          <div className="work-frame">
-            {project.image ? <WorkShot image={project.image} eager className="work-shot" /> : null}
-          </div>
-        </div>
-      </div>
-      <div className="work-featured-copy">
-        <div>
-          <p className="work-eyebrow">{project.featuredEyebrow}</p>
-          <h3 id="work-featured-title" className="work-featured-title">{project.name}</h3>
-          {project.client ? <p className="work-client">For {project.client}</p> : null}
-        </div>
-        <p className="work-case">{project.caseStudy || project.outcome}</p>
-        {project.stats?.length ? (
-          <div>
-            <p id="work-stats" className="work-stats-label">{workSectionCopy.statsLabel}</p>
-            <ul className="work-stats" role="list" aria-labelledby="work-stats">
-              {project.stats.map(([value, label]) => (
-                <li key={label} className="work-stat">
-                  <span className="work-stat-val"><CountUpText text={value} /></span>
-                  <span className="work-stat-lbl">{label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        <div className="work-featured-meta">
-          <p className="work-role">{project.role}</p>
-          <TagList tags={project.stack} />
-        </div>
-        <div className="work-featured-ctas">
-          <TileCta project={project} />
-        </div>
-      </div>
     </article>
-  );
-}
-
-function TileCard({ project }: { project: WorkProject }) {
-  const metaRight = [project.private ? 'Private' : '', project.year].filter(Boolean).join(' · ');
-  return (
-    <article className="work-tile">
-      <div className="work-tile-media">
-        {project.labTerminal ? (
-          <div className="work-frame work-frame-lab"><LabTerminal /></div>
-        ) : project.image ? (
-          <div className="work-frame">
-            <WorkShot image={project.image} className="work-shot" />
-          </div>
-        ) : null}
-      </div>
-      <div className="work-tile-body">
-        <div className="work-tile-meta">
-          <span>{project.kind}</span>
-          {metaRight ? <span className="work-tile-year">{metaRight}</span> : null}
-        </div>
-        <h3 className="work-tile-title">{project.name}</h3>
-        <p className="work-tile-outcome">{project.outcome}</p>
-        <p className="work-role">{project.role}</p>
-        <TagList tags={project.stack} />
-        <div className="work-tile-cta-wrap">
-          <TileCta project={project} />
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function Projects() {
-  const [featured, ...rest] = workProjects;
-  return (
-    <section id="work" aria-labelledby="work-title">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">{workSectionCopy.marker}</span>
-          <span className="num">{workSectionCopy.countLabel}</span>
-        </div>
-        <div className="work-head">
-          <Reveal>
-            <h2 id="work-title" className="section-title">{workSectionCopy.title}</h2>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="section-intro">{workSectionCopy.intro}</p>
-          </Reveal>
-        </div>
-        {featured ? (
-          <Reveal className="work-featured-wrap" delay={80}>
-            <FeaturedCard project={featured} />
-          </Reveal>
-        ) : null}
-        <div className="work-grid">
-          {rest.map((project, i) => (
-            <Reveal key={project.id} delay={120 + i * 40}>
-              <TileCard project={project} />
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const STACK: StackCat[] = stackGroups;
-
-const STACK_MARKS: Partial<Record<string, BrandMarkName>> = {
-  TypeScript: 'typescript',
-  'C#': 'csharp',
-  JavaScript: 'javascript',
-  'HTML, CSS, JavaScript': 'javascript',
-  Python: 'python',
-  Go: 'go',
-  React: 'react',
-  'Next.js': 'nextdotjs',
-  'Tailwind CSS': 'tailwindcss',
-  'Three.js': 'threedotjs',
-  GSAP: 'greensock',
-  'Node.js / Express': 'nodedotjs',
-  'ASP.NET Core': 'dotnet',
-  PostgreSQL: 'postgresql',
-  Supabase: 'supabase',
-  'REST / OpenAPI': 'openapiinitiative',
-  Docker: 'docker',
-  Nginx: 'nginx',
-  'GitHub Actions': 'github',
-  'Cloudflare tunnels': 'cloudflare',
-  Linux: 'linux',
-  Azure: 'microsoftazure',
-};
-
-function Stack({ cats }: { cats: StackCat[] }) {
-  return (
-    <section id="stack">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">03 · Stack</span>
-          <span className="num">Tools · learned in order</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="stack-head">
-            <h2 className="section-title">{stackCopy.title}</h2>
-          </Reveal>
-          <Reveal className="stack-intro" delay={120}>
-            <p>{stackCopy.intro}</p>
-          </Reveal>
-          <div className="stack-grid">
-            {cats.map((cat, i) => (
-              <Reveal key={cat.name} className="stack-cat" delay={i * 80}>
-                <h3>
-                  <span className="road-kicker" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                  {cat.name}
-                  <span className="cnt" aria-hidden="true">[{cat.items.length}]</span>
-                </h3>
-                <ol className="road">
-                  {cat.items.map((it, step) => (
-                    <li key={it.n}>
-                      <span className="road-node" aria-hidden="true">{String(step + 1).padStart(2, '0')}</span>
-                      <span className="stack-name">
-                        {STACK_MARKS[it.n] ? <BrandMark name={STACK_MARKS[it.n]!} /> : null}
-                        {it.n}
-                      </span>
-                      <span className={`yr${it.y === 'learning' || it.y === 'in progress' ? ' is-next' : ''}`}>{it.y}</span>
-                    </li>
-                  ))}
-                </ol>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal className="stack-activity" delay={120}>
-            <GithubActivity />
-          </Reveal>
-          <Reveal className="stack-home-lab" delay={180}>
-            <p className="section-intro">{stackCopy.atHome}</p>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-function Contact() {
-  const email = contactCopy.email;
-  const [copied, setCopied] = useState(false);
-
-  const copyEmail = () => {
-    const done = () => {
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
-    };
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(email).then(done).catch(() => {
-        const area = document.createElement('textarea');
-        area.value = email;
-        document.body.appendChild(area);
-        area.select();
-        const ok = document.execCommand('copy');
-        area.remove();
-        if (ok) done();
-      });
-      return;
-    }
-    const area = document.createElement('textarea');
-    area.value = email;
-    document.body.appendChild(area);
-    area.select();
-    const ok = document.execCommand('copy');
-    area.remove();
-    if (ok) done();
-  };
-
-  return (
-    <section id="contact">
-      <div className="ed-shell">
-        <div className="eyebrow-row">
-          <span className="section-marker">06 · Contact</span>
-          <span className="num">{availability.status}</span>
-        </div>
-        <div className="ed-grid12">
-          <Reveal className="contact-head">
-            <h2 className="contact-title">{contactCopy.title}</h2>
-          </Reveal>
-          <Reveal className="contact-intro" delay={60}>
-            <p className="section-intro">{contactCopy.intro}</p>
-          </Reveal>
-          <Reveal className="contact-primary">
-            <div className="contact-mail">
-              <a className="email" href={`mailto:${email}`}>{email}</a>
-              <button type="button" className="copy-mail" onClick={copyEmail} aria-live="polite">
-                {copied ? 'Copied' : 'Copy email'}
-              </button>
-            </div>
-            <div className="availability">
-              <span className="status-dot" />
-              {availabilityLine()}
-            </div>
-          </Reveal>
-          <Reveal className="contact-side" delay={120}>
-            <a href="https://www.linkedin.com/in/markus-fourie/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><span className="contact-name"><LinkedInMark />LinkedIn</span><span className="sr-only"> (opens in a new tab)</span><span className="lbl">Work history</span></a>
-            <a href="https://github.com/ThePedalingDev" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><span className="contact-name"><GitHubMark />GitHub</span><span className="sr-only"> (opens in a new tab)</span><span className="lbl">Code</span></a>
-            <a href={CV_HREF} download><span className="contact-name">Resume</span><span className="lbl">October 2026</span></a>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function EdFooter() {
-  return (
-    <footer className="ed-footer">
-      <div className="ed-shell">
-        <div className="ed-footer-inner">
-          <div className="footer-mark">MF<em>.</em></div>
-          <div className="footer-meta">
-            <p>Markus Fourie · Full-stack developer · Pretoria</p>
-            <p style={{ marginTop: 12 }}>© {new Date().getFullYear()}</p>
-          </div>
-          <div className="footer-right">
-            <a href="#top">Back to top ↑</a>
-            <a href="#contact">Contact</a>
-            <a href={CV_HREF} download>Resume</a>
-          </div>
-        </div>
-      </div>
-      <p className="footer-word" aria-hidden="true">Fourie</p>
-    </footer>
   );
 }
 
 export function Home() {
-  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
-  const [journeyItems, setJourneyItems] = useState<JourneyItem[]>(journeyNodes);
-  const [stackCats, setStackCats] = useState<StackCat[]>(STACK);
-  const [showMobileBar, setShowMobileBar] = useState(false);
+  useReveal();
+  useNavSectionActive();
+  useHeroLogLines();
+  usePortfolioDocument();
+  const { label: copyLabel, copy } = useCopyEmail();
 
-  useEffect(() => {
-    const ac = new AbortController();
-    fetchContent<HeroContent>('hero', ac.signal)
-      .then((r) => setHeroContent(r.value))
-      .catch(() => {});
-    return () => ac.abort();
-  }, []);
+  const rms = workProjects.find((p) => p.id === 'katanga-rms')!;
+  const afrisist = workProjects.find((p) => p.id === 'afrisist')!;
+  const eridge = workProjects.find((p) => p.id === 'eridge-rda')!;
+  const skillance = workProjects.find((p) => p.id === 'skillance')!;
+  const lab = workProjects.find((p) => p.id === 'home-lab')!;
 
-  useEffect(() => {
-    const ac = new AbortController();
-    (async () => {
-      try {
-        const [journey, stack] = await Promise.all([
-          fetchContent<JourneyItem[]>('journey', ac.signal),
-          fetchContent<StackCat[]>('stack', ac.signal),
-        ]);
+  const rmsStats = rms.stats ? `${rms.stats[0][0]} assets and ${rms.stats[1][0]} users on RMS today.` : '';
 
-        if (Array.isArray(journey.value) && journey.value.length) {
-          const stale = journey.value.some((item) =>
-            (item.year === '2021' && /physics|nwu|computer/i.test(`${item.title} ${item.desc}`))
-            || (item.year === '2020' && /computer/i.test(item.title))
-            || (item.year === '2026' && /graduat|trailseeker/i.test(`${item.title} ${item.desc}`))
-            || /Katanga RMS|Rimitso RMS/i.test(`${item.title} ${item.desc}`),
-          );
-          if (!stale) setJourneyItems(journey.value);
-        }
-        if (Array.isArray(stack.value) && stack.value.length) {
-          const stale = stack.value.some((cat) => /languages|frontend|ops/i.test(cat.name));
-          if (!stale) setStackCats(stack.value);
-        }
-      } catch {
-        // Keep fallbacks when backend is down.
-      }
-    })();
-    return () => ac.abort();
-  }, []);
-
-  useEffect(() => {
-    const hero = document.getElementById('top');
-    const contact = document.getElementById('contact');
-    if (!hero || !contact) return;
-    const sync = () => {
-      const heroGone = hero.getBoundingClientRect().bottom <= 0;
-      const contactVisible = contact.getBoundingClientRect().top < window.innerHeight * 0.85;
-      setShowMobileBar(heroGone && !contactVisible);
-    };
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
-    return () => {
-      window.removeEventListener('scroll', sync);
-      window.removeEventListener('resize', sync);
-    };
-  }, []);
+  const mergedStackGroups = (() => {
+    const groups = [...stackGroups];
+    const sec = groups.find((g) => g.name === 'Security');
+    const learn = groups.find((g) => g.name === 'Learning now');
+    if (sec && learn) {
+      return groups
+        .filter((g) => g.name !== 'Security' && g.name !== 'Learning now')
+        .concat({
+          name: 'Security, and learning now',
+          items: [...sec.items, ...learn.items],
+        });
+    }
+    return groups;
+  })();
 
   return (
-    <div className="editorial">
-      <EdNav />
-      <Hero content={heroContent} />
-      <Projects />
-      <HowIBuild />
-      <Stack cats={stackCats} />
-      <Journey items={journeyItems} />
-      <OnTheSide />
-      <PaperTrail />
-      <Cycling />
-      <Contact />
-      <EdFooter />
-      <div className={`mobile-contact-bar${showMobileBar ? ' is-visible' : ''}`}>
-        <a className="btn-solid" href={`mailto:${CONTACT_EMAIL}`}>Email me</a>
-        <a className="btn-outline" href={CV_HREF} download>Download resume</a>
-      </div>
+    <div className="portfolio-redesign" id="top">
+      <a className="skip" href="#main">Skip to content</a>
+
+      <header className="hdr">
+        <div className="wrap">
+          <a className="mark" href="#top" aria-label="Markus Fourie, back to top">
+            Markus Fourie <span>Pretoria</span>
+          </a>
+          <nav className="nav" aria-label="Sections">
+            <a href="#work">Work</a>
+            <a href="#approach">Approach</a>
+            <a href="#stack">Stack</a>
+            <a href="#journey">Journey</a>
+            <a href="#life">Life</a>
+          </nav>
+          <a className="btn btn-dark" href="#contact">Get in touch</a>
+        </div>
+        <nav className="mob" aria-label="Sections (mobile)">
+          <a href="#work">Work</a>
+          <a href="#approach">Approach</a>
+          <a href="#stack">Stack</a>
+          <a href="#journey">Journey</a>
+          <a href="#life">Life</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <main id="main">
+        <section className="hero" aria-labelledby="h1">
+          <div className="wrap">
+            <div>
+              <h1 id="h1">Software that holds up outside the office.</h1>
+              <p className="sub">
+                Full-stack developer in Pretoria, building the Resource Management System for Katanga site teams.
+              </p>
+              <div className="ctas">
+                <a className="btn btn-primary" href={contactMailto}>
+                  <EnvelopeIcon />
+                  Email me
+                </a>
+                <a className="btn btn-ghost" href="#work">See my work</a>
+              </div>
+              <div className="meta">
+                <a className="tlink" href="/cert-docs/markus-fourie-resume.pdf">Resume (PDF)</a>
+                <a className="tlink" href={GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a className="tlink" href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
+            </div>
+            <div className="visual">
+              <div className="block" aria-hidden="true" />
+              <div className="photo">
+                <img
+                  src={HERO_IMG}
+                  width={720}
+                  height={1080}
+                  alt="Markus Fourie in profile, wearing a cap and a dark polo shirt"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </div>
+              <div className="panel" aria-label="Example deploy log from the Resource Management System">
+                <div className="ttl">
+                  <span>markus@fedora: ~</span>
+                  <span>rms</span>
+                </div>
+                <div className="line">$ ./deploy rms --env prod</div>
+                <div className="line">→ running migrations (017_audit_trail)</div>
+                <div className="line">→ health check: api, worker, gateway</div>
+                <div className="line ok">✓ deploy complete · 14.2s · 0 errors</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="sec" id="work" aria-labelledby="work-h">
+          <div className="wrap">
+            <div className="work-head reveal">
+              <h2 className="h2" id="work-h">{workCopy.title}</h2>
+              <p className="muted">{workCopy.intro}</p>
+            </div>
+            <div className="bento">
+              <WorkTile
+                className="t-rms"
+                image="/images/work/rms-1600.webp"
+                imageAlt="Resource Management System landing page with sign-in, API and system health links"
+                kind="Featured · For Katanga Contracting Services · Since 2025"
+                title="Resource Management System"
+                body={rms.outcome}
+                stats={rmsStats}
+                stack="React · ASP.NET Core · EF Core · PostgreSQL · SignalR · Azure"
+                href={rms.cta.href}
+                linkLabel={rms.cta.label}
+              />
+              <WorkTile
+                className="t-a"
+                image="/images/work/afrisist-1600.webp"
+                imageAlt="A truck on a mountain pass at sunrise, from the Afrisist brand imagery"
+                kind="Fleet alarm desk · Private · 2025"
+                title="Afrisist"
+                body={afrisist.outcome}
+                stack="React · Node.js · Supabase · WebSocket · Azure"
+                href={afrisist.cta.href}
+                linkLabel={afrisist.cta.label}
+              />
+              <WorkTile
+                className="t-b"
+                image="/images/work/eridge-1600.webp"
+                imageAlt="Eridge RDA home page: More than a ride, with volunteers in yellow beside a pony"
+                kind="UK charity site and CMS · 2024"
+                title="Eridge RDA"
+                body={eridge.outcome}
+                stack="React · Vite · Tailwind CSS · Supabase · Vercel"
+                href={eridge.cta.href}
+                linkLabel="Visit eridgerda.org.uk"
+                external
+              />
+              <WorkTile
+                className="t-c"
+                image="/images/work/skillance-1600.webp"
+                imageAlt="Skillance home page: The community designed for trust"
+                kind="Freelance marketplace · Co-built with Kyle Nel · Ongoing"
+                title="Skillance"
+                body={skillance.outcome}
+                stack="React · Fastify · PostgreSQL"
+                href={skillance.cta.href}
+                linkLabel="Visit skillance.co.za"
+                external
+              />
+              <article className="tile t-lab reveal">
+                <div className="body">
+                  <div>
+                    <p className="kind">Personal infrastructure · Ongoing</p>
+                    <h3 className="h3" style={{ margin: '8px 0 12px' }}>Home lab</h3>
+                    <p>{lab.outcome}</p>
+                  </div>
+                  <div>
+                    <p className="stack">Linux · Plex · Ollama (Gemma, Qwen)</p>
+                    <p className="go">
+                      <a className="tlink" href="#stack">See my stack</a>
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="sec appr" id="approach" aria-labelledby="appr-h">
+          <div className="wrap grid">
+            <div className="side reveal">
+              <h2 className="h2" id="appr-h">{approachCopy.title}</h2>
+              <p className="muted" style={{ marginTop: 24 }}>
+                Most of what I build never makes it into a demo. It&apos;s the approval step before a report, the audit log that shows who changed what, and the dashboard someone reads on a bad screen in a site office.
+              </p>
+            </div>
+            <div>
+              <ol className="rows">
+                {approachCopy.capabilities.map((c) => (
+                  <li key={c.name} className="reveal">
+                    <span className="nm">{c.name}</span>
+                    <p>{c.line}</p>
+                  </li>
+                ))}
+              </ol>
+              <p className="quote reveal">
+                Good systems are a chain of small, repeated decisions. The log line written for whoever is debugging at 2 am.
+              </p>
+              <div className="princ">
+                {approachCopy.principles.map((p) => (
+                  <div key={p.title} className="reveal">
+                    <h3>{p.title.replace(/^\d+\s*·\s*/, '')}</h3>
+                    <p>{p.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="band" aria-labelledby="band-h">
+          <div className="wrap">
+            <div>
+              <h2 className="h2" id="band-h" style={{ fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}>
+                Want to see RMS running?
+              </h2>
+              <p>
+                I&apos;m happy to walk you through the Resource Management System, from the approval step to the audit log.
+              </p>
+            </div>
+            <a
+              className="btn btn-primary"
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Walkthrough: Resource Management System')}`}
+            >
+              Ask for a walkthrough
+            </a>
+          </div>
+        </section>
+
+        <section className="sec stk" id="stack" aria-labelledby="stk-h">
+          <div className="wrap grid">
+            <div className="reveal">
+              <h2 className="h2" id="stk-h">{stackCopy.title}</h2>
+              <p style={{ marginTop: 24 }}>{stackCopy.intro}</p>
+              <div className="note small">
+                {stackCopy.atHome}
+                <br />
+                <br />
+                <a className="tlink" href={GITHUB} target="_blank" rel="noopener noreferrer">
+                  GitHub · ThePedalingDev
+                </a>
+              </div>
+            </div>
+            <div className="groups">
+              {mergedStackGroups.map((group) => (
+                <div key={group.name} className="group reveal">
+                  <h3>{group.name}</h3>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item.n}>
+                        <span>{item.n}</span>
+                        <span>{item.y}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="sec jr" id="journey" aria-labelledby="jr-h">
+          <div className="wrap grid">
+            <div>
+              <div className="reveal">
+                <h2 className="h2" id="jr-h">How I got here</h2>
+                <p className="lead" style={{ marginTop: 24 }}>
+                  I didn&apos;t take the straight road into software. I started in physics and maths, switched to a computing degree, and was shipping production work before I graduated.
+                </p>
+              </div>
+              <ol className="tl">
+                {JOURNEY.map((j) => (
+                  <li key={j.year} className="reveal">
+                    <span className="yr">{j.year}</span>
+                    <div>
+                      <p className="where">{j.where}</p>
+                      <h3>{j.title}</h3>
+                      <p>{j.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <aside>
+              <figure className="reveal">
+                <div className="fr">
+                  <img
+                    src={graduation}
+                    width={459}
+                    height={1024}
+                    loading="lazy"
+                    decoding="async"
+                    alt="Markus Fourie in his graduation gown"
+                  />
+                </div>
+                <figcaption>Graduation, Varsity College (now Emeris)</figcaption>
+              </figure>
+              <div className="reveal">
+                <h3 style={{ fontSize: '1.25rem', marginBottom: 12 }}>The paper trail</h3>
+                <ul className="paper">
+                  {paperTrail.map((item) => (
+                    <li key={item.label}>
+                      <a
+                        href={item.href}
+                        {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      >
+                        {item.label} <span>{item.note}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="sec life" id="life" aria-labelledby="life-h">
+          <div className="wrap">
+            <div className="head reveal">
+              <h2 className="h2" id="life-h">Off the clock, on the bike</h2>
+              <p>
+                When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the{' '}
+                <a className="tlink" href="https://transbaviaans.co.za/" target="_blank" rel="noopener noreferrer">
+                  Trans Baviaans
+                </a>
+                , the 24-hour mountain bike marathon. This year I rode the full Ford Trailseeker series, including #6 Wellington on 12 September.
+              </p>
+            </div>
+            <div className="gal">
+              {GALLERY.map((g) => (
+                <figure key={g.cap} className="reveal">
+                  <div className="fr">
+                    <img src={g.src} width={g.w} height={g.h} loading="lazy" decoding="async" alt={g.alt} />
+                  </div>
+                  <figcaption>{g.cap}</figcaption>
+                </figure>
+              ))}
+            </div>
+            <div className="links">
+              <a className="tlink" href={STRAVA} target="_blank" rel="noopener noreferrer">
+                Follow the riding on Strava
+              </a>
+              <a className="tlink" href={INSTAGRAM} target="_blank" rel="noopener noreferrer">Instagram</a>
+              <Link className="tlink" to="/uses">See my desk and bike setup</Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="closer" id="contact" aria-labelledby="ct-h">
+          <div className="bg" aria-hidden="true">
+            <img src={capeFriends} width={960} height={1280} loading="lazy" decoding="async" alt="" />
+          </div>
+          <div className="wrap">
+            <h2 id="ct-h">Let&apos;s talk.</h2>
+            <p>
+              Building something that has to work in the real world, or hiring someone who enjoys that kind of problem? Email me.
+            </p>
+            <p className="addr">{CONTACT_EMAIL}</p>
+            <div className="ctas">
+              <a className="btn btn-primary" href={contactMailto}>Email me</a>
+              <button className="btn btn-ghost-light" type="button" onClick={() => void copy()}>
+                {copyLabel}
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="ftr">
+        <div className="wrap">
+          <p className="big" aria-hidden="true">Markus Fourie</p>
+          <div className="cols">
+            <div>
+              <p>Full-stack developer · Pretoria</p>
+              <p className="muted">{availability.employer} · {availability.status}.</p>
+            </div>
+            <div>
+              <h3>Sections</h3>
+              <ul>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#approach">Approach</a></li>
+                <li><a href="#stack">Stack</a></li>
+                <li><a href="#journey">Journey</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3>Elsewhere</h3>
+              <ul>
+                <li><a href={LINKEDIN}>LinkedIn</a></li>
+                <li><a href={GITHUB}>GitHub</a></li>
+                <li><a href={STRAVA}>Strava</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3>Contact</h3>
+              <ul>
+                <li><a href={contactMailto}>Email</a></li>
+                <li><a href="/cert-docs/markus-fourie-resume.pdf">Resume</a></li>
+                <li><a href="#top">Back to top</a></li>
+              </ul>
+            </div>
+          </div>
+          <p className="small muted" style={{ marginTop: 40 }}>© 2026 Markus Fourie</p>
+        </div>
+      </footer>
     </div>
   );
 }
