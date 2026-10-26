@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '@/styles/portfolio-redesign.css';
 import capeFriends from '@/assets/images/cape-friends.webp';
 import graduation from '@/assets/images/graduation.webp';
+import { GitHubMark, InstagramMark, LinkedInMark, MailMark, StravaMark, WhatsAppMark } from '@/components/BrandMarks';
 import { CountUpText } from '@/components/motion/CountUp';
-import { CONTACT_EMAIL, contactMailto } from '@/config/contact';
+import { CONTACT_EMAIL, CONTACT_WHATSAPP, contactMailto } from '@/config/contact';
 import { availability } from '@/config/availability';
 import {
   approachCopy,
@@ -40,6 +42,14 @@ const GITHUB = 'https://github.com/ThePedalingDev';
 const LINKEDIN = 'https://www.linkedin.com/in/markus-fourie/';
 const STRAVA = 'https://www.strava.com/athletes/7756913';
 const INSTAGRAM = 'https://www.instagram.com/markuss.fourie/';
+
+const NAV_LINKS = [
+  { href: '#work', label: 'Work' },
+  { href: '#approach', label: 'Approach' },
+  { href: '#stack', label: 'Stack' },
+  { href: '#journey', label: 'Journey' },
+  { href: '#life', label: 'Life' },
+] as const;
 
 function EnvelopeIcon() {
   return (
@@ -148,6 +158,23 @@ export function Home() {
   useHeroLogLines();
   usePortfolioDocument();
   const { label: copyLabel, copy } = useCopyEmail();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 900) setMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [menuOpen]);
 
   const rms = workProjects.find((p) => p.id === 'katanga-rms')!;
   const gridProjects = workProjects.filter((p) => p.id !== 'home-lab');
@@ -159,27 +186,32 @@ export function Home() {
     <div className="portfolio-redesign" id="top">
       <a className="skip" href="#main">Skip to content</a>
 
-      <header className="hdr">
+      <header className={`hdr${menuOpen ? ' is-open' : ''}`}>
         <div className="wrap">
-          <a className="mark" href="#top" aria-label="Markus Fourie, back to top">
+          <a className="mark" href="#top" aria-label="Markus Fourie, back to top" onClick={() => setMenuOpen(false)}>
             Markus Fourie <span>Pretoria</span>
           </a>
           <nav className="nav" aria-label="Sections">
-            <a href="#work">Work</a>
-            <a href="#approach">Approach</a>
-            <a href="#stack">Stack</a>
-            <a href="#journey">Journey</a>
-            <a href="#life">Life</a>
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href}>{l.label}</a>
+            ))}
           </nav>
-          <a className="btn btn-dark" href="#contact">Get in touch</a>
+          <a className="btn btn-dark hdr-cta" href="#contact">Get in touch</a>
+          <button
+            type="button"
+            className="burger"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span aria-hidden="true" />
+          </button>
         </div>
-        <nav className="mob" aria-label="Sections (mobile)">
-          <a href="#work">Work</a>
-          <a href="#approach">Approach</a>
-          <a href="#stack">Stack</a>
-          <a href="#journey">Journey</a>
-          <a href="#life">Life</a>
-          <a href="#contact">Contact</a>
+        <nav className="mob" id="mobile-menu" aria-label="Sections (mobile)" hidden={!menuOpen}>
+          {[...NAV_LINKS, { href: '#contact', label: 'Contact' }].map((l) => (
+            <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</a>
+          ))}
         </nav>
       </header>
 
@@ -212,9 +244,8 @@ export function Home() {
                 ))}
               </div>
               <div className="meta">
-                <a className="tlink" href="/cert-docs/markus-fourie-resume.pdf">Resume (PDF)</a>
-                <a className="tlink" href={GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a className="tlink" href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a className="tlink ico" href={GITHUB} target="_blank" rel="noopener noreferrer"><GitHubMark />GitHub</a>
+                <a className="tlink ico" href={LINKEDIN} target="_blank" rel="noopener noreferrer"><LinkedInMark />LinkedIn</a>
               </div>
             </div>
             <div className="visual">
@@ -355,8 +386,8 @@ export function Home() {
                 {stackCopy.atHome}
                 <br />
                 <br />
-                <a className="tlink" href={GITHUB} target="_blank" rel="noopener noreferrer">
-                  GitHub · ThePedalingDev
+                <a className="tlink ico" href={GITHUB} target="_blank" rel="noopener noreferrer">
+                  <GitHubMark />GitHub · ThePedalingDev
                 </a>
               </div>
             </div>
@@ -469,38 +500,64 @@ export function Home() {
               ))}
             </div>
             <div className="links">
-              <a className="tlink" href={STRAVA} target="_blank" rel="noopener noreferrer">
-                {lifeCopy.socialLabel} on Strava
+              <a className="tlink ico" href={STRAVA} target="_blank" rel="noopener noreferrer">
+                <StravaMark />{lifeCopy.socialLabel} on Strava
               </a>
-              <a className="tlink" href={INSTAGRAM} target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a className="tlink ico" href={INSTAGRAM} target="_blank" rel="noopener noreferrer"><InstagramMark />Instagram</a>
               <Link className="tlink" to="/uses">{lifeCopy.usesLabel}</Link>
             </div>
           </div>
         </section>
 
         <section className="closer" id="contact" aria-labelledby="ct-h">
-          <div className="bg" aria-hidden="true">
-            <FramedImage
-              src={capeFriends}
-              width={960}
-              height={1280}
-              alt=""
-              objectPosition="center 40%"
-              className="closer-bg"
-            />
-          </div>
           <div className="wrap">
-            <h2 id="ct-h">Let&apos;s talk.</h2>
-            <p>
-              Building something that has to work in the real world, or hiring someone who enjoys that kind of problem? Email me.
-            </p>
-            <p className="addr">{CONTACT_EMAIL}</p>
-            <div className="ctas">
-              <a className="btn btn-primary" href={contactMailto}>Email me</a>
-              <button className="btn btn-ghost-light" type="button" onClick={() => void copy()}>
-                {copyLabel}
-              </button>
+            <div className="closer-copy">
+              <h2 id="ct-h">Let&apos;s talk.</h2>
+              <p>
+                Building something that has to work in the real world, or hiring someone who enjoys that kind of problem? Email me.
+              </p>
+              <p className="addr">{CONTACT_EMAIL}</p>
+              <div className="ctas">
+                <a className="btn btn-primary" href={contactMailto}>
+                  <EnvelopeIcon />
+                  Email me
+                </a>
+                <button className="btn btn-ghost-light" type="button" onClick={() => void copy()} aria-live="polite">
+                  {copyLabel}
+                </button>
+              </div>
+              <ul className="chans" aria-label="Other ways to reach me">
+                <li>
+                  <a className="chan" href={contactMailto}>
+                    <span className="chip"><MailMark /></span>Email
+                  </a>
+                </li>
+                <li>
+                  <a className="chan" href={CONTACT_WHATSAPP} target="_blank" rel="noopener noreferrer">
+                    <span className="chip"><WhatsAppMark /></span>WhatsApp
+                  </a>
+                </li>
+                <li>
+                  <a className="chan" href={LINKEDIN} target="_blank" rel="noopener noreferrer">
+                    <span className="chip"><LinkedInMark /></span>LinkedIn
+                  </a>
+                </li>
+                <li>
+                  <a className="chan" href={GITHUB} target="_blank" rel="noopener noreferrer">
+                    <span className="chip"><GitHubMark /></span>GitHub
+                  </a>
+                </li>
+              </ul>
             </div>
+            <figure className="closer-photo">
+              <FramedImage
+                src={capeFriends}
+                width={960}
+                height={1280}
+                alt="Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula"
+                objectPosition="center 42%"
+              />
+            </figure>
           </div>
         </section>
       </main>
@@ -525,15 +582,16 @@ export function Home() {
             <div>
               <h3>Elsewhere</h3>
               <ul>
-                <li><a href={LINKEDIN}>LinkedIn</a></li>
-                <li><a href={GITHUB}>GitHub</a></li>
-                <li><a href={STRAVA}>Strava</a></li>
+                <li><a className="ico" href={LINKEDIN} target="_blank" rel="noopener noreferrer"><LinkedInMark />LinkedIn</a></li>
+                <li><a className="ico" href={GITHUB} target="_blank" rel="noopener noreferrer"><GitHubMark />GitHub</a></li>
+                <li><a className="ico" href={STRAVA} target="_blank" rel="noopener noreferrer"><StravaMark />Strava</a></li>
               </ul>
             </div>
             <div>
               <h3>Contact</h3>
               <ul>
-                <li><a href={contactMailto}>Email</a></li>
+                <li><a className="ico" href={contactMailto}><MailMark />Email</a></li>
+                <li><a className="ico" href={CONTACT_WHATSAPP} target="_blank" rel="noopener noreferrer"><WhatsAppMark />WhatsApp</a></li>
                 <li><a href="/cert-docs/markus-fourie-resume.pdf">Resume</a></li>
                 <li><a href="#top">Back to top</a></li>
               </ul>
