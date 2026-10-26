@@ -1,7 +1,23 @@
 {
+  "headers": [
+    {
+      "source": "/og.jpg",
+      "headers": [
+        { "key": "Content-Type", "value": "image/jpeg" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/og-image.jpg",
+      "headers": [
+        { "key": "Content-Type", "value": "image/jpeg" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ],
   "rewrites": [
     {
-      "source": "/((?!robots\\.txt$|sitemap\\.xml$).*)",
+      "source": "/((?!robots\\.txt$|sitemap\\.xml$|og\\.jpg$|og-image\\.jpg$|favicon\\.svg$|images/.*|cert-docs/.*).*)",
       "destination": "/index.html"
     }
   ]
