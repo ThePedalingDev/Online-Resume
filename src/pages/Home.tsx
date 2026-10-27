@@ -268,7 +268,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec" id="work" aria-labelledby="work-h">
+        <section className="sec edge edge-s" id="work" aria-labelledby="work-h">
           <div className="wrap">
             <div className="work-head reveal">
               <h2 className="h2" id="work-h">{workCopy.title}</h2>
@@ -318,7 +318,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec appr" id="approach" aria-labelledby="appr-h">
+        <section className="sec appr edge edge-diag" id="approach" aria-labelledby="appr-h">
           <div className="wrap grid">
             <div className="side reveal">
               <h2 className="h2" id="appr-h">{approachCopy.title}</h2>
@@ -346,7 +346,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="band" aria-labelledby="band-h">
+        <section className="band edge edge-hill" aria-labelledby="band-h">
           <div className="wrap">
             <div>
               <h2 className="h2" id="band-h" style={{ fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}>
@@ -365,7 +365,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec stk" id="stack" aria-labelledby="stk-h">
+        <section className="sec stk edge edge-wave" id="stack" aria-labelledby="stk-h">
           <div className="wrap grid">
             <div className="reveal">
               <h2 className="h2" id="stk-h">{stackCopy.title}</h2>
@@ -397,7 +397,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec jr" id="journey" aria-labelledby="jr-h">
+        <section className="sec jr edge edge-diagr" id="journey" aria-labelledby="jr-h">
           <div className="wrap grid">
             <div>
               <div className="reveal">
@@ -450,7 +450,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec life" id="life" aria-labelledby="life-h">
+        <section className="sec life edge edge-arc" id="life" aria-labelledby="life-h">
           <div className="wrap">
             <div className="head reveal">
               <h2 className="h2" id="life-h">{lifeCopy.title}</h2>
@@ -519,7 +519,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="closer" id="contact" aria-labelledby="ct-h">
+        <section className="closer edge edge-diag" id="contact" aria-labelledby="ct-h">
           <div className="wrap">
             <div className="closer-copy">
               <h2 id="ct-h">Let&apos;s talk.</h2>
@@ -572,7 +572,7 @@ export function Home() {
         </section>
       </main>
 
-      <footer className="ftr">
+      <footer className="ftr edge edge-s">
         <div className="wrap">
           <p className="big" aria-hidden="true"><TypedText text="Markus Fourie" /></p>
           <div className="cols">
