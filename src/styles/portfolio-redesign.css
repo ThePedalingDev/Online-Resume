@@ -1,20 +1,20 @@
 /* markusfourie.dev redesign — tokens and layout per implementation spec */
 
 .portfolio-redesign {
-  --paper: #f4f3ef;
-  --paper-2: #e9e7e1;
-  --paper-3: #dedbd3;
+  --paper: #f3f4f0;
+  --paper-2: #e6e8e2;
+  --paper-3: #d6dad1;
   --ink: #141614;
   --ink-2: #454843;
-  --line: #cfccc3;
+  --line: #c8ccc2;
   --brand: #a33d22;
   --brand-ink: #7e2c16;
   --amber: #f2b134;
   --amber-h: #e6a21f;
-  --night: #141614;
-  --night-2: #1f221f;
-  --on-night: #efeee9;
-  --on-night-2: #b9bbb4;
+  --night: #121513;
+  --night-2: #1c201d;
+  --on-night: #eef0ea;
+  --on-night-2: #b4b9b0;
   --ease: cubic-bezier(0.23, 1, 0.32, 1);
   --display: "Schibsted Grotesk", ui-sans-serif, sans-serif;
   --text: "IBM Plex Sans", ui-sans-serif, sans-serif;
@@ -99,6 +99,10 @@
   mask-repeat: no-repeat;
 }
 
+.portfolio-redesign .edge-lg {
+  --edge: clamp(40px, 8vw, 120px);
+}
+
 .portfolio-redesign .edge-s {
   --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 52C240 52 360 6 720 38S1200 78 1440 22V80H0Z'/%3E%3C/svg%3E");
 }
@@ -119,6 +123,49 @@
 
 .portfolio-redesign .sec {
   padding: var(--sec) 0;
+  background: var(--paper);
+}
+
+/* Work sits on the dark tone; its white cards keep their own dark text. */
+.portfolio-redesign #work {
+  background: var(--night);
+  color: var(--on-night);
+}
+
+.portfolio-redesign #work .work-head .muted {
+  color: var(--on-night-2);
+}
+
+/* Every work card shares the Home lab tone. */
+.portfolio-redesign #work .tile {
+  background: var(--night-2);
+  color: var(--on-night);
+  box-shadow: inset 0 0 0 1px rgba(238, 240, 234, 0.07);
+}
+
+.portfolio-redesign #work .tile:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(238, 240, 234, 0.16),
+    0 22px 40px -24px rgba(0, 0, 0, 0.7);
+}
+
+.portfolio-redesign #work .tile .kind,
+.portfolio-redesign #work .tile .stack,
+.portfolio-redesign #work .rms-stats-row {
+  color: var(--on-night-2);
+}
+
+.portfolio-redesign #work .rms-stats-row strong {
+  color: var(--on-night);
+}
+
+.portfolio-redesign #work .tile .tlink {
+  color: var(--on-night);
+  text-decoration-color: rgba(239, 238, 233, 0.4);
+}
+
+.portfolio-redesign #work .tile .tlink:hover {
+  text-decoration-color: var(--amber);
 }
 
 .portfolio-redesign .h2 {
@@ -399,10 +446,6 @@
   cursor: pointer;
 }
 
-.portfolio-redesign .btn:hover {
-  transform: translateY(-2px);
-}
-
 .portfolio-redesign .btn-primary:hover {
   box-shadow: 0 10px 24px -12px rgba(163, 61, 34, 0.55);
 }
@@ -483,9 +526,10 @@
 
 .portfolio-redesign .hero {
   position: relative;
-  padding: 32px 0 72px;
+  padding: 48px 0 clamp(120px, 16vw, 200px);
   background:
-    radial-gradient(60% 70% at 85% 30%, #ffffff 0%, rgba(255, 255, 255, 0) 70%), #efede7;
+    radial-gradient(60% 70% at 85% 30%, #f8f9f5 0%, rgba(248, 249, 245, 0) 70%),
+    linear-gradient(180deg, var(--paper-2) 0%, #d3d8cf 100%);
 }
 
 .portfolio-redesign .hero {
@@ -534,7 +578,13 @@
 
 @media (min-width: 1000px) {
   .portfolio-redesign .hero {
-    padding: 96px 0 128px;
+    display: flex;
+    align-items: center;
+    min-height: min(92svh, 960px);
+    padding: 112px 0 clamp(160px, 14vw, 220px);
+  }
+  .portfolio-redesign .hero .wrap {
+    width: 100%;
   }
   .portfolio-redesign .hero .wrap {
     grid-template-columns: 7fr 5fr;
@@ -747,12 +797,27 @@
 @media (min-width: 760px) {
   .portfolio-redesign .bento {
     grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding-bottom: 56px;
+  }
+  .portfolio-redesign .bento > :nth-child(even) {
+    translate: 0 56px;
   }
 }
 
 @media (min-width: 1100px) {
   .portfolio-redesign .bento {
     grid-template-columns: repeat(6, 1fr);
+  }
+  .portfolio-redesign .bento > :nth-child(even) {
+    translate: none;
+  }
+  .portfolio-redesign .bento > .t-b,
+  .portfolio-redesign .bento > :nth-child(5) {
+    translate: 0 56px;
+  }
+  .portfolio-redesign .bento > .t-lab {
+    margin-top: 56px;
   }
 }
 
@@ -761,14 +826,11 @@
   flex-direction: column;
   background: #fff;
   height: 100%;
-  transition:
-    translate 0.35s var(--ease),
-    box-shadow 0.35s var(--ease);
+  transition: box-shadow 0.35s var(--ease);
 }
 
 .portfolio-redesign .tile:hover {
-  translate: 0 -4px;
-  box-shadow: 0 22px 40px -28px rgba(20, 22, 20, 0.45);
+  box-shadow: 0 22px 40px -28px rgba(20, 22, 20, 0.35);
 }
 
 .portfolio-redesign .tile .go .tlink::after,
@@ -819,33 +881,6 @@
   flex-direction: column;
   height: 100%;
   background: var(--paper-2);
-}
-
-.portfolio-redesign .work-browser-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--line);
-  font-size: 12px;
-  color: var(--ink-2);
-}
-
-.portfolio-redesign .work-browser-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--line);
-  flex-shrink: 0;
-}
-
-.portfolio-redesign .work-browser-url {
-  margin-left: 8px;
-  font-family: var(--mono);
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .portfolio-redesign .work-browser-frame {
@@ -1113,11 +1148,10 @@
 }
 
 .portfolio-redesign .group li span:first-child {
-  transition: translate 0.25s var(--ease), color 0.25s var(--ease);
+  transition: color 0.25s var(--ease);
 }
 
 .portfolio-redesign .group li:hover span:first-child {
-  translate: 4px 0;
   color: var(--brand-ink);
 }
 
@@ -1135,7 +1169,7 @@
 }
 
 .portfolio-redesign .jr {
-  background: #fff;
+  background: #fafbf8;
 }
 
 .portfolio-redesign .jr .grid {
@@ -1192,14 +1226,14 @@
   margin-bottom: 4px;
 }
 
-.portfolio-redesign .jr aside {
+.portfolio-redesign .jr .jr-side {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 @media (min-width: 1000px) {
-  .portfolio-redesign .jr aside {
+  .portfolio-redesign .jr .jr-side {
     padding-top: 200px;
   }
 }
@@ -1591,11 +1625,6 @@
   height: 36px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.2s var(--ease);
-}
-
-.portfolio-redesign .chan:hover .chip {
-  transform: translateY(-2px);
 }
 
 .portfolio-redesign .chip svg {
@@ -1786,10 +1815,5 @@
   .portfolio-redesign .btn,
   .portfolio-redesign .nav a {
     transition: none;
-  }
-  .portfolio-redesign .btn:hover,
-  .portfolio-redesign .tile:hover {
-    transform: none;
-    translate: none;
   }
 }

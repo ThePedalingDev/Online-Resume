@@ -1,11 +1,12 @@
-import { ReactLenis, useLenis } from 'lenis/react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { ReactLenis, useLenis, type LenisRef } from 'lenis/react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type Lenis from 'lenis';
-import { ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { beginAnchorNav, endAnchorNav } from '@/lib/anchorNav';
 
 const options = {
-  autoRaf: true,
+  // Lenis is driven by the GSAP ticker (see SmoothScroll) so both share one clock.
+  autoRaf: false,
   lerp: 0.1,
   wheelMultiplier: 1,
   smoothWheel: true,
@@ -157,6 +158,19 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener('change', apply);
   }, []);
 
+  const lenisRef = useRef<LenisRef>(null);
+
+  useEffect(() => {
+    if (reduced) return;
+    const tick = (time: number) => lenisRef.current?.lenis?.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    return () => {
+      gsap.ticker.remove(tick);
+      gsap.ticker.lagSmoothing(500, 33);
+    };
+  }, [reduced]);
+
   if (reduced) {
     return (
       <>
@@ -167,7 +181,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ReactLenis root options={options}>
+    <ReactLenis root ref={lenisRef} options={options}>
       <LenisFrames />
       <LenisAnchors />
       {children}

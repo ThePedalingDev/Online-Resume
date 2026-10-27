@@ -82,7 +82,6 @@ function WorkTile({
   uiFrame?: boolean;
 }) {
   const external = Boolean(project.cta.external);
-  const host = project.private ? 'Demo on request' : 'rms.rimitso.com';
 
   return (
     <article className={`tile ${className} reveal`}>
@@ -93,12 +92,6 @@ function WorkTile({
         >
           {uiFrame ? (
             <div className="work-browser">
-              <div className="work-browser-bar" aria-hidden="true">
-                <span className="work-browser-dot" />
-                <span className="work-browser-dot" />
-                <span className="work-browser-dot" />
-                <span className="work-browser-url">{host}</span>
-              </div>
               <div className="work-browser-frame">
                 <WorkShot image={project.image} eager={className.includes('t-rms')} objectPosition="left top" />
               </div>
@@ -268,7 +261,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec edge edge-s" id="work" aria-labelledby="work-h">
+        <section className="sec edge edge-s edge-lg" id="work" aria-labelledby="work-h">
           <div className="wrap">
             <div className="work-head reveal">
               <h2 className="h2" id="work-h">{workCopy.title}</h2>
@@ -417,7 +410,7 @@ export function Home() {
                 ))}
               </ol>
             </div>
-            <aside>
+            <div className="jr-side">
               <figure className="reveal">
                 <div className="fr">
                   <FramedImage
@@ -446,7 +439,7 @@ export function Home() {
                   ))}
                 </ul>
               </div>
-            </aside>
+            </div>
           </div>
         </section>
 
