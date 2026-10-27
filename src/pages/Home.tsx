@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '@/styles/portfolio-redesign.css';
 import capeFriends from '@/assets/images/cape-friends.webp';
@@ -22,13 +22,14 @@ import {
 import { workProjects, type WorkProject } from '@/content/work';
 import type { CSSProperties } from 'react';
 import { FramedImage } from '@/pages/home/FramedImage';
-import { lifeGallery } from '@/pages/home/gallery';
+import { lifeGallery, type GalleryItem } from '@/pages/home/gallery';
+import { Lightbox } from '@/pages/home/Lightbox';
+import { TypedText } from '@/pages/home/TypedText';
 import { WorkShot } from '@/pages/home/WorkShot';
 import {
   useCopyEmail,
   useHeroLogLines,
   useNavSectionActive,
-  usePortfolioDocument,
   useReveal,
 } from '@/pages/home/usePortfolioPage';
 
@@ -144,9 +145,10 @@ export function Home() {
   useReveal();
   useNavSectionActive();
   useHeroLogLines();
-  usePortfolioDocument();
   const { label: copyLabel, copy } = useCopyEmail();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [zoomed, setZoomed] = useState<GalleryItem | null>(null);
+  const zoomTrigger = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -472,14 +474,24 @@ export function Home() {
               {lifeGallery.map((g) => (
                 <figure key={g.caption} className="reveal">
                   <div className="fr">
-                    <FramedImage
-                      src={g.src}
-                      width={g.width}
-                      height={g.height}
-                      alt={g.alt}
-                      fit={g.fit ?? 'cover'}
-                      objectPosition={g.objectPosition}
-                    />
+                    <button
+                      type="button"
+                      className="zoom"
+                      aria-label={`View larger: ${g.caption}`}
+                      onClick={(e) => {
+                        zoomTrigger.current = e.currentTarget;
+                        setZoomed(g);
+                      }}
+                    >
+                      <FramedImage
+                        src={g.thumb}
+                        width={g.width}
+                        height={g.height}
+                        alt={g.alt}
+                        fit={g.fit ?? 'cover'}
+                        objectPosition={g.objectPosition}
+                      />
+                    </button>
                   </div>
                   <figcaption>
                     {g.captionLink && g.caption.includes(g.captionLink.text) ? (
@@ -562,7 +574,7 @@ export function Home() {
 
       <footer className="ftr">
         <div className="wrap">
-          <p className="big" aria-hidden="true">Markus Fourie</p>
+          <p className="big" aria-hidden="true"><TypedText text="Markus Fourie" /></p>
           <div className="cols">
             <div>
               <p>Full-stack developer · Pretoria</p>
@@ -598,6 +610,13 @@ export function Home() {
           <p className="small muted" style={{ marginTop: 40 }}>© 2026 Markus Fourie</p>
         </div>
       </footer>
+      <Lightbox
+        item={zoomed}
+        onClose={() => {
+          setZoomed(null);
+          zoomTrigger.current?.focus({ preventScroll: true });
+        }}
+      />
     </div>
   );
 }

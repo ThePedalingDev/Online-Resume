@@ -34,7 +34,7 @@ export const heroCopy = {
   role: 'Full-stack developer in Pretoria',
   tagline: 'Software that holds up outside the office.',
   subline:
-    'Building the Resource Management System for Katanga site teams. Earlier work: fleet alarms, a UK charity site, and a freelance marketplace.',
+    "I build the Resource Management System that Katanga's site teams run on, plus internal tools like C-Flow. On the side, I'm co-building Skillance, a freelance marketplace for South Africa.",
 };
 
 export const workCopy = {
@@ -272,7 +272,7 @@ export const lifeCopy = {
   intro:
     'When I close the laptop, I ride: mostly cross-country marathons and long endurance days. In 2024 I rode the Trans Baviaans, the 24-hour mountain bike marathon. This year I rode the full Ford Trailseeker series, including #6 Wellington at Bosman Family Vineyards on 12 September.',
   galleryTitle: 'Field notes',
-  galleryIntro: 'Race days, long rides and the desk where the other half happens. All shot on my phone.',
+  galleryIntro: 'Race days, long rides and the desk where the other half happens.',
   usesLabel: 'Curious about the kit? See my desk and bike setup',
   socialLabel: 'Follow the riding',
 };

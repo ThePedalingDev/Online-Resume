@@ -5,7 +5,7 @@ export const HOME_SHELL_HTML = `
     <div class="wrap">
       <div>
         <h1 id="h1">Software that holds up outside the office.</h1>
-        <p class="hero-subline">Building the Resource Management System for Katanga site teams.</p>
+        <p class="hero-subline">I build the Resource Management System that Katanga&apos;s site teams run on, plus internal tools like C-Flow.</p>
       </div>
     </div>
   </section>

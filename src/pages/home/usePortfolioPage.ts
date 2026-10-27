@@ -85,12 +85,3 @@ export function useCopyEmail() {
 
   return { label, copy };
 }
-
-export function usePortfolioDocument() {
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
-    return () => {
-      document.documentElement.style.scrollBehavior = '';
-    };
-  }, []);
-}

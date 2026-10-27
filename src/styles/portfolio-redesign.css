@@ -61,6 +61,10 @@
   text-wrap: pretty;
 }
 
+.portfolio-redesign main section[id] {
+  scroll-margin-top: 72px;
+}
+
 .portfolio-redesign .wrap {
   max-width: var(--wrap);
   margin: 0 auto;
@@ -292,6 +296,23 @@
   border-bottom: 0;
 }
 
+.portfolio-redesign .mob:not([hidden]) a {
+  animation: menu-in 0.32s var(--ease) both;
+}
+
+.portfolio-redesign .mob a:nth-child(2) { animation-delay: 30ms; }
+.portfolio-redesign .mob a:nth-child(3) { animation-delay: 60ms; }
+.portfolio-redesign .mob a:nth-child(4) { animation-delay: 90ms; }
+.portfolio-redesign .mob a:nth-child(5) { animation-delay: 120ms; }
+.portfolio-redesign .mob a:nth-child(6) { animation-delay: 150ms; }
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
 @media (min-width: 560px) {
   .portfolio-redesign .hdr .hdr-cta {
     display: inline-flex;
@@ -326,9 +347,18 @@
   transition:
     background-color 0.2s var(--ease),
     color 0.2s var(--ease),
-    transform 0.12s var(--ease);
+    box-shadow 0.25s var(--ease),
+    transform 0.2s var(--ease);
   border: 2px solid transparent;
   cursor: pointer;
+}
+
+.portfolio-redesign .btn:hover {
+  transform: translateY(-2px);
+}
+
+.portfolio-redesign .btn-primary:hover {
+  box-shadow: 0 10px 24px -12px rgba(163, 61, 34, 0.55);
 }
 
 .portfolio-redesign .btn:active {
@@ -412,7 +442,30 @@
     radial-gradient(60% 70% at 85% 30%, #ffffff 0%, rgba(255, 255, 255, 0) 70%), var(--paper);
 }
 
+.portfolio-redesign .hero {
+  overflow: hidden;
+}
+
+.portfolio-redesign .hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    radial-gradient(38% 42% at 78% 38%, rgba(242, 177, 52, 0.16), transparent 70%),
+    radial-gradient(30% 36% at 18% 80%, rgba(163, 61, 34, 0.07), transparent 70%);
+  animation: ambient-drift 26s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes ambient-drift {
+  to {
+    translate: -4% 3%;
+    scale: 1.06;
+  }
+}
+
 .portfolio-redesign .hero .wrap {
+  position: relative;
   display: grid;
   gap: 40px;
 }
@@ -663,6 +716,28 @@
   flex-direction: column;
   background: #fff;
   height: 100%;
+  transition:
+    translate 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+.portfolio-redesign .tile:hover {
+  translate: 0 -4px;
+  box-shadow: 0 22px 40px -28px rgba(20, 22, 20, 0.45);
+}
+
+.portfolio-redesign .tile .go .tlink::after,
+.portfolio-redesign .band .btn::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 8px;
+  transition: translate 0.25s var(--ease);
+}
+
+.portfolio-redesign .tile:hover .go .tlink::after,
+.portfolio-redesign .tile .go .tlink:focus-visible::after,
+.portfolio-redesign .band .btn:hover::after {
+  translate: 4px 0;
 }
 
 .portfolio-redesign .tile .media {
@@ -992,6 +1067,15 @@
   font-size: 17px;
 }
 
+.portfolio-redesign .group li span:first-child {
+  transition: translate 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.portfolio-redesign .group li:hover span:first-child {
+  translate: 4px 0;
+  color: var(--brand-ink);
+}
+
 .portfolio-redesign .group li span:last-child {
   color: var(--ink-2);
   font-size: 15px;
@@ -1154,7 +1238,7 @@
     gap: 24px;
   }
   .portfolio-redesign .gal figure:nth-child(even) {
-    transform: translateY(64px);
+    translate: 0 64px;
   }
 }
 
@@ -1163,10 +1247,10 @@
     grid-template-columns: repeat(3, 1fr);
   }
   .portfolio-redesign .gal figure:nth-child(even) {
-    transform: none;
+    translate: none;
   }
   .portfolio-redesign .gal figure:nth-child(3n + 2) {
-    transform: translateY(64px);
+    translate: 0 64px;
   }
 }
 
@@ -1182,6 +1266,113 @@
 
 .portfolio-redesign .gal .fr .framed-media {
   height: 100%;
+}
+
+.portfolio-redesign .zoom {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: zoom-in;
+}
+
+.portfolio-redesign .zoom img {
+  transition: transform 0.5s var(--ease);
+}
+
+.portfolio-redesign .zoom:hover img {
+  transform: scale(1.03);
+}
+
+.portfolio-redesign .lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  overscroll-behavior: contain;
+}
+
+.portfolio-redesign .lightbox[open] {
+  display: grid;
+  place-items: center;
+  animation: lb-fade 0.25s var(--ease);
+}
+
+.portfolio-redesign .lightbox::backdrop {
+  background: rgba(10, 11, 10, 0.88);
+  animation: lb-fade 0.25s var(--ease);
+}
+
+.portfolio-redesign .lightbox figure {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  max-width: 92vw;
+  animation: lb-zoom 0.3s var(--ease);
+}
+
+.portfolio-redesign .lightbox img {
+  max-width: 92vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: var(--night-2);
+}
+
+.portfolio-redesign .lightbox figcaption {
+  font-size: 15px;
+  text-align: center;
+  color: var(--on-night-2);
+}
+
+.portfolio-redesign .lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+
+.portfolio-redesign .lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.portfolio-redesign .lightbox-close svg {
+  width: 22px;
+  height: 22px;
+}
+
+@keyframes lb-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lb-zoom {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
 }
 
 .portfolio-redesign .life-quote {
@@ -1401,6 +1592,26 @@
   letter-spacing: -0.04em;
 }
 
+.portfolio-redesign .typed-rest {
+  visibility: hidden;
+}
+
+.portfolio-redesign .typed-caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.78em;
+  margin-left: 0.04em;
+  vertical-align: -0.04em;
+  background: var(--brand);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .portfolio-redesign .ftr .cols {
   display: grid;
   gap: 32px;
@@ -1452,20 +1663,68 @@
   }
 }
 
+/* Reveal once, shortly before entering view, with a short sibling stagger. */
 .portfolio-redesign .reveal {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(14px);
   transition:
-    opacity 0.5s var(--ease),
-    transform 0.5s var(--ease);
+    opacity 0.5s var(--ease) var(--d, 0ms),
+    transform 0.5s var(--ease) var(--d, 0ms);
+  will-change: opacity, transform;
 }
 
 .portfolio-redesign .reveal.in {
   opacity: 1;
   transform: none;
+  will-change: auto;
+}
+
+.portfolio-redesign .bento > :nth-child(2n),
+.portfolio-redesign .gal > :nth-child(2n),
+.portfolio-redesign .groups > :nth-child(2n),
+.portfolio-redesign .princ > :nth-child(2n) {
+  --d: 90ms;
+}
+
+.portfolio-redesign .gal > :nth-child(3n),
+.portfolio-redesign .princ > :nth-child(3n) {
+  --d: 180ms;
+}
+
+/* Slow, small float on the hero portrait and its offset block. */
+.portfolio-redesign .visual .photo,
+.portfolio-redesign .visual .block {
+  animation: hero-float 8s ease-in-out infinite;
+}
+
+.portfolio-redesign .visual .block {
+  animation-delay: -1.2s;
+  animation-direction: reverse;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .portfolio-redesign .visual .photo,
+  .portfolio-redesign .hero::before,
+  .portfolio-redesign .mob:not([hidden]) a,
+  .portfolio-redesign .typed-caret,
+  .portfolio-redesign .lightbox,
+  .portfolio-redesign .lightbox::backdrop,
+  .portfolio-redesign .lightbox figure {
+    animation: none;
+  }
+  .portfolio-redesign .visual .block {
+    animation: none;
+  }
   .portfolio-redesign .reveal,
   .portfolio-redesign .panel .line {
     opacity: 1 !important;
@@ -1473,8 +1732,17 @@
     transition: none;
   }
   .portfolio-redesign .tile .media img,
+  .portfolio-redesign .tile,
+  .portfolio-redesign .tile .go .tlink::after,
+  .portfolio-redesign .group li span:first-child,
+  .portfolio-redesign .zoom img,
   .portfolio-redesign .btn,
   .portfolio-redesign .nav a {
     transition: none;
+  }
+  .portfolio-redesign .btn:hover,
+  .portfolio-redesign .tile:hover {
+    transform: none;
+    translate: none;
   }
 }

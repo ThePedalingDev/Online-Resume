@@ -6,14 +6,22 @@ import { beginAnchorNav, endAnchorNav } from '@/lib/anchorNav';
 
 const options = {
   autoRaf: true,
-  lerp: 0.08,
-  wheelMultiplier: 0.8,
+  lerp: 0.1,
+  wheelMultiplier: 1,
   smoothWheel: true,
   syncTouch: false,
   anchors: false,
   stopInertiaOnNavigate: true,
   respectReducedMotion: true,
 };
+
+/** Expo ease-out: quick start, long soft landing. */
+const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+/** Sticky page headers (the home page's .hdr) must not cover the section a link jumps to. */
+function headerOffset() {
+  return document.querySelector<HTMLElement>('.hdr')?.offsetHeight ?? 0;
+}
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -42,7 +50,9 @@ function scrollToHash(lenis: Lenis | null | undefined, hash: string, immediate =
   }
 
   lenis.scrollTo(!el || id === 'top' ? 0 : el, {
-    offset: 0,
+    offset: id === 'top' ? 0 : -headerOffset(),
+    duration: 1.2,
+    easing: easeOutExpo,
     immediate: immediate || reduced,
     force: true,
     programmatic: true,
