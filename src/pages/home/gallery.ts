@@ -5,12 +5,16 @@ import raceReady from '@/assets/images/race-ready.webp';
 import sworksUpgrades from '@/assets/images/sworks-upgrades.webp';
 import trailseekerWellington from '@/assets/images/trailseeker-wellington.webp';
 
+const MATTHEW_LINKEDIN = 'https://www.linkedin.com/in/matthew-waldeck-a77884255/';
+
 export type GalleryItem = {
   src: string;
   width: number;
   height: number;
   alt: string;
   caption: string;
+  /** Optional link wrapped around part of the caption. */
+  captionLink?: { text: string; href: string };
   fit?: 'cover' | 'contain';
   objectPosition?: string;
 };
@@ -31,6 +35,7 @@ export const lifeGallery: GalleryItem[] = [
     height: 1280,
     alt: 'Markus Fourie and Matthew Waldeck cycling on the Cape Peninsula',
     caption: 'Cape Peninsula, with Matthew Waldeck',
+    captionLink: { text: 'Matthew Waldeck', href: MATTHEW_LINKEDIN },
     objectPosition: 'center 42%',
   },
   {

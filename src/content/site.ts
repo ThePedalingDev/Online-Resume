@@ -100,8 +100,8 @@ export const projectCopy: Array<{
     role: 'Co-built with Kyle Nel',
     problem:
       'South African freelancers and clients needed a verified marketplace to discover professionals, review profiles, and book with payment held until work is approved.',
-    built: 'Verified freelance marketplace for South Africa, co-built with Kyle, with iOS and Android apps still to come.',
-    result: 'Web product live at skillance.co.za; mobile launch still to come.',
+    built: 'Verified freelance marketplace for South Africa, co-built with Kyle. An ongoing web and mobile app in Flutter and React on PostgreSQL.',
+    result: 'Web app live at skillance.co.za; the Flutter mobile app is in active development.',
     href: 'https://skillance.co.za/',
     cta: 'visit',
   },
@@ -142,7 +142,7 @@ export const stackCopy = {
   nav: 'Stack',
   title: 'What I work in',
   intro:
-    "My day to day is React and TypeScript at the front, and ASP.NET Core or Node with Postgres behind it. I learned it in that order: the page, then a typed language, then the server and the database. Cloud came once I had something worth hosting, and mobile is what I'm learning next.",
+    "My day to day is React and TypeScript at the front, and ASP.NET Core or Node with Postgres behind it. I learned it in that order: the page, then a typed language, then the server and the database. Cloud came once I had something worth hosting, and mobile with Flutter, which I'm building on Skillance.",
   atHome:
     "At home: an HP Victus 15 runs as my home server, with Plex and local models (Gemma, Qwen) on Ollama. It's where I try things before they go near a client.",
 };
@@ -159,7 +159,6 @@ export const stackGroups: StackCat[] = [
       { n: 'Tailwind CSS', y: '3 yrs' },
       { n: 'Next.js', y: '2 yrs' },
       { n: 'GSAP', y: '2 yrs' },
-      { n: 'Three.js', y: '1 yr' },
     ],
   },
   {
@@ -171,6 +170,8 @@ export const stackGroups: StackCat[] = [
       { n: 'EF Core', y: '3 yrs' },
       { n: 'SQL', y: '4 yrs' },
       { n: 'PostgreSQL', y: '3 yrs' },
+      { n: 'MS SQL', y: 'in use' },
+      { n: 'MongoDB', y: 'in use' },
       { n: 'Supabase', y: '2 yrs' },
       { n: 'REST / OpenAPI', y: 'in use' },
       { n: 'Python', y: '2 yrs' },
@@ -180,25 +181,25 @@ export const stackGroups: StackCat[] = [
     name: 'Cloud and ops',
     items: [
       { n: 'Linux', y: 'in use' },
-      { n: 'Docker', y: '2 yrs' },
+      { n: 'Docker', y: 'in use' },
+      { n: 'Cloudflare: Turnstile, CDN, proxy, tunnels', y: 'in use' },
       { n: 'Nginx', y: '2 yrs' },
       { n: 'GitHub Actions', y: '2 yrs' },
       { n: 'Azure', y: '1 yr' },
-      { n: 'Cloudflare tunnels', y: '1 yr' },
     ],
   },
   {
-    name: 'Security',
+    name: 'Mobile',
     items: [
-      { n: 'Environment secrets', y: 'in use' },
-      { n: 'Role-based access', y: 'in use' },
+      { n: 'Flutter', y: 'building Skillance' },
+      { n: 'iOS and Android', y: 'experimenting' },
     ],
   },
   {
     name: 'Learning now',
     items: [
+      { n: 'Three.js', y: 'learning' },
       { n: 'Go', y: 'learning' },
-      { n: 'iOS and Android', y: 'in progress' },
     ],
   },
 ];

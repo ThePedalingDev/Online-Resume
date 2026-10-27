@@ -32,7 +32,7 @@ const PROJECTS: Array<{
   {
     title: 'Afrisist - Alarm Monitoring System',
     period: '2025, handed over October 2025',
-    description: 'A limited-duration 2025 engagement. I built a real-time alarm desk on React, Node.js and Supabase, hosted on Azure, then handed it over in October 2025.',
+    description: 'A limited-duration 2025 engagement. I built a real-time alarm desk on React, Node.js and PostgreSQL, hosted on Azure, then handed it over in October 2025.',
     highlights: [
       'Developed an intuitive operator dashboard with Tailwind + DaisyUI',
       'Supporting animated tabs, filtering and real-time event streams',

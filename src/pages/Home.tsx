@@ -140,18 +140,6 @@ function WorkTile({
   );
 }
 
-function mergeStackGroups() {
-  const groups = [...stackGroups];
-  const sec = groups.find((g) => g.name === 'Security');
-  const learn = groups.find((g) => g.name === 'Learning now');
-  if (sec && learn) {
-    return groups
-      .filter((g) => g.name !== 'Security' && g.name !== 'Learning now')
-      .concat({ name: 'Security, and learning now', items: [...sec.items, ...learn.items] });
-  }
-  return groups;
-}
-
 export function Home() {
   useReveal();
   useNavSectionActive();
@@ -189,7 +177,7 @@ export function Home() {
       <header className={`hdr${menuOpen ? ' is-open' : ''}`}>
         <div className="wrap">
           <a className="mark" href="#top" aria-label="Markus Fourie, back to top" onClick={() => setMenuOpen(false)}>
-            Markus Fourie <span>Pretoria</span>
+            Markus Fourie <span>{heroCopy.role}</span>
           </a>
           <nav className="nav" aria-label="Sections">
             {NAV_LINKS.map((l) => (
@@ -219,8 +207,6 @@ export function Home() {
         <section className="hero" aria-labelledby="h1">
           <div className="wrap">
             <div>
-              <p className="hero-eyebrow">{heroCopy.name}</p>
-              <p className="hero-role">{heroCopy.role}</p>
               <h1 id="h1">{heroCopy.tagline}</h1>
               <p className="hero-subline">{heroCopy.subline}</p>
               <div className="ctas">
@@ -392,7 +378,7 @@ export function Home() {
               </div>
             </div>
             <div className="groups">
-              {mergeStackGroups().map((group) => (
+              {stackGroups.map((group) => (
                 <div key={group.name} className="group reveal">
                   <h3>{group.name}</h3>
                   <ul>
@@ -495,7 +481,19 @@ export function Home() {
                       objectPosition={g.objectPosition}
                     />
                   </div>
-                  <figcaption>{g.caption}</figcaption>
+                  <figcaption>
+                    {g.captionLink && g.caption.includes(g.captionLink.text) ? (
+                      <>
+                        {g.caption.split(g.captionLink.text)[0]}
+                        <a className="tlink" href={g.captionLink.href} target="_blank" rel="noopener noreferrer">
+                          {g.captionLink.text}
+                        </a>
+                        {g.caption.split(g.captionLink.text)[1]}
+                      </>
+                    ) : (
+                      g.caption
+                    )}
+                  </figcaption>
                 </figure>
               ))}
             </div>

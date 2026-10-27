@@ -128,10 +128,10 @@ export const workProjects: WorkProject[] = [
     id: 'skillance',
     n: '04',
     name: 'Skillance',
-    kind: 'Freelance marketplace',
+    kind: 'Freelance marketplace, web and mobile',
     year: 'Ongoing',
     outcome:
-      'Verified South African freelancers, with payment held until the client approves the work.',
+      'Verified South African freelancers, with payment held until the client approves the work. An ongoing web and mobile app, built with Flutter, React and PostgreSQL.',
     role: 'Co-built with Kyle Nel',
     stack: getProjectTags('skillance'),
     image: shot(
@@ -146,8 +146,24 @@ export const workProjects: WorkProject[] = [
     },
   },
   {
-    id: 'home-lab',
+    id: 'c-flow',
     n: '05',
+    name: 'C-Flow',
+    kind: 'Internal system',
+    outcome:
+      'An internal system I build at Rimitso, installable as a PWA. It is private, so there is no public link.',
+    role: 'Full-stack software developer at Rimitso',
+    stack: getProjectTags('c-flow'),
+    private: true,
+    cta: {
+      label: 'Ask me for a walkthrough',
+      href: `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Walkthrough: C-Flow')}`,
+      mailto: true,
+    },
+  },
+  {
+    id: 'home-lab',
+    n: '06',
     name: 'Home lab',
     kind: 'Personal infrastructure',
     year: 'Ongoing',
@@ -165,7 +181,7 @@ export const workProjects: WorkProject[] = [
 
 export const workSectionCopy = {
   marker: '01 · Work',
-  countLabel: 'Selected work · 05',
+  countLabel: 'Selected work · 06',
   title: "Things I've shipped",
   intro:
     "Software for very different people: a contractor's site teams, fleet operators, a UK charity's volunteers and South African freelancers. Plus the home server where I try things first.",

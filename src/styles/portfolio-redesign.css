@@ -792,7 +792,7 @@
   .portfolio-redesign .t-a,
   .portfolio-redesign .t-b,
   .portfolio-redesign .t-c {
-    grid-column: span 2;
+    grid-column: span 3;
   }
   .portfolio-redesign .t-lab {
     grid-column: span 6;

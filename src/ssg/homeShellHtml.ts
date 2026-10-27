@@ -4,7 +4,6 @@ export const HOME_SHELL_HTML = `
   <section class="hero" aria-labelledby="h1">
     <div class="wrap">
       <div>
-        <p class="hero-eyebrow">Markus Fourie</p>
         <h1 id="h1">Software that holds up outside the office.</h1>
         <p class="hero-subline">Building the Resource Management System for Katanga site teams.</p>
       </div>
