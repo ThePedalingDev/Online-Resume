@@ -103,20 +103,8 @@
   --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 52C240 52 360 6 720 38S1200 78 1440 22V80H0Z'/%3E%3C/svg%3E");
 }
 
-.portfolio-redesign .edge-wave {
-  --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 28C200 78 420 0 700 34S1180 76 1440 8V80H0Z'/%3E%3C/svg%3E");
-}
-
 .portfolio-redesign .edge-diag {
   --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 80 1440 4V80Z'/%3E%3C/svg%3E");
-}
-
-.portfolio-redesign .edge-diagr {
-  --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 6 1440 80H0Z'/%3E%3C/svg%3E");
-}
-
-.portfolio-redesign .edge-arc {
-  --edge-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 80Q520 -26 1440 62V80Z'/%3E%3C/svg%3E");
 }
 
 .portfolio-redesign .edge-hill {

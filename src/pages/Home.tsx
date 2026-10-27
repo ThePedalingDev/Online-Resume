@@ -365,7 +365,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec stk edge edge-wave" id="stack" aria-labelledby="stk-h">
+        <section className="sec stk edge edge-s" id="stack" aria-labelledby="stk-h">
           <div className="wrap grid">
             <div className="reveal">
               <h2 className="h2" id="stk-h">{stackCopy.title}</h2>
@@ -397,7 +397,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec jr edge edge-diagr" id="journey" aria-labelledby="jr-h">
+        <section className="sec jr edge edge-diag" id="journey" aria-labelledby="jr-h">
           <div className="wrap grid">
             <div>
               <div className="reveal">
@@ -450,7 +450,7 @@ export function Home() {
           </div>
         </section>
 
-        <section className="sec life edge edge-arc" id="life" aria-labelledby="life-h">
+        <section className="sec life edge edge-hill" id="life" aria-labelledby="life-h">
           <div className="wrap">
             <div className="head reveal">
               <h2 className="h2" id="life-h">{lifeCopy.title}</h2>
