@@ -70,7 +70,7 @@ export default defineConfig({
           'vendor-animation': ['gsap', '@gsap/react'],
           'vendor-three': ['three'],
           'vendor-ui': ['lucide-react', '@radix-ui/react-slot', '@radix-ui/react-label'],
-          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'vendor-forms': ['react-hook-form'],
           'vendor-utils': ['clsx', 'tailwind-merge', 'class-variance-authority']
         }
       }

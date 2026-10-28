@@ -1,6 +1,0 @@
-# Netlify: serve real files first, then SPA fallback
-/robots.txt   /robots.txt   200
-/sitemap.xml  /sitemap.xml  200
-/og.jpg       /og.jpg       200
-/og-image.jpg /og-image.jpg 200
-/*            /index.html   200
