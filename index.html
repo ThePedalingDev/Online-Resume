@@ -160,8 +160,12 @@ button{font:inherit;color:inherit}
 .intro .mark{width:clamp(90px,12vw,140px);margin:0 auto 2rem}
 .intro h1{font:600 clamp(1.9rem,4.2vw,3.8rem)/1.12 var(--sans);letter-spacing:-.0125em;color:var(--pink);max-width:20ch;margin:0 auto;text-shadow:0 4px 30px rgba(12,13,27,.6)}
 .intro .kick{display:block;margin-top:1.6rem;font:700 .8rem var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--text);text-shadow:0 2px 18px rgba(12,13,27,.7)}
-.petals{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.petals i{position:absolute;top:-6%;width:16px;height:16px;background:url(assets/svg/petal.svg) center/contain no-repeat;opacity:.8;animation:fall linear infinite}
+.petals{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.petals .pwrap{position:absolute;width:16px;height:16px}
+.petals i{position:absolute;inset:0;width:16px;height:16px;background:url(assets/svg/petal.svg) center/contain no-repeat;opacity:.8;animation:sway 6.5s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translate3d(-10px,0,0) rotate(-16deg)}to{transform:translate3d(18px,26px,0) rotate(32deg)}}
+.coming .petals{z-index:1}
+.coming>.logo,.coming>h2,.coming>.sub,.coming>.mail,.coming>.acts,.coming>.bar,.coming>.fine{position:relative;z-index:2}
 @keyframes fall{to{transform:translate3d(60px,115vh,0) rotate(260deg)}}
 
 main>section,main>div{position:relative}
@@ -813,6 +817,7 @@ gemma · qwen</pre></div>
   <img class="stk" src="assets/stickers/blossom.webp" alt="" aria-hidden="true" width="300" height="300" loading="lazy" data-s="0.03" style="--w:clamp(60px,6.5vw,112px);left:5%;top:.5rem;--r:-7deg">
   <img class="dep" src="assets/stickers/branch.webp" alt="" aria-hidden="true" width="1000" height="560" loading="lazy" style="--w:min(62vw,900px);--o:.6;right:0;top:0;z-index:1">
   <div class="bg" id="endbg"><img src="assets/gta/street.jpg" alt="" width="2000" height="1116" loading="lazy"></div>
+  <div class="petals" id="endpetals" aria-hidden="true"><i style="left:8%;top:6%"></i><i style="left:20%;top:18%"></i><i style="left:34%;top:8%"></i><i style="left:48%;top:22%"></i><i style="left:61%;top:10%"></i><i style="left:74%;top:26%"></i><i style="left:86%;top:12%"></i><i style="left:14%;top:40%"></i><i style="left:29%;top:52%"></i><i style="left:46%;top:46%"></i><i style="left:63%;top:58%"></i><i style="left:78%;top:44%"></i><i style="left:90%;top:64%"></i><i style="left:18%;top:74%"></i><i style="left:40%;top:82%"></i><i style="left:58%;top:76%"></i><i style="left:76%;top:86%"></i></div>
   <img class="logo rv" src="assets/svg/mf-mark.svg" alt="Markus Fourie" width="130" height="69">
   <h2 class="rv d1">Let's talk.</h2>
   <p class="sub rv d1">Building something that has to work in the real world, or hiring someone who enjoys that kind of problem? Email me.</p>
@@ -931,7 +936,9 @@ if(hasGS&&!calm){
     gsap.to('.cover .sun',{yPercent:-60,opacity:0,ease:'none',scrollTrigger:{trigger:'.cover',start:'top top',end:'+=60%',scrub:true}});
   });
   gsap.utils.toArray('.pn').forEach(function(pn,i){gsap.fromTo(pn.querySelectorAll('img,video'),{yPercent:0,scale:1.14},{yPercent:-4-(i%3)*2,scale:1.14,ease:'none',scrollTrigger:{trigger:'.cover',start:'top top',end:'bottom top',scrub:true}})});
-  gsap.utils.toArray('#petals i').forEach(function(el,i){el.style.animation='none';gsap.fromTo(el,{y:-120,x:0,rotation:(i%2? -18:12)},{y:'120vh',x:(i%2? 48:-28),rotation:(i%2? 200:-160),ease:'none',scrollTrigger:{trigger:'#stage',start:'top bottom',end:'bottom top',scrub:true}})});
+  function petalize(root,trigger){if(!root)return;gsap.utils.toArray(root.querySelectorAll('i')).forEach(function(el,i){var wrap=document.createElement('span');wrap.className='pwrap';wrap.style.left=el.style.left;wrap.style.top=el.style.top;el.style.left='0';el.style.top='0';el.style.animationDuration=(5.5+(i%5)*0.7)+'s';el.style.animationDelay=(-i*0.35)+'s';el.parentNode.insertBefore(wrap,el);wrap.appendChild(el);gsap.fromTo(wrap,{y:-80,x:0},{y:'70vh',x:(i%2?36:-22),ease:'none',scrollTrigger:{trigger:trigger,start:'top bottom',end:'bottom top',scrub:true}})})}
+  petalize($('#petals'),'#stage');
+  petalize($('#endpetals'),'#contact');
   gsap.fromTo('#stackbg',{yPercent:-4},{yPercent:4,ease:'none',scrollTrigger:{trigger:'#stack',start:'top bottom',end:'bottom top',scrub:true}});
   gsap.fromTo('#stagebg img',{yPercent:-3,scale:1.12},{yPercent:3,scale:1,ease:'none',scrollTrigger:{trigger:'#stage',start:'top bottom',end:'bottom top',scrub:true}});
   gsap.fromTo('#stagebg',{'--fade':.12},{'--fade':.72,ease:'none',scrollTrigger:{trigger:'#intro',start:'top 60%',end:'bottom 40%',scrub:true}});
