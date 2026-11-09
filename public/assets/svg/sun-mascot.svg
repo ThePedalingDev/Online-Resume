@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<defs><style>
+#hand,#eyes{display:none}
+</style>
+<linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE29A"/><stop offset=".38" stop-color="#FFB36B"/><stop offset=".72" stop-color="#FF6F9C"/><stop offset="1" stop-color="#B05BD6"/></linearGradient>
+<linearGradient id="lens" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A1A66"/><stop offset="1" stop-color="#150A33"/></linearGradient>
+<clipPath id="disc"><circle cx="100" cy="100" r="70"/></clipPath>
+</defs>
+<!-- palm fronds behind the disc -->
+<g fill="#2A1559" stroke="#150A33" stroke-width="3" stroke-linejoin="round">
+<path d="M100 40C70 8 30 12 12 38c26-10 50-6 66 8z"/>
+<path d="M100 40C130 8 170 12 188 38c-26-10-50-6-66 8z"/>
+<path d="M96 44C74 22 48 30 36 52c20-10 38-8 52 4z"/>
+<path d="M104 44C126 22 152 30 164 52c-20-10-38-8-52 4z"/>
+</g>
+<circle cx="100" cy="106" r="72" fill="#150A33"/>
+<circle cx="100" cy="106" r="68" fill="url(#sg)" stroke="#150A33" stroke-width="5"/>
+<!-- scan-line cut-outs of the lower sun -->
+<g clip-path="url(#disc)" transform="translate(0 6)">
+<g fill="#150A33"><rect x="20" y="132" width="160" height="3"/><rect x="20" y="144" width="160" height="5"/><rect x="20" y="158" width="160" height="7"/></g>
+</g>
+<g id="eyes" stroke="#150A33" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="72" cy="104" rx="12" ry="10" fill="#FFF8EC"/><circle cx="74" cy="105" r="5.5" fill="#150A33" stroke="none"/><circle cx="76" cy="103" r="1.6" fill="#fff" stroke="none"/><g id="wink"><path d="M122 106c8 7 20 7 28 0" fill="none" stroke-width="5"/><path d="M126 108l-5 6M136 112l-1 8M147 108l5 6" fill="none" stroke-width="3"/></g></g>
+<g id="sh">
+<g stroke="#150A33" stroke-width="4" stroke-linejoin="round">
+<path d="M46 92h46c3 0 5 2 5 5v6c0 11-9 19-20 19H62c-11 0-18-8-18-19v-7c0-2 1-4 2-4z" fill="url(#lens)"/>
+<path d="M108 92h46c1 0 2 2 2 4v7c0 11-7 19-18 19h-15c-11 0-20-8-20-19v-6c0-3 2-5 5-5z" fill="url(#lens)"/>
+<path d="M97 98h6" fill="none" stroke-linecap="round" stroke-width="5"/>
+</g>
+<path d="M54 100l12-4M118 100l12-4" stroke="#FFE9F2" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+</g>
+<g id="hand" stroke-linecap="round" stroke-linejoin="round"><path d="M186 206L128 140" fill="none" stroke="#150A33" stroke-width="24"/><path d="M186 206L128 140" fill="none" stroke="#FFD5B5" stroke-width="16"/><circle cx="118" cy="126" r="14" fill="#FFD5B5" stroke="#150A33" stroke-width="4"/><path d="M112 118L103 104" fill="none" stroke="#150A33" stroke-width="13"/><path d="M112 118L103 104" fill="none" stroke="#FFD5B5" stroke-width="6"/><path d="M106 128L97 114" fill="none" stroke="#150A33" stroke-width="13"/><path d="M106 128L97 114" fill="none" stroke="#FFD5B5" stroke-width="6"/></g>
+<!-- smirk -->
+<path d="M82 128c10 7 26 7 36 0" fill="none" stroke="#150A33" stroke-width="5" stroke-linecap="round"/>
+<path d="M118 128l6-4" fill="none" stroke="#150A33" stroke-width="5" stroke-linecap="round"/>
+<!-- bird -->
+<path d="M150 30c6-8 14-8 18-3-6-1-12 0-18 3zM150 30c-6-8-14-8-18-3 6-1 12 0 18 3z" fill="#150A33"/>
+</svg>
