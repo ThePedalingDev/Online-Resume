@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 410" role="img" aria-label="Markus Fourie, full-stack developer">
+<defs>
+<linearGradient id="mfg" x1="0" y1="30" x2="0" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4C5BE6"/><stop offset=".3" stop-color="#8A4FE0"/><stop offset=".62" stop-color="#F04FB0"/><stop offset="1" stop-color="#FF9A4D"/></linearGradient>
+<linearGradient id="mfs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFE3F0"/></linearGradient>
+<clipPath id="mfc"><polygon points="34,200 34,30 92,30 128,118 164,30 222,30 222,200 178,200 178,102 144,200 112,200 78,102 78,200"/><polygon points="252,200 252,30 392,30 392,70 296,70 296,98 378,98 378,134 296,134 296,200"/></clipPath>
+</defs>
+<g stroke-linejoin="miter" stroke-miterlimit="8">
+<g fill="#2B0E5E" stroke="#2B0E5E" stroke-width="40"><polygon points="34,200 34,30 92,30 128,118 164,30 222,30 222,200 178,200 178,102 144,200 112,200 78,102 78,200"/><polygon points="252,200 252,30 392,30 392,70 296,70 296,98 378,98 378,134 296,134 296,200"/></g>
+<g fill="#fff" stroke="#fff" stroke-width="22"><polygon points="34,200 34,30 92,30 128,118 164,30 222,30 222,200 178,200 178,102 144,200 112,200 78,102 78,200"/><polygon points="252,200 252,30 392,30 392,70 296,70 296,98 378,98 378,134 296,134 296,200"/></g>
+<g fill="url(#mfg)"><polygon points="34,200 34,30 92,30 128,118 164,30 222,30 222,200 178,200 178,102 144,200 112,200 78,102 78,200"/><polygon points="252,200 252,30 392,30 392,70 296,70 296,98 378,98 378,134 296,134 296,200"/></g>
+</g>
+<g clip-path="url(#mfc)" fill="#2B0E5E" opacity=".34">
+<circle cx="58" cy="60" r="14"/><circle cx="84" cy="44" r="10"/><circle cx="110" cy="64" r="12"/><circle cx="150" cy="52" r="12"/><circle cx="196" cy="62" r="14"/><circle cx="62" cy="110" r="12"/><circle cx="204" cy="118" r="13"/><circle cx="60" cy="168" r="14"/><circle cx="198" cy="170" r="13"/><circle cx="128" cy="156" r="12"/>
+<circle cx="276" cy="50" r="12"/><circle cx="318" cy="46" r="11"/><circle cx="362" cy="52" r="12"/><circle cx="274" cy="108" r="12"/><circle cx="272" cy="170" r="13"/><circle cx="330" cy="116" r="9"/>
+</g>
+<g clip-path="url(#mfc)" fill="#fff" opacity=".55"><circle cx="72" cy="52" r="3"/><circle cx="140" cy="70" r="3"/><circle cx="206" cy="90" r="3"/><circle cx="300" cy="58" r="3"/><circle cx="350" cy="88" r="3"/></g>
+<g font-family="'Lilita One','Bebas Neue','Arial Black',Impact,sans-serif" text-anchor="middle" stroke-linejoin="round" paint-order="stroke">
+<text x="214" y="274" font-size="104" fill="#2B0E5E" stroke="#2B0E5E" stroke-width="30" textLength="340" lengthAdjust="spacingAndGlyphs">markus</text>
+<text x="214" y="274" font-size="104" fill="url(#mfs)" textLength="340" lengthAdjust="spacingAndGlyphs">markus</text>
+<text x="214" y="362" font-size="104" fill="#2B0E5E" stroke="#2B0E5E" stroke-width="30" textLength="318" lengthAdjust="spacingAndGlyphs">fourie</text>
+<text x="214" y="362" font-size="104" fill="url(#mfs)" textLength="318" lengthAdjust="spacingAndGlyphs">fourie</text>
+</g>
+<text x="214" y="398" text-anchor="middle" textLength="250" lengthAdjust="spacing" font-family="'Outfit',system-ui,sans-serif" font-weight="700" font-size="12" fill="#FFE9F2">FULL-STACK DEVELOPER</text>
+</svg>
