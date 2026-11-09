@@ -332,7 +332,8 @@ dialog.gal::backdrop{background:#0A0818}
 .trail{max-width:1760px;margin-inline:auto;padding:clamp(5rem,10vw,9rem) var(--gutter) 0}
 .trail .hd{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1.4rem}
 .trail .hd h2{margin:0;font:600 clamp(1.8rem,2.6vw,2.4rem)/1.1 var(--sans);color:var(--pink);text-transform:none;letter-spacing:-.01em}
-.dl3{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(320px,22vw,420px);gap:1.1rem;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding-bottom:1rem}
+.dl3{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(320px,22vw,420px);gap:1.1rem;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding-bottom:1rem;cursor:grab;touch-action:pan-y}
+.dl3.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
 .dl3 article{display:grid;grid-template-rows:auto 1fr;min-width:0;scroll-snap-align:start;border-radius:var(--r);background:linear-gradient(180deg,#3A2870,#1D1540);overflow:hidden;transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out)}
 .dl3 article>img{width:100%;height:2400px;object-fit:cover;object-position:50% 30%;display:block}
 .dl3 article:nth-child(3)>img{object-position:50% 62%}
@@ -449,6 +450,10 @@ footer.site{position:relative;z-index:2;margin-top:-14rem;background:linear-grad
 @media(max-width:1499px){
  .dl3{display:flex;grid-auto-flow:initial;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:1rem;padding-bottom:1rem;margin-inline:calc(var(--gutter)*-1);padding-inline:var(--gutter);scroll-padding-inline:var(--gutter);overscroll-behavior-x:contain;scrollbar-width:thin}
  .dl3>*{flex:0 0 min(78vw,400px);scroll-snap-align:start;min-width:0}
+}
+@media(max-width:700px){
+ .dl3 article>img{height:min(52vh,440px)}
+ .dl3>*{flex-basis:min(72vw,280px)}
 }
 @media(max-width:1200px){
  .cards{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:1rem;padding-bottom:1rem;overscroll-behavior-x:contain;scrollbar-width:thin;margin-inline:0;padding-inline:0;max-width:none;width:100%}
@@ -591,7 +596,7 @@ footer.site{position:relative;z-index:2;margin-top:-14rem;background:linear-grad
   <div>
     <span class="tag rv">Approach</span>
     <h2 class="rv">The unglamorous parts, done properly.</h2>
-    <p class="lead rv">Most of what I build never makes it into a demo. It's the approval step before a report, the audit log that shows who changed what, and the dashboard someone reads on a bad screen in a site office. That's the part of the job I enjoy, because it's where software earns people's trust.</p>
+    <p class="lead rv">The work I enjoy is easy to miss in a walkthrough: the approval step before a report, the audit log that shows who changed what, and the dashboard someone reads on a bad screen in a site office. That is where software earns people's trust.</p>
     <dl class="rv">
       <div><dt>Resource management</dt><dd>Who has which asset, where, and whether it's compliant.</dd></div>
       <div><dt>Audit trails</dt><dd>Append-only records you can query later.</dd></div>
@@ -905,6 +910,15 @@ secs.forEach(function(id){var s=document.getElementById(id);if(s)spy.observe(s)}
 /* reveals: blur and opacity, once */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 $$('.rv').forEach(function(el){io.observe(el)});
+
+/* paper trail: hold and drag sideways */
+(function(){var sc=$('.dl3');if(!sc)return;var on=false,sx=0,sl=0,moved=false;
+sc.addEventListener('pointerdown',function(e){if(e.pointerType==='touch'||e.button!==0)return;if(e.target.closest('a,button'))return;on=true;moved=false;sx=e.clientX;sl=sc.scrollLeft;sc.classList.add('dragging');try{sc.setPointerCapture(e.pointerId)}catch(err){}});
+sc.addEventListener('pointermove',function(e){if(!on)return;var dx=e.clientX-sx;if(Math.abs(dx)>5)moved=true;sc.scrollLeft=sl-dx});
+function end(){on=false;sc.classList.remove('dragging')}
+sc.addEventListener('pointerup',end);sc.addEventListener('pointercancel',end);
+sc.addEventListener('click',function(e){if(!moved)return;e.preventDefault();e.stopPropagation();moved=false},true);
+})();
 
 /* copy email */
 $('#copy').addEventListener('click',function(){var msg=$('#copied');function ok(){msg.textContent='Email copied.';setTimeout(function(){msg.textContent=''},2400)}
