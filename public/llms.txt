@@ -1,0 +1,21 @@
+# Markus Fourie
+
+> Full-stack developer in Pretoria, South Africa. Systems & Technology Developer at Katanga Contracting Services (KCS) / Rimitso, co-founder of Skillance. Graduated With Distinction from IIE Varsity College (Bachelor of Computer and Information Sciences, Application Development, December 2025) and named 2025 Top Achiever. Open to new work and new experiences in Pretoria (hybrid or on-site).
+
+markusfourie.dev is a single-page portfolio. Contact: fourie.markus@outlook.com
+
+## Work
+- Resource Management System (RMS): operations platform for Katanga Contracting Services, live with 388 assets and 46 users. React, ASP.NET Core, EF Core, PostgreSQL, SignalR, Azure.
+- Skillance: freelance marketplace for South Africa, web and mobile, with verified providers and payment held until the client approves the work. Flutter, React, Fastify, PostgreSQL. https://skillance.co.za/
+- Alarm Monitoring System (Afrisist): real-time vehicle alarm dashboard, built in 2025 and still supported as on-request freelance work.
+- Eridge RDA: website and CMS for a UK charity, 2024. https://www.eridgerda.org.uk/
+- C-Flow: private internal PWA built at Rimitso.
+
+## Documents
+- Resume (one page, November 2026): https://markusfourie.dev/cert-docs/markus-fourie-resume.pdf
+- Full CV with references: available on request by email to fourie.markus@outlook.com
+
+## Links
+- Site: https://markusfourie.dev/
+- GitHub: https://github.com/ThePedalingDev
+- LinkedIn: https://www.linkedin.com/in/markus-fourie/
